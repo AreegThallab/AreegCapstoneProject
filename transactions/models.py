@@ -90,6 +90,13 @@ class Payment(models.Model):
                     "الدورة لا تتبع هذه الجمعية."
                 )
 
+    def save(self, *args, **kwargs):
+        self.full_clean(
+            validate_unique=False,
+            validate_constraints=False
+        )
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return (
             f"{self.membership.user.username} - "

@@ -2,6 +2,8 @@ from datetime import timedelta
 from decimal import Decimal
 
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -210,6 +212,54 @@ class JamiyahWorkflowTests(TestCase):
             jamiyah.max_members,
         )
 
+    def test_duplicate_approval_attempt_does_not_change_approved_membership(self):
+        jamiyah = make_jamiyah(self.manager, max_members=2)
+        pending = add_membership(
+            jamiyah,
+            self.member,
+            status=Membership.Status.PENDING,
+        )
+        self.client.force_login(self.manager)
+
+        first_response = self.client.post(
+            reverse("manage_join_request", args=[jamiyah.pk, pending.pk]),
+            {"action": "approve"},
+        )
+        second_response = self.client.post(
+            reverse("manage_join_request", args=[jamiyah.pk, pending.pk]),
+            {"action": "approve"},
+        )
+        pending.refresh_from_db()
+
+        self.assertRedirects(first_response, reverse("jamiyah_detail", args=[jamiyah.pk]))
+        self.assertEqual(second_response.status_code, 404)
+        self.assertEqual(pending.status, Membership.Status.APPROVED)
+        self.assertEqual(
+            Membership.objects.filter(
+                jamiyah=jamiyah,
+                status=Membership.Status.APPROVED,
+            ).count(),
+            2,
+        )
+
+    def test_rejected_membership_cannot_be_approved_again_by_request_view(self):
+        jamiyah = make_jamiyah(self.manager, max_members=3)
+        rejected = add_membership(
+            jamiyah,
+            self.member,
+            status=Membership.Status.REJECTED,
+        )
+        self.client.force_login(self.manager)
+
+        response = self.client.post(
+            reverse("manage_join_request", args=[jamiyah.pk, rejected.pk]),
+            {"action": "approve"},
+        )
+        rejected.refresh_from_db()
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(rejected.status, Membership.Status.REJECTED)
+
     def test_generate_payout_schedule_activates_jamiyah(self):
         jamiyah = make_jamiyah(self.manager)
         member_membership = add_membership(jamiyah, self.member)
@@ -254,6 +304,82 @@ class JamiyahWorkflowTests(TestCase):
         jamiyah.refresh_from_db()
         self.assertRedirects(response, reverse("jamiyah_detail", args=[jamiyah.pk]))
         self.assertEqual(jamiyah.status, Jamiyah.Status.OPEN)
+        self.assertFalse(PayoutTurn.objects.filter(jamiyah=jamiyah).exists())
+
+    def test_second_payout_schedule_generation_is_rejected(self):
+        jamiyah = make_jamiyah(self.manager)
+        member_membership = add_membership(jamiyah, self.member)
+        manager_membership = Membership.objects.get(jamiyah=jamiyah, user=self.manager)
+        self.client.force_login(self.manager)
+        member_order = [str(manager_membership.pk), str(member_membership.pk)]
+
+        first_response = self.client.post(
+            reverse("generate_payout_schedule", args=[jamiyah.pk]),
+            {"member_order": member_order},
+        )
+        second_response = self.client.post(
+            reverse("generate_payout_schedule", args=[jamiyah.pk]),
+            {"member_order": member_order},
+        )
+        jamiyah.refresh_from_db()
+
+        self.assertRedirects(first_response, reverse("jamiyah_detail", args=[jamiyah.pk]))
+        self.assertRedirects(second_response, reverse("jamiyah_detail", args=[jamiyah.pk]))
+        self.assertEqual(jamiyah.status, Jamiyah.Status.ACTIVE)
+        self.assertEqual(PayoutTurn.objects.filter(jamiyah=jamiyah).count(), 2)
+
+    def test_duplicate_payout_position_is_rejected_by_database_constraint(self):
+        jamiyah = make_jamiyah(self.manager)
+        member_membership = add_membership(jamiyah, self.member)
+        manager_membership = Membership.objects.get(jamiyah=jamiyah, user=self.manager)
+        PayoutTurn.objects.create(
+            jamiyah=jamiyah,
+            membership=manager_membership,
+            position=1,
+            payout_date=jamiyah.start_date,
+        )
+
+        with self.assertRaises(IntegrityError):
+            PayoutTurn.objects.create(
+                jamiyah=jamiyah,
+                membership=member_membership,
+                position=1,
+                payout_date=jamiyah.start_date,
+            )
+
+    def test_payout_turn_rejects_cross_jamiyah_membership_on_validation(self):
+        other_jamiyah = make_jamiyah(self.other, name="Other Jamiyah")
+        jamiyah = make_jamiyah(self.manager)
+        foreign_membership = Membership.objects.get(
+            jamiyah=other_jamiyah,
+            user=self.other,
+        )
+        turn = PayoutTurn(
+            jamiyah=jamiyah,
+            membership=foreign_membership,
+            position=1,
+            payout_date=jamiyah.start_date,
+        )
+
+        with self.assertRaises(ValidationError):
+            turn.full_clean()
+
+    def test_payout_turn_save_rejects_cross_jamiyah_membership(self):
+        other_jamiyah = make_jamiyah(self.other, name="Other Jamiyah")
+        jamiyah = make_jamiyah(self.manager)
+        foreign_membership = Membership.objects.get(
+            jamiyah=other_jamiyah,
+            user=self.other,
+        )
+        turn = PayoutTurn(
+            jamiyah=jamiyah,
+            membership=foreign_membership,
+            position=1,
+            payout_date=jamiyah.start_date,
+        )
+
+        with self.assertRaises(ValidationError):
+            turn.save()
         self.assertFalse(PayoutTurn.objects.filter(jamiyah=jamiyah).exists())
 
     def test_private_jamiyah_detail_is_restricted_to_approved_members(self):

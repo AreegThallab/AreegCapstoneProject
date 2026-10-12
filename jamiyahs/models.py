@@ -259,6 +259,13 @@ class PayoutTurn(models.Model):
                     "لا يمكن تحديد دور لعضو غير مقبول."
                 )
 
+    def save(self, *args, **kwargs):
+        self.full_clean(
+            validate_unique=False,
+            validate_constraints=False
+        )
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return (
             f"{self.jamiyah.name} - "
