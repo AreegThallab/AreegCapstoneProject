@@ -1,0 +1,161 @@
+
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}جمعياتي | دَوْرة{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/jamiyahs.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="my-jamiyahs-page">
+    <div class="dashboard-container">
+
+        <!-- 01. PAGE HEADER -->
+        <div class="my-jamiyahs-hero">
+            <div class="my-jamiyahs-hero-content">
+                <h1>جمعياتي</h1>
+            </div>
+
+            <a href="{% url 'create_jamiyah' %}" class="my-jamiyahs-create-btn">
+                <img src="{% static 'images/icons/plus.svg' %}" alt="أيقونة إنشاء جمعية">
+                <span>إنشاء جمعية</span>
+            </a>
+        </div>
+
+
+        <!-- 03. LIST HEADER AND FILTERS -->
+        <div class="my-jamiyahs-toolbar">
+            <div class="my-jamiyahs-toolbar-text">
+                <h2>قائمة الجمعيات</h2>
+                <p>استعرض الجمعيات المسجلة في حسابك بسهولة ووضوح.</p>
+            </div>
+
+            <div class="my-jamiyahs-toolbar-actions">
+                <nav class="my-jamiyahs-filters" aria-label="تصفية الجمعيات">
+
+                    {% if selected_filter == 'all' %}
+                    <a href="{% url 'my_jamiyahs' %}?filter=all" class="is-active" aria-current="page">الكل</a>
+                    {% else %}
+                    <a href="{% url 'my_jamiyahs' %}?filter=all">الكل</a>
+                    {% endif %}
+
+                    {% if selected_filter == 'managed' %}
+                    <a href="{% url 'my_jamiyahs' %}?filter=managed" class="is-active" aria-current="page">أديرها</a>
+                    {% else %}
+                    <a href="{% url 'my_jamiyahs' %}?filter=managed">أديرها</a>
+                    {% endif %}
+
+                    {% if selected_filter == 'joined' %}
+                    <a href="{% url 'my_jamiyahs' %}?filter=joined" class="is-active" aria-current="page">مشترك فيها</a>
+                    {% else %}
+                    <a href="{% url 'my_jamiyahs' %}?filter=joined">مشترك فيها</a>
+                    {% endif %}
+
+                </nav>
+            </div>
+        </div>
+
+        <!-- 04. JAMIYAH CARDS -->
+        {% if memberships %}
+        <div class="my-jamiyahs-grid">
+            {% for membership in memberships %}
+            <article class="my-jamiyah-card">
+
+                <!-- ROLE AND DATE -->
+                <div class="my-jamiyah-card-top">
+                    <span class="my-jamiyah-role {% if membership.role == 'manager' %}is-manager{% else %}is-member{% endif %}">
+                        {{ membership.get_role_display }}
+                    </span>
+                    <span class="my-jamiyah-created-at">
+                        أُنشئت في {{ membership.jamiyah.created_at|date:"Y/m/d" }}
+                    </span>
+                </div>
+
+                <!-- NAME AND DESCRIPTION -->
+                <div class="my-jamiyah-card-head">
+                    <div class="my-jamiyah-card-head-text">
+                        <h3>{{ membership.jamiyah.name }}</h3>
+                        <p class="my-jamiyah-card-description">
+                            {% if membership.jamiyah.description %}
+                                {{ membership.jamiyah.description|truncatechars:110 }}
+                            {% else %}
+                                جمعية من {{ membership.jamiyah.max_members }} أشخاص
+                                بسهم {{ membership.jamiyah.contribution_amount|floatformat:2 }} ر.س.
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="my-jamiyah-card-icon">
+                        <img src="{% static 'images/icons/group.svg' %}" alt="أيقونة الجمعية">
+                    </div>
+                </div>
+
+                <!-- FINANCIAL DETAILS -->
+                <div class="my-jamiyah-card-details">
+                    <div class="my-jamiyah-detail-item">
+                        <span class="my-jamiyah-detail-label">مبلغ الاشتراك</span>
+                        <strong class="my-jamiyah-detail-value">
+                            {{ membership.jamiyah.contribution_amount|floatformat:2 }} ر.س
+                        </strong>
+                    </div>
+                    <div class="my-jamiyah-detail-item">
+                        <span class="my-jamiyah-detail-label">عدد الأعضاء المطلوب</span>
+                        <strong class="my-jamiyah-detail-value">
+                            {{ membership.jamiyah.max_members }}
+                        </strong>
+                    </div>
+                </div>
+
+                <!-- VISIBILITY AND STATUS -->
+                <div class="my-jamiyah-card-tags">
+                    <span class="my-jamiyah-tag">
+                        {{ membership.jamiyah.get_visibility_display }}
+                    </span>
+                    <span class="my-jamiyah-tag">
+                        {{ membership.jamiyah.get_status_display }}
+                    </span>
+                </div>
+
+                <!-- ACTION -->
+                <div class="my-jamiyah-card-footer">
+                    <a href="{% url 'jamiyah_detail' membership.jamiyah.pk %}" class="my-jamiyah-details-btn">
+                        عرض تفاصيل الجمعية
+                    </a>
+                </div>
+
+            </article>
+            {% endfor %}
+        </div>
+
+        <!-- 05. EMPTY STATES -->
+        {% else %}
+        <div class="my-jamiyahs-empty">
+            <div class="my-jamiyahs-empty-icon">
+                <img src="{% static 'images/icons/group.svg' %}" alt="أيقونة عدم وجود جمعيات">
+            </div>
+
+            {% if selected_filter == 'managed' %}
+                <h3>ما عندك جمعيات تديرها حاليًا</h3>
+                <p>ابدأ بإنشاء جمعية جديدة وبتظهر هنا مباشرة.</p>
+                <a href="{% url 'create_jamiyah' %}" class="my-jamiyahs-empty-btn">إنشاء جمعية</a>
+
+            {% elif selected_filter == 'joined' %}
+                <h3>ما أنت مشترك في جمعيات حاليًا</h3>
+                <p>أي جمعية تنضم لها وتُقبل عضويتك فيها بتظهر هنا.</p>
+                <a href="{% url 'explore_jamiyahs' %}" class="my-jamiyahs-empty-btn">استكشف الجمعيات</a>
+
+            {% else %}
+                <h3>لسه ما عندك جمعيات</h3>
+                <p>أنشئ أول جمعية لك أو انضم إلى جمعية مناسبة لك.</p>
+                <div class="my-jamiyahs-empty-actions">
+                    <a href="{% url 'create_jamiyah' %}" class="my-jamiyahs-empty-btn">إنشاء جمعية</a>
+                    <a href="{% url 'explore_jamiyahs' %}" class="my-jamiyahs-empty-btn secondary">استكشف الجمعيات</a>
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+{% endblock %}

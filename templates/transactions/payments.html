@@ -1,0 +1,312 @@
+
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}دفعات {{ jamiyah.name }} | دَوْرة{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/payments.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="payments-page">
+    <div class="dashboard-container">
+
+        <!-- =========================================
+             01. BREADCRUMB
+        ========================================= -->
+        <div class="payments-breadcrumb">
+            <a href="{% url 'my_jamiyahs' %}">جمعياتي</a>
+            <span>/</span>
+            <a href="{% url 'jamiyah_detail' jamiyah.pk %}">
+                {{ jamiyah.name }}
+            </a>
+            <span>/</span>
+            <span>الدفعات</span>
+        </div>
+
+        <!-- =========================================
+             02. BACK TO JAMIYAH DETAILS
+        ========================================= -->
+        <div class="payments-back-wrapper">
+            <a
+                href="{% url 'jamiyah_detail' jamiyah.pk %}"
+                class="payments-back-btn"
+                aria-label="العودة إلى تفاصيل جمعية {{ jamiyah.name }}"
+            >
+                <img
+                    src="{% static 'images/icons/chevron.svg' %}"
+                    alt="أيقونة الرجوع إلى تفاصيل الجمعية"
+                >
+                <span>العودة لتفاصيل الجمعية</span>
+            </a>
+        </div>
+
+        <!-- =========================================
+             03. HERO
+        ========================================= -->
+        <header class="payments-hero">
+            <div class="payments-hero-icon">
+                <img
+                    src="{% static 'images/icons/receipt.svg' %}"
+                    alt="أيقونة سجل الدفعات"
+                >
+            </div>
+
+            <div>
+                <span class="payments-eyebrow">
+                    متابعة الاشتراكات
+                </span>
+
+                <h1>دفعات {{ jamiyah.name }}</h1>
+
+                <p>
+                    {% if is_manager %}
+                        راجع بلاغات الأعضاء وأكّد الدفعات
+                        بعد التحقق منها خارج المنصة.
+                    {% else %}
+                        سجّل الدفعات التي سددتها،
+                        وتابع حالة مراجعتها من المدير.
+                    {% endif %}
+                </p>
+            </div>
+        </header>
+
+        <!-- =========================================
+             04. STATISTICS
+        ========================================= -->
+        <div class="payments-stats">
+
+            <article class="payments-stat">
+                <span>مبلغ الاشتراك لكل دورة</span>
+                <strong>
+                    {{ jamiyah.contribution_amount|floatformat:2 }}
+                    <small>ر.س</small>
+                </strong>
+            </article>
+
+            <article class="payments-stat">
+                <span>عدد الدورات</span>
+                <strong>{{ rounds|length }}</strong>
+            </article>
+
+            <article class="payments-stat">
+                <span>عدد الأعضاء</span>
+                <strong>{{ members_count }}</strong>
+            </article>
+
+        </div>
+
+        <!-- =========================================
+             05. PAYMENT ROUNDS
+        ========================================= -->
+        {% if rounds %}
+
+            <div class="payments-section-heading">
+                <h2>سجل الدفعات حسب الدورة</h2>
+                <p>
+                    يتم تسجيل كل اشتراك بشكل منفصل،
+                    ثم مراجعته من مدير الجمعية.
+                </p>
+            </div>
+
+            <div class="payments-rounds">
+                {% for round in rounds %}
+
+                    <article class="payments-round-card">
+
+                        <!-- ROUND HEADER -->
+                        <div class="payments-round-header">
+                            <div>
+                                <span class="payments-round-label">
+                                    الدورة {{ round.turn.position }}
+                                </span>
+
+                                <h3>
+                                    موعد الدورة:
+                                    {{ round.turn.payout_date|date:"Y/m/d" }}
+                                </h3>
+
+                                <p>
+                                    المستلم:
+                                    {{ round.turn.membership.user.profile.full_name|default:round.turn.membership.user.username }}
+                                </p>
+                            </div>
+
+                            <span class="payments-progress {% if round.is_complete %}is-complete{% endif %}">
+                                {{ round.verified_count }} /
+                                {{ round.total_members }}
+                                دفعات مؤكدة
+                            </span>
+                        </div>
+
+                        <!-- ROUND MEMBERS -->
+                        <div class="payments-rows">
+                            {% for row in round.rows %}
+
+                                <div class="payments-member-row">
+
+                                    <!-- MEMBER INFORMATION -->
+                                    <div class="payments-member">
+                                        <div class="payments-avatar">
+                                            <img
+                                                src="{% static 'images/icons/user.svg' %}"
+                                                alt="أيقونة عضو الجمعية"
+                                            >
+                                        </div>
+
+                                        <div class="payments-member-info">
+                                            <strong>
+                                                {{ row.membership.user.profile.full_name|default:row.membership.user.username }}
+                                            </strong>
+
+                                            <span>
+                                                {{ jamiyah.contribution_amount|floatformat:2 }}
+                                                ر.س
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- PAYMENT STATUS -->
+                                    <div class="payments-row-status">
+                                        {% if row.payment %}
+
+                                            {% if row.payment.status == 'verified' %}
+                                                <span class="payment-status is-verified">
+                                                    مؤكدة
+                                                </span>
+
+                                            {% elif row.payment.status == 'pending' %}
+                                                <span class="payment-status is-pending">
+                                                    بانتظار التأكيد
+                                                </span>
+
+                                            {% else %}
+                                                <span class="payment-status is-rejected">
+                                                    مرفوضة
+                                                </span>
+                                            {% endif %}
+
+                                        {% else %}
+                                            <span class="payment-status is-unreported">
+                                                غير مسجلة
+                                            </span>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- ACTION BUTTONS -->
+                                    <div class="payments-actions">
+
+                                        <!-- MEMBER REPORTS PAYMENT -->
+                                        {% if row.can_report %}
+                                            <form
+                                                method="POST"
+                                                action="{% url 'report_payment' jamiyah.pk round.turn.pk %}"
+                                            >
+                                                {% csrf_token %}
+
+                                                <button
+                                                    type="submit"
+                                                    class="payments-action-btn"
+                                                >
+                                                    {% if row.payment %}
+                                                        إعادة تسجيل الدفعة
+                                                    {% else %}
+                                                        تسجيل دفعة
+                                                    {% endif %}
+                                                </button>
+                                            </form>
+                                        {% endif %}
+
+                                        <!-- MANAGER REVIEWS PAYMENT -->
+                                        {% if is_manager and row.payment.status == 'pending' %}
+
+                                            <form
+                                                method="POST"
+                                                action="{% url 'review_payment' jamiyah.pk row.payment.pk %}"
+                                            >
+                                                {% csrf_token %}
+
+                                                <input
+                                                    type="hidden"
+                                                    name="action"
+                                                    value="verify"
+                                                >
+
+                                                <button
+                                                    type="submit"
+                                                    class="payments-verify-btn"
+                                                >
+                                                    تأكيد
+                                                </button>
+                                            </form>
+
+                                            <form
+                                                method="POST"
+                                                action="{% url 'review_payment' jamiyah.pk row.payment.pk %}"
+                                            >
+                                                {% csrf_token %}
+
+                                                <input
+                                                    type="hidden"
+                                                    name="action"
+                                                    value="reject"
+                                                >
+
+                                                <button
+                                                    type="submit"
+                                                    class="payments-reject-btn"
+                                                >
+                                                    رفض
+                                                </button>
+                                            </form>
+
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+
+                            {% endfor %}
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+            </div>
+
+        <!-- =========================================
+             06. EMPTY STATE
+        ========================================= -->
+        {% else %}
+
+            <div class="payments-empty">
+                <img
+                    src="{% static 'images/icons/receipt.svg' %}"
+                    alt="أيقونة عدم وجود سجل دفعات"
+                >
+
+                <h2>ما فيه جدول استلام حتى الآن</h2>
+
+                <p>
+                    لازم يحدد المدير ترتيب الأعضاء
+                    ويبدأ الجمعية أولًا حتى تظهر الدورات هنا.
+                </p>
+
+                <a href="{% url 'jamiyah_detail' jamiyah.pk %}">
+                    العودة لتفاصيل الجمعية
+                </a>
+            </div>
+
+        {% endif %}
+
+        <!-- =========================================
+             07. DISCLAIMER
+        ========================================= -->
+        <div class="payments-disclaimer">
+            دَوْرة توثّق بلاغات الدفع ومراجعتها فقط.
+            لا تستقبل الأموال ولا تنفّذ تحويلات مالية.
+        </div>
+
+    </div>
+</section>
+{% endblock %}

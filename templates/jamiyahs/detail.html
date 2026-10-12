@@ -1,0 +1,1084 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% load static %}
+
+{% block title %}{{ jamiyah.name }} | دَوْرة{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/jamiyahs.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<section class="jamiyah-detail-page">
+
+    <div class="dashboard-container">
+
+        <!-- =========================================
+
+             01. BREADCRUMB
+
+        ========================================= -->
+
+        <div class="jd-breadcrumb">
+
+            <a href="{% url 'my_jamiyahs' %}">جمعياتي</a>
+
+            <span>/</span>
+
+            <span>{{ jamiyah.name }}</span>
+
+        </div>
+
+        <!-- =========================================
+
+             02. JAMIYAH HERO
+
+        ========================================= -->
+
+        <header class="jd-hero">
+
+            <div class="jd-hero-content">
+
+                <div class="jd-hero-icon">
+
+                    <img src="{% static 'images/icons/group.svg' %}" alt="أيقونة الجمعية">
+
+                </div>
+
+                <div>
+
+                    <span class="jd-eyebrow">تفاصيل الجمعية</span>
+
+                    <h1>{{ jamiyah.name }}</h1>
+
+                    <p>
+
+                        {% if jamiyah.description %}
+
+                        {{ jamiyah.description }}
+
+                        {% else %}
+
+                        تابع تفاصيل الجمعية وأعضائها من مكان واحد.
+
+                        {% endif %}
+
+                    </p>
+
+                    <div class="jd-hero-tags">
+
+                        <span>{{ jamiyah.get_visibility_display }}</span>
+
+                        <span>{{ jamiyah.get_status_display }}</span>
+
+                        {% if is_manager %}
+
+                        <span>أنت المدير</span>
+
+                        {% elif is_approved %}
+
+                        <span>أنت عضو</span>
+
+                        {% elif my_membership.status == 'pending' %}
+
+                        <span>طلبك قيد المراجعة</span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- =========================================
+
+             03. STATISTICS
+
+        ========================================= -->
+
+        <div class="jd-stats">
+
+            <article class="jd-stat">
+
+                <span>مبلغ الاشتراك</span>
+
+                <strong>
+
+                    {{ jamiyah.contribution_amount|floatformat:2 }}
+
+                    <small>ر.س</small>
+
+                </strong>
+
+            </article>
+
+            <article class="jd-stat">
+
+                <span>الأعضاء الحاليون</span>
+
+                <strong>{{ approved_count }}</strong>
+
+            </article>
+
+            <article class="jd-stat">
+
+                <span>العدد المستهدف</span>
+
+                <strong>{{ jamiyah.max_members }}</strong>
+
+            </article>
+
+            <article class="jd-stat">
+
+                <span>المقاعد المتبقية</span>
+
+                <strong>{{ remaining_seats }}</strong>
+
+            </article>
+
+        </div>
+
+        <!-- =========================================
+
+             04. MEMBERS AND SUMMARY
+
+        ========================================= -->
+
+        <div class="jd-layout">
+
+            <!-- MEMBERS PANEL -->
+
+            <section class="jd-panel">
+
+                <div class="jd-panel-heading">
+
+                    <div>
+
+                        <h2>أعضاء الجمعية</h2>
+
+                        <p>المدير والأعضاء المقبولون</p>
+
+                    </div>
+
+                    <span class="jd-count">{{ approved_count }}</span>
+
+                </div>
+
+                <!-- MANAGER -->
+
+                {% if manager_membership %}
+
+                <div class="jd-manager-section">
+
+                    <span class="jd-members-section-label">
+
+                        إدارة الجمعية
+
+                    </span>
+
+                    <div class="jd-manager-card">
+
+                        <div class="jd-member-avatar">
+
+                            <img src="{% static 'images/icons/user.svg' %}" alt="أيقونة مدير الجمعية">
+
+                        </div>
+
+                        <div class="jd-member-info">
+
+                            <strong>
+
+                                {{ manager_membership.user.profile.full_name|default:manager_membership.user.username }}
+
+                            </strong>
+
+                            <span>@{{ manager_membership.user.username }}</span>
+
+                        </div>
+
+                        <span class="jd-role is-manager">مدير الجمعية</span>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+                <!-- REGULAR MEMBERS -->
+
+                {% if is_approved %}
+
+                <div class="jd-regular-members">
+
+                    <h3 class="jd-members-section-label">الأعضاء</h3>
+
+                    <div class="jd-members">
+
+                        {% for membership in regular_members %}
+
+                        <div class="jd-member">
+
+                            <div class="jd-member-avatar">
+
+                                <img src="{% static 'images/icons/user.svg' %}" alt="أيقونة عضو الجمعية">
+
+                            </div>
+
+                            <div class="jd-member-info">
+
+                                <strong>
+
+                                    {{ membership.user.profile.full_name|default:membership.user.username }}
+
+                                </strong>
+
+                                <span>@{{ membership.user.username }}</span>
+
+                            </div>
+
+                            <span class="jd-role">عضو</span>
+
+                        </div>
+
+                        {% empty %}
+
+                        <div class="jd-members-empty">
+
+                            لم ينضم أعضاء آخرون إلى الجمعية بعد.
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="jd-members-private-note">
+
+                    <img src="{% static 'images/icons/user.svg' %}" alt="أيقونة خصوصية الأعضاء">
+
+                    <p>
+
+                        تظهر قائمة بقية الأعضاء بعد الموافقة على طلب انضمامك.
+
+                    </p>
+
+                </div>
+
+                {% endif %}
+
+            </section>
+
+            <!-- SUMMARY SIDEBAR -->
+
+            <aside class="jd-sidebar">
+
+                <div class="jd-panel">
+
+                    <div class="jd-panel-heading">
+
+                        <div>
+
+                            <h2>ملخص الجمعية</h2>
+
+                            <p>معلومات تنظيمية</p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="jd-summary-row">
+
+                        <span>مؤسس الجمعية</span>
+
+                        <strong>{{ jamiyah.creator.username }}</strong>
+
+                    </div>
+
+                    <div class="jd-summary-row">
+
+                        <span>تاريخ الإنشاء</span>
+
+                        <strong>{{ jamiyah.created_at|date:"Y/m/d" }}</strong>
+
+                    </div>
+
+                    <div class="jd-summary-row">
+
+                        <span>دورية الجمعية</span>
+
+                        <strong>{{ jamiyah.get_frequency_display }}</strong>
+
+                    </div>
+
+                    <div class="jd-summary-row">
+
+                        <span>تاريخ البداية</span>
+
+                        <strong>
+
+                            {% if jamiyah.start_date %}
+
+                            {{ jamiyah.start_date|date:"Y/m/d" }}
+
+                            {% else %}
+
+                            لم يُحدد بعد
+
+                            {% endif %}
+
+                        </strong>
+
+                    </div>
+
+                    <div class="jd-summary-row">
+
+                        <span>نوع الجمعية</span>
+
+                        <strong>{{ jamiyah.get_visibility_display }}</strong>
+
+                    </div>
+
+                    <div class="jd-summary-row">
+
+                        <span>حالة الجمعية</span>
+
+                        <strong>{{ jamiyah.get_status_display }}</strong>
+
+                    </div>
+
+                    <!-- MAIN ACTION: JUMP TO TIMELINE -->
+
+                    {% if is_approved %}
+
+                    <a href="#journey" class="jd-main-action" aria-label="الانتقال إلى أدوار الاستلام والدفعات">
+
+                        <span class="jd-main-action-icon">
+
+                            <img src="{% static 'images/icons/wallet.svg' %}" alt="أيقونة إدارة الأدوار والدفعات">
+
+                        </span>
+
+                        <span class="jd-main-action-content">
+
+                            <strong>إدارة الأدوار والدفعات</strong>
+
+                            <small>متابعة دفعات الأعضاء وتأكيد تسليم مبالغ الجمعية</small>
+
+                        </span>
+
+
+                    </a>
+
+                    {% endif %}
+
+                    <!-- PRIVATE INVITATION -->
+
+                    {% if is_manager and jamiyah.visibility == 'private' %}
+
+                    <div class="jd-invite-card">
+
+                        <div class="jd-invite-heading">
+
+                            <div class="jd-invite-icon">
+
+                                <img src="{% static 'images/icons/link.svg' %}" alt="أيقونة رابط الدعوة">
+
+                            </div>
+
+                            <div>
+
+                                <h3>دعوة أعضاء للجمعية</h3>
+
+                                <p>
+
+                                    انسخ رابط الدعوة وشاركه مع الأشخاص اللي تبيهم ينضمون.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <label for="private-invite-url">
+
+                            رابط الدعوة الخاص
+
+                        </label>
+
+                        <input id="private-invite-url" type="text" value="{{ invite_url }}" readonly dir="ltr">
+
+                        <button type="button" class="jd-copy-invite" id="copy-private-invite">
+
+                            نسخ رابط الدعوة
+
+                        </button>
+
+                        <p class="jd-invite-feedback" id="private-invite-feedback" role="status" aria-live="polite"></p>
+
+                        <form method="POST" action="{% url 'regenerate_invite_link' jamiyah.pk %}"
+
+                            class="jd-regenerate-invite">
+
+                            {% csrf_token %}
+
+                            <button type="submit">
+
+                                تجديد رابط الدعوة
+
+                            </button>
+
+                        </form>
+
+                        <p class="jd-invite-note">
+
+                            أي شخص معه الرابط يقدر يطلب الانضمام، لكن لازم موافقة المدير قبل ما يصير عضوًا.
+
+                        </p>
+
+                        {% if jamiyah.status != 'open' %}
+
+                        <p class="jd-invite-notice">
+
+                            الجمعية ليست مفتوحة حاليًا، لذلك لا يمكن قبول طلبات انضمام جديدة.
+
+                        </p>
+
+                        {% endif %}
+
+                    </div>
+
+                    {% endif %}
+
+                    <!-- JOIN REQUEST -->
+
+                    {% if can_request_join %}
+
+                    <form method="POST" action="{% url 'request_join' jamiyah.pk %}" class="jd-join-form">
+
+                        {% csrf_token %}
+
+                        <button type="submit" class="jd-primary-btn">
+
+                            طلب الانضمام
+
+                        </button>
+
+                    </form>
+
+                    {% elif my_membership.status == 'pending' %}
+
+                    <div class="jd-notice">
+
+                        طلب انضمامك بانتظار مراجعة المدير.
+
+                    </div>
+
+                    {% elif my_membership.status == 'rejected' %}
+
+                    <div class="jd-notice">
+
+                        تم رفض طلب الانضمام السابق.
+
+                    </div>
+
+                    {% elif is_approved %}
+
+                    <div class="jd-notice">
+
+                        أنت مسجل في هذه الجمعية.
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="jd-notice">
+
+                        الانضمام غير متاح حاليًا.
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="jd-note">
+
+                    دَوْرة تنظّم الجمعيات وتوثّق بياناتها، ولا تنفّذ تحويلات مالية.
+
+                </div>
+
+            </aside>
+
+        </div>
+
+        <!-- =========================================
+
+             05. INTERACTIVE PAYOUT TIMELINE
+
+        ========================================= -->
+
+        {% if is_approved %}
+
+        <section class="jd-panel jd-journey" id="journey">
+
+            <!-- TIMELINE HEADING -->
+
+            <div class="jd-panel-heading">
+
+                <div>
+
+                    <span class="jd-journey-label">رحلة الجمعية</span>
+
+                    <h2>أدوار الاستلام والدفعات</h2>
+
+                    <p>
+
+                        افتح أي دور للاطلاع على دفعاته وتأكيد التسليم دون مغادرة الصفحة.
+
+                    </p>
+
+                </div>
+
+                {% if timeline_rows %}
+
+                <span class="jd-count">
+
+                    {{ delivered_turns_count }} من {{ timeline_rows|length }}
+
+                    تم تسليمها
+
+                </span>
+
+                {% endif %}
+
+            </div>
+
+            {% if timeline_rows %}
+
+            <!-- OVERALL DELIVERY PROGRESS -->
+
+            <progress class="jd-native-progress jd-journey-native-progress" value="{{ delivered_turns_count }}"
+
+                max="{{ timeline_rows|length }}" aria-label="تقدم تسليم أدوار الجمعية"></progress>
+
+            <!-- TIMELINE ENTRIES -->
+
+            <div class="jd-timeline">
+
+                {% for row in timeline_rows %}
+
+                <article
+
+                    class="jd-timeline-entry {% if row.turn.delivered_at %}is-delivered{% elif row.ready_to_deliver %}is-ready{% endif %}">
+
+                    <!-- TIMELINE MARKER -->
+
+                    <div class="jd-timeline-marker" aria-hidden="true">
+
+                        {% if row.turn.delivered_at %}
+
+                        <img src="{% static 'images/icons/check.svg' %}" alt="أيقونة اكتمال التسليم">
+
+                        {% else %}
+
+                        {{ row.turn.position }}
+
+                        {% endif %}
+
+                    </div>
+
+                    <!-- TURN CARD -->
+
+                    <details class="jd-turn-card" {% if row.ready_to_deliver %}open{% endif %}>
+
+                        <summary class="jd-turn-summary">
+
+                            <div class="jd-turn-summary-main">
+
+                                <span class="jd-turn-overline">
+
+                                    الدور {{ row.turn.position }} ·
+
+                                    {{ row.turn.payout_date|date:"Y/m/d" }}
+
+                                </span>
+
+                                <h3>
+
+                                    {{ row.turn.membership.user.profile.full_name|default:row.turn.membership.user.username }}
+
+                                </h3>
+
+                                <span class="jd-turn-amount">
+
+                                    مبلغ الدورة:
+
+                                    {{ row.payout_amount|floatformat:2 }} ر.س
+
+                                </span>
+
+                            </div>
+
+                            <div class="jd-turn-summary-end">
+
+                                {% if row.turn.delivered_at %}
+
+                                <span class="jd-delivery-status is-delivered">
+
+                                    تم تأكيد التسليم
+
+                                </span>
+
+                                {% elif row.ready_to_deliver %}
+
+                                <span class="jd-delivery-status is-ready">
+
+                                    الدفعات مكتملة
+
+                                </span>
+
+                                {% elif row.verified_count %}
+
+                                <span class="jd-delivery-status is-pending">
+
+                                    الدفعات قيد الاكتمال
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="jd-delivery-status is-upcoming">
+
+                                    بانتظار الدفعات
+
+                                </span>
+
+                                {% endif %}
+
+                                <span class="jd-expand-cue">التفاصيل</span>
+
+                            </div>
+
+                        </summary>
+
+                        <!-- EXPANDED TURN CONTENT -->
+
+                        <div class="jd-turn-content">
+
+                            <!-- PAYMENT SUMMARY -->
+
+                            <div class="jd-turn-payment-summary">
+
+                                <div>
+
+                                    <span>الدفعات المؤكدة</span>
+
+                                    <strong>
+
+                                        {{ row.verified_count }} /
+
+                                        {{ row.required_count }}
+
+                                    </strong>
+
+                                </div>
+
+                                <!-- NATIVE PAYMENT PROGRESS -->
+
+                                {% if row.required_count %}
+
+                                <progress class="jd-native-progress" value="{{ row.verified_count }}"
+
+                                    max="{{ row.required_count }}" aria-label="تقدم دفعات الدورة"></progress>
+
+                                {% endif %}
+
+                            </div>
+
+                            <!-- MEMBER PAYMENTS -->
+
+                            <h4>دفعات أعضاء هذه الدورة</h4>
+
+                            <div class="jd-cycle-payments">
+
+                                {% for item in row.payment_members %}
+
+                                <div class="jd-cycle-payment">
+
+                                    <span>
+
+                                        {{ item.membership.user.profile.full_name|default:item.membership.user.username }}
+
+                                    </span>
+
+                                    {% if item.payment_status == 'verified' %}
+
+                                    <span class="jd-payment-badge is-verified">
+
+                                        مؤكدة
+
+                                    </span>
+
+                                    {% elif item.payment_status == 'pending' %}
+
+                                    <span class="jd-payment-badge is-pending">
+
+                                        بانتظار مراجعة المدير
+
+                                    </span>
+
+                                    {% elif item.payment_status == 'rejected' %}
+
+                                    <span class="jd-payment-badge is-rejected">
+
+                                        مرفوضة
+
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="jd-payment-badge is-missing">
+
+                                        لم تُبلّغ بعد
+
+                                    </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                            <!-- TURN ACTIONS -->
+
+                            <div class="jd-turn-actions">
+
+                                {% if row.turn.delivered_at %}
+
+                                <p class="jd-delivery-confirmed">
+
+                                    تم تأكيد تسليم مبلغ هذه الدورة إداريًا في
+
+                                    {{ row.turn.delivered_at|date:"Y/m/d" }}.
+
+                                    {% if row.turn.delivered_by %}
+
+                                    بواسطة {{ row.turn.delivered_by.username }}.
+
+                                    {% endif %}
+
+                                </p>
+
+                                {% if row.is_recipient and not row.turn.recipient_seen_at %}
+
+                                <form method="POST"
+
+                                    action="{% url 'mark_payout_delivery_seen' jamiyah.pk row.turn.pk %}">
+
+                                    {% csrf_token %}
+
+                                    <button type="submit" class="jd-primary-btn">
+
+                                        تأكيد الاطلاع على إشعار التسليم
+
+                                    </button>
+
+                                </form>
+
+                                {% endif %}
+
+                                {% elif is_manager and row.ready_to_deliver %}
+
+                                <form method="POST" action="{% url 'confirm_payout_delivery' jamiyah.pk row.turn.pk %}"
+
+                                    onsubmit="return confirm('هل تؤكد إداريًا تسليم مبلغ الدورة لهذا المستلم؟ لا تنفذ دَوْرة أي تحويل مالي.');">
+
+                                    {% csrf_token %}
+
+                                    <button type="submit" class="jd-primary-btn">
+
+                                        تأكيد تسليم مبلغ الدورة
+
+                                    </button>
+
+                                </form>
+
+                                {% elif row.is_recipient %}
+
+                                <p class="jd-turn-hint">
+
+                                    ستظهر حالة التسليم هنا بعد اكتمال الدفعات وتأكيد المدير.
+
+                                </p>
+
+                                {% endif %}
+
+                                <!-- PAYMENT DASHBOARD -->
+
+                                <a href="{% url 'payment_dashboard' jamiyah.pk %}" class="jd-inline-payments-link">
+
+                                    {% if is_manager %}
+
+                                    مراجعة أو توثيق الدفعات
+
+                                    {% else %}
+
+                                    الإبلاغ عن دفعة أو متابعة حالتها
+
+                                    {% endif %}
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </details>
+
+                </article>
+
+                {% endfor %}
+
+            </div>
+
+            {% elif can_generate_schedule %}
+
+            <!-- GENERATE PAYOUT SCHEDULE -->
+
+            <div class="jd-schedule-info">
+
+                اكتمل عدد الأعضاء. حدّد ترتيب الاستلام، ثم احفظ الجدول لبدء الجمعية.
+
+            </div>
+
+            <form method="POST" action="{% url 'generate_payout_schedule' jamiyah.pk %}" class="jd-schedule-form">
+
+                {% csrf_token %}
+
+                {% for membership in members %}
+
+                <div class="jd-order-row">
+
+                    <label for="turn-{{ forloop.counter }}">
+
+                        الدور {{ forloop.counter }}
+
+                    </label>
+
+                    <select id="turn-{{ forloop.counter }}" name="member_order" required>
+
+                        <option value="">اختر العضو المستلم</option>
+
+                        {% for option in members %}
+
+                        <option value="{{ option.pk }}">
+
+                            {{ option.user.profile.full_name|default:option.user.username }}
+
+                            (@{{ option.user.username }})
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                {% endfor %}
+
+                <p class="jd-schedule-hint">
+
+                    اختر كل عضو مرة واحدة فقط.
+
+                    تبدأ المواعيد من
+
+                    {{ jamiyah.start_date|date:"Y/m/d" }}
+
+                    وفق دورية
+
+                    {{ jamiyah.get_frequency_display }}.
+
+                </p>
+
+                <button type="submit" class="jd-primary-btn jd-schedule-submit">
+
+                    حفظ جدول الأدوار وبدء الجمعية
+
+                </button>
+
+            </form>
+
+            {% else %}
+
+            <!-- EMPTY TIMELINE -->
+
+            <div class="jd-empty">
+
+                <img src="{% static 'images/icons/calendar.svg' %}" alt="أيقونة جدول الأدوار">
+
+                <h3>لم يبدأ جدول الأدوار بعد</h3>
+
+                {% if not jamiyah.start_date %}
+
+                <p>
+
+                    يلزم تحديد تاريخ البداية قبل إنشاء جدول الاستلام.
+
+                </p>
+
+                {% elif remaining_seats > 0 %}
+
+                <p>
+
+                    متبقي {{ remaining_seats }} مقاعد.
+
+                    بعد اكتمال الأعضاء يحدد المدير ترتيب الاستلام.
+
+                </p>
+
+                {% else %}
+
+                <p>
+
+                    بانتظار اعتماد جدول الاستلام من مدير الجمعية.
+
+                </p>
+
+                {% endif %}
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+        {% endif %}
+
+        <!-- =========================================
+
+             06. MANAGER JOIN REQUESTS
+
+        ========================================= -->
+
+        {% if is_manager %}
+
+        <section class="jd-panel jd-requests">
+
+            <div class="jd-panel-heading">
+
+                <div>
+
+                    <h2>طلبات الانضمام</h2>
+
+                    <p>راجع الطلبات واتخذ قرارك</p>
+
+                </div>
+
+            </div>
+
+            {% for membership in pending_requests %}
+
+            <div class="jd-request">
+
+                <div class="jd-request-user">
+
+                    <div class="jd-member-avatar">
+
+                        <img src="{% static 'images/icons/user.svg' %}" alt="أيقونة مقدم طلب الانضمام">
+
+                    </div>
+
+                    <div class="jd-member-info">
+
+                        <strong>
+
+                            {{ membership.user.profile.full_name|default:membership.user.username }}
+
+                        </strong>
+
+                        <span>@{{ membership.user.username }}</span>
+
+                    </div>
+
+                </div>
+
+                <div class="jd-request-actions">
+
+                    <form method="POST" action="{% url 'manage_join_request' jamiyah.pk membership.pk %}">
+
+                        {% csrf_token %}
+
+                        <input type="hidden" name="action" value="approve">
+
+                        <button type="submit" class="jd-approve-btn">
+
+                            قبول
+
+                        </button>
+
+                    </form>
+
+                    <form method="POST" action="{% url 'manage_join_request' jamiyah.pk membership.pk %}">
+
+                        {% csrf_token %}
+
+                        <input type="hidden" name="action" value="reject">
+
+                        <button type="submit" class="jd-reject-btn">
+
+                            رفض
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="jd-empty">
+
+                <img src="{% static 'images/icons/activity.svg' %}" alt="أيقونة عدم وجود طلبات انضمام">
+
+                <h3>لا توجد طلبات معلّقة</h3>
+
+                <p>
+
+                    أي طلب انضمام جديد سيظهر هنا للمراجعة.
+
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        </section>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{% static 'js/jamiyahs.js' %}" defer></script>
+
+{% endblock %}

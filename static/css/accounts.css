@@ -1,0 +1,219 @@
+
+/* =========================================
+   DAWRAH | AUTHENTICATION
+========================================= */
+
+/* 01. AUTH PAGE */
+
+.auth-section {
+    min-height: calc(100vh - 88px);
+    padding: 75px 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(21, 159, 156, 0.07),
+            transparent 35%
+        ),
+        #f8fbf9;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 520px;
+
+    background: #ffffff;
+    border: 1px solid #e2ebe9;
+    border-radius: 26px;
+
+    padding: 42px;
+
+    box-shadow: 0 18px 50px rgba(16, 51, 74, 0.06);
+}
+
+/* 02. HEADING */
+
+.auth-heading {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.auth-kicker {
+    color: #159f9c;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.auth-heading h1 {
+    margin: 10px 0;
+    color: #10334a;
+    font-size: 34px;
+}
+
+.auth-heading p {
+    color: #697e87;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+/* 03. FORM */
+
+.auth-form {
+    display: grid;
+    gap: 19px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    color: #10334a;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.required {
+    color: #d35050;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    min-height: 48px;
+
+    padding: 12px 15px;
+
+    border: 1px solid #dce6e4;
+    border-radius: 12px;
+
+    background: #ffffff;
+    color: #10334a;
+
+    font: inherit;
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.25s,
+        box-shadow 0.25s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #159f9c;
+    box-shadow: 0 0 0 3px rgba(21, 159, 156, 0.10);
+}
+
+.form-group input::placeholder {
+    color: #9baaaa;
+}
+
+/* 04. MESSAGES */
+
+.field-help {
+    color: #87979d;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.field-help ul {
+    padding-right: 18px;
+    margin: 6px 0 0;
+}
+
+.field-error {
+    color: #ca4040;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.form-alert {
+    padding: 13px 16px;
+
+    background: #fff1f1;
+    border: 1px solid #f3c9c9;
+    border-radius: 12px;
+
+    color: #ac3434;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* 05. SUBMIT BUTTON */
+
+.auth-submit {
+    width: 100%;
+    min-height: 50px;
+
+    margin-top: 8px;
+
+    background: #10334a;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 13px;
+
+    font: inherit;
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s,
+        transform 0.25s,
+        box-shadow 0.25s;
+}
+
+.auth-submit:hover {
+    background: #174a61;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(16, 51, 74, 0.12);
+}
+
+/* 06. LOGIN LINK */
+
+.auth-switch {
+    margin: 25px 0 0;
+
+    text-align: center;
+    color: #697e87;
+
+    font-size: 14px;
+}
+
+.auth-switch a {
+    color: #159f9c;
+    font-weight: 800;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
+/* 07. MOBILE */
+
+@media (max-width: 600px) {
+    .auth-section {
+        padding: 35px 15px;
+    }
+
+    .auth-container {
+        padding: 30px 22px;
+        border-radius: 20px;
+    }
+
+    .auth-heading h1 {
+        font-size: 29px;
+    }
+}

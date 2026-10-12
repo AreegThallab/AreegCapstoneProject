@@ -1,0 +1,3005 @@
+/* =========================================
+DAWRAH | JAMIYAHS
+CREATE + MINE + DETAIL + EXPLORE
+PAYOUT SCHEDULE + PRIVATE INVITES
+========================================= */
+/* Layout sizing applies only to Jamiyah pages. */
+.jamiyah-create-page *,
+.my-jamiyahs-page *,
+.jamiyah-detail-page *,
+.explore-page *,
+.private-invite-page * {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   01. CREATE JAMIYAH | REDESIGNED
+========================================= */
+.jamiyah-create-page {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 45px 0 95px;
+}
+.jamiyah-create-container {
+    position: relative;
+    z-index: 1;
+}
+.jamiyah-create-decor {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+.jamiyah-create-riyal {
+    position: absolute;
+    display: block;
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    opacity: 0.12;
+}
+.jamiyah-create-riyal-1 {
+    top: 7%;
+    right: 5%;
+    width: 48px;
+    height: 48px;
+}
+.jamiyah-create-riyal-2 {
+    top: 18%;
+    left: 7%;
+    width: 34px;
+    height: 34px;
+}
+.jamiyah-create-riyal-3 {
+    top: 32%;
+    right: 3%;
+    width: 37px;
+    height: 37px;
+}
+.jamiyah-create-riyal-4 {
+    top: 45%;
+    left: 5%;
+    width: 55px;
+    height: 55px;
+    opacity: 0.09;
+}
+.jamiyah-create-riyal-5 {
+    top: 61%;
+    right: 7%;
+    width: 32px;
+    height: 32px;
+}
+.jamiyah-create-riyal-6 {
+    top: 73%;
+    left: 8%;
+    width: 40px;
+    height: 40px;
+}
+.jamiyah-create-riyal-7 {
+    bottom: 6%;
+    right: 12%;
+    width: 45px;
+    height: 45px;
+    opacity: 0.10;
+}
+.jamiyah-create-riyal-8 {
+    bottom: 14%;
+    left: 3%;
+    width: 28px;
+    height: 28px;
+}
+.jamiyah-create-heading {
+    max-width: 950px;
+    margin: 0 auto 26px;
+    text-align: right;
+}
+.jamiyah-create-eyebrow {
+    display: inline-block;
+    margin-bottom: 9px;
+    color: var(--teal);
+    font-size: 13px;
+    font-weight: 800;
+}
+.jamiyah-create-heading h1 {
+    margin: 0 0 9px;
+    color: var(--navy);
+    font-size: clamp(30px, 3.4vw, 40px);
+    line-height: 1.4;
+}
+.jamiyah-create-heading p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+.jamiyah-create-layout {
+    display: block;
+    max-width: 950px;
+    margin: 0 auto;
+}
+.jamiyah-create-card {
+    min-width: 0;
+    padding: 38px 43px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 23px;
+    box-shadow: 0 15px 40px rgba(16, 51, 74, 0.05);
+}
+.jamiyah-card-heading {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 23px;
+    border-bottom: 1px solid var(--line);
+}
+.jamiyah-create-heading-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    background: #e9f7f3;
+    border-radius: 16px;
+}
+.jamiyah-create-heading-icon img {
+    width: 27px;
+    height: 27px;
+    object-fit: contain;
+}
+.jamiyah-section-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--teal);
+    font-size: 12px;
+    font-weight: 800;
+}
+.jamiyah-card-heading h2 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 24px;
+    line-height: 1.5;
+}
+.jamiyah-create-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+.jamiyah-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+.jamiyah-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+}
+.jamiyah-form-field label {
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 800;
+}
+.jamiyah-required {
+    color: var(--teal);
+}
+.jamiyah-optional {
+    margin-inline-start: 7px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 500;
+}
+.jamiyah-form-field input,
+.jamiyah-form-field textarea,
+.jamiyah-form-field select {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 51px;
+    padding: 13px 15px;
+    color: var(--navy);
+    background: #fdfefe;
+    border: 1px solid #dce6e4;
+    border-radius: 12px;
+    outline: none;
+    font: inherit;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.jamiyah-form-field textarea {
+    min-height: 92px;
+    resize: vertical;
+    line-height: 1.8;
+}
+.jamiyah-form-field select {
+    cursor: pointer;
+}
+.jamiyah-form-field input:focus,
+.jamiyah-form-field textarea:focus,
+.jamiyah-form-field select:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(21, 159, 156, 0.1);
+}
+.jamiyah-form-field input::placeholder,
+.jamiyah-form-field textarea::placeholder {
+    color: #94a7ad;
+}
+.jamiyah-field-hint {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.7;
+}
+.jamiyah-field-error {
+    color: #b43434;
+    font-size: 12px;
+    line-height: 1.7;
+}
+.jamiyah-form-alert {
+    padding: 13px 16px;
+    color: #a33a3a;
+    background: #fff1f1;
+    border: 1px solid #f1c6c6;
+    border-radius: 12px;
+    font-size: 13px;
+}
+.jamiyah-create-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 15px 17px;
+    color: #4b7277;
+    background: #edf8f5;
+    border: 1px solid #d8ece6;
+    border-radius: 13px;
+}
+.jamiyah-create-note-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 35px;
+    height: 35px;
+    background: #e0f2ec;
+    border-radius: 10px;
+}
+.jamiyah-create-note-icon img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+.jamiyah-create-note p {
+    margin: 0;
+    padding-top: 5px;
+    font-size: 12px;
+    line-height: 1.9;
+}
+.jamiyah-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 3px;
+    padding-top: 25px;
+    border-top: 1px solid var(--line);
+}
+.jamiyah-submit-btn,
+.jamiyah-cancel-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 47px;
+    padding: 11px 23px;
+    border-radius: 12px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+.jamiyah-submit-btn {
+    color: var(--white);
+    background: var(--navy);
+    border: 1px solid var(--navy);
+}
+.jamiyah-submit-btn:hover {
+    background: #174a61;
+    transform: translateY(-2px);
+}
+.jamiyah-cancel-btn {
+    color: var(--navy);
+    background: #f4f8f7;
+    border: 1px solid var(--line);
+}
+.jamiyah-cancel-btn:hover {
+    background: #e9f3f0;
+    transform: translateY(-2px);
+}
+.jamiyah-submit-btn:focus-visible,
+.jamiyah-cancel-btn:focus-visible {
+    outline: 3px solid var(--teal);
+    outline-offset: 3px;
+}
+
+
+
+/* =========================================
+   02. MY JAMIYAHS - REDESIGNED
+========================================= */
+.my-jamiyahs-page {
+    padding: 50px 0 95px;
+}
+.my-jamiyahs-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+.my-jamiyahs-hero-content {
+    max-width: 700px;
+}
+.my-jamiyahs-eyebrow {
+    display: inline-block;
+    margin-bottom: 9px;
+    color: var(--teal);
+    font-size: 13px;
+    font-weight: 800;
+}
+.my-jamiyahs-hero h1 {
+    margin: 0 0 9px;
+    color: var(--navy);
+    font-size: clamp(30px, 3.5vw, 42px);
+    line-height: 1.4;
+}
+.my-jamiyahs-hero p {
+    max-width: 660px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.9;
+}
+.my-jamiyahs-create-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-shrink: 0;
+    width: auto;
+    min-height: 46px;
+    padding: 11px 20px;
+    color: var(--white);
+    background: var(--navy);
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 800;
+    transition: background .2s, transform .2s;
+}
+.my-jamiyahs-create-btn:hover {
+    color: var(--white);
+    background: #174a61;
+    transform: translateY(-2px);
+}
+.my-jamiyahs-create-btn:focus-visible,
+.my-jamiyahs-filters a:focus-visible,
+.my-jamiyah-details-btn:focus-visible,
+.my-jamiyahs-empty-btn:focus-visible {
+    outline: 3px solid var(--teal);
+    outline-offset: 3px;
+}
+.my-jamiyahs-create-btn img {
+    display: block;
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+.my-jamiyahs-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 0;
+    padding: 22px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 19px;
+    transition: transform .2s, box-shadow .2s;
+}
+.my-jamiyahs-stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+}
+.my-jamiyahs-stat-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 55px;
+    height: 55px;
+    background: #e9f7f3;
+    border-radius: 16px;
+}
+.my-jamiyahs-stat-icon img {
+    display: block;
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+}
+.my-jamiyahs-stat-text {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+.my-jamiyahs-stat-text span {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+}
+.my-jamiyahs-stat-text strong {
+    color: var(--navy);
+    font-size: 31px;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+}
+.my-jamiyahs-toolbar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+.my-jamiyahs-toolbar-text h2 {
+    margin: 0 0 7px;
+    color: var(--navy);
+    font-size: 25px;
+}
+.my-jamiyahs-toolbar-text p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+.my-jamiyahs-toolbar-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.my-jamiyahs-results-count {
+    flex-shrink: 0;
+    padding: 8px 13px;
+    color: #16746f;
+    background: #e9f7f3;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+}
+.my-jamiyahs-filters {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+.my-jamiyahs-filters a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 41px;
+    padding: 9px 17px;
+    color: #617a83;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 800;
+    transition: background .2s, color .2s, border-color .2s, transform .2s;
+}
+.my-jamiyahs-filters a:hover {
+    color: var(--navy);
+    border-color: #b7d8d2;
+    transform: translateY(-1px);
+}
+.my-jamiyahs-filters a.is-active {
+    color: var(--white);
+    background: var(--navy);
+    border-color: var(--navy);
+}
+.my-jamiyahs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 20px;
+}
+.my-jamiyah-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 25px;
+    background: rgba(255, 255, 255, .98);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    transition: transform .25s, box-shadow .25s, border-color .25s;
+}
+.my-jamiyah-card:hover {
+    transform: translateY(-4px);
+    border-color: #c4dfd9;
+    box-shadow: var(--shadow);
+}
+.my-jamiyah-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.my-jamiyah-role {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    padding: 6px 13px;
+    color: #58717c;
+    background: #eaf0f2;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+}
+.my-jamiyah-role.is-manager {
+    color: #16746f;
+    background: #e4f5f0;
+}
+.my-jamiyah-created-at {
+    color: var(--muted);
+    font-size: 12px;
+}
+.my-jamiyah-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    min-height: 105px;
+}
+.my-jamiyah-card-head-text {
+    flex: 1;
+    min-width: 0;
+}
+.my-jamiyah-card-head h3 {
+    margin: 0 0 10px;
+    color: var(--navy);
+    font-size: 23px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.my-jamiyah-card-description {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.9;
+    overflow-wrap: anywhere;
+}
+.my-jamiyah-card-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 54px;
+    height: 54px;
+    background: #e9f7f3;
+    border-radius: 15px;
+}
+.my-jamiyah-card-icon img {
+    display: block;
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+}
+.my-jamiyah-card-details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 18px;
+    padding: 19px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+}
+.my-jamiyah-detail-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 8px;
+}
+.my-jamiyah-detail-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+.my-jamiyah-detail-value {
+    color: var(--navy);
+    font-size: clamp(18px, 2vw, 24px);
+    font-weight: 800;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+}
+.my-jamiyah-card-tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+}
+.my-jamiyah-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 30px;
+    padding: 6px 12px;
+    color: #587680;
+    background: #eef4f2;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.my-jamiyah-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: auto;
+    padding-top: 18px;
+}
+
+.my-jamiyah-details-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: auto;
+    min-height: 45px;
+    padding: 10px 19px;
+    color: var(--white);
+    background: var(--navy);
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.5;
+    text-align: center;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.my-jamiyah-details-btn:hover {
+    color: var(--white);
+    background: #174a61;
+    transform: translateY(-2px);
+}
+.my-jamiyahs-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    padding: 38px 22px;
+    text-align: center;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+}
+.my-jamiyahs-empty-icon {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    margin-bottom: 20px;
+    background: #e9f7f3;
+    border-radius: 20px;
+}
+.my-jamiyahs-empty-icon img {
+    display: block;
+    width: 33px;
+    height: 33px;
+    object-fit: contain;
+}
+.my-jamiyahs-empty h3 {
+    margin: 0 0 10px;
+    color: var(--navy);
+    font-size: 21px;
+}
+.my-jamiyahs-empty p {
+    max-width: 400px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.9;
+}
+.my-jamiyahs-empty-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+.my-jamiyahs-empty-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 45px;
+    margin-top: 19px;
+    padding: 10px 20px;
+    color: var(--white);
+    background: var(--navy);
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 800;
+    transition: background .2s, transform .2s;
+}
+.my-jamiyahs-empty-actions .my-jamiyahs-empty-btn {
+    margin-top: 0;
+}
+.my-jamiyahs-empty-btn:hover {
+    color: var(--white);
+    background: #174a61;
+    transform: translateY(-2px);
+}
+.my-jamiyahs-empty-btn.secondary {
+    color: #16746f;
+    background: #e9f7f3;
+}
+.my-jamiyahs-empty-btn.secondary:hover {
+    color: #115b57;
+    background: #dcefe9;
+}
+
+/* 03. JAMIYAH DETAILS */
+.jamiyah-detail-page {
+    padding: 40px 0 95px;
+}
+.jd-breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 22px;
+    color: var(--muted);
+    font-size: 13px;
+}
+.jd-breadcrumb a {
+    color: var(--teal);
+    font-weight: 800;
+}
+.jd-breadcrumb a:hover {
+    color: var(--navy);
+}
+.jd-hero {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 23px;
+    padding: 38px;
+    border-radius: 24px;
+    background: linear-gradient(115deg,#10334a,#18535a);
+    color: var(--white);
+}
+.jd-hero::after {
+    content: "";
+    position: absolute;
+    left: -95px;
+    top: -130px;
+    width: 280px;
+    height: 280px;
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 50%;
+    pointer-events: none;
+}
+.jd-hero-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+}
+.jd-hero-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.13);
+}
+.jd-hero-icon img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+.jd-eyebrow {
+    color: var(--mint);
+    font-weight: 800;
+    font-size: 13px;
+}
+.jd-hero h1 {
+    margin: 8px 0 12px;
+    font-size: clamp(25px,3vw,38px);
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+.jd-hero p {
+    max-width: 730px;
+    margin: 0;
+    color: #d2e7e8;
+    font-size: 14px;
+    line-height: 1.9;
+    overflow-wrap: anywhere;
+}
+.jd-hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 22px;
+}
+.jd-hero-tags span {
+    padding: 7px 12px;
+    border: 1px solid rgba(255,255,255,.15);
+    background: rgba(255,255,255,.1);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+.jd-stats {
+    display: grid;
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    gap: 16px;
+    margin-bottom: 23px;
+}
+.jd-stat {
+    min-width: 0;
+    padding: 24px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 19px;
+}
+.jd-stat > span {
+    display: block;
+    margin-bottom: 14px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+}
+.jd-stat strong {
+    color: var(--navy);
+    font-size: clamp(22px,2.5vw,30px);
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+.jd-stat strong small {
+    font-size: 13px;
+}
+.jd-layout {
+    display: grid;
+    grid-template-columns: minmax(0,1.5fr) minmax(270px,1fr);
+    gap: 23px;
+    align-items: start;
+}
+.jd-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+    min-width: 0;
+}
+.jd-panel {
+    min-width: 0;
+    padding: 29px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+}
+.jd-panel-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 21px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--line);
+}
+.jd-panel-heading h2 {
+    margin: 0 0 7px;
+    color: var(--navy);
+    font-size: 22px;
+}
+.jd-panel-heading p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+.jd-count {
+    flex-shrink: 0;
+    padding: 7px 12px;
+    background: #e8f6f1;
+    border-radius: 20px;
+    color: #187b76;
+    font-size: 13px;
+    font-weight: 800;
+}
+/* MANAGER AND MEMBERS */
+.jd-manager-section {
+    width: 100%;
+    min-width: 0;
+}
+.jd-members-section-label {
+    display: block;
+    margin: 0 0 13px;
+    color: var(--navy);
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.5;
+}
+.jd-manager-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    padding: 18px;
+    background: #edf7f4;
+    border: 1px solid #d8eae5;
+    border-radius: 15px;
+}
+.jd-manager-card .jd-member-avatar {
+    background: var(--white);
+    border: 1px solid #d8eae5;
+}
+.jd-manager-card .jd-member-info strong {
+    font-size: 15px;
+}
+.jd-manager-card .jd-role.is-manager {
+    color: #146e68;
+    background: #d8f0e9;
+}
+.jd-regular-members {
+    min-width: 0;
+    margin-top: 25px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+}
+.jd-regular-members .jd-members-section-label {
+    margin-bottom: 8px;
+}
+.jd-members-empty {
+    padding: 20px 0 5px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.9;
+}
+.jd-members-private-note {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    margin-top: 22px;
+    padding: 17px;
+    color: #607b81;
+    background: #f6f9f8;
+    border: 1px dashed #d6e6e2;
+    border-radius: 13px;
+}
+.jd-members-private-note img {
+    width: 21px;
+    height: 21px;
+    flex-shrink: 0;
+    object-fit: contain;
+    opacity: .65;
+}
+.jd-members-private-note p {
+    margin: 0;
+    color: inherit;
+    font-size: 13px;
+    line-height: 1.9;
+}
+.jd-members {
+    display: flex;
+    flex-direction: column;
+}
+.jd-member, .jd-request {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+}
+.jd-member:last-child, .jd-request:last-child {
+    border-bottom: 0;
+}
+.jd-member-avatar {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    background: #e9f7f3;
+    border-radius: 14px;
+}
+.jd-member-avatar img {
+    width: 23px;
+    height: 23px;
+    object-fit: contain;
+}
+.jd-member-info {
+    flex: 1;
+    min-width: 0;
+}
+.jd-member-info strong, .jd-member-info span {
+    display: block;
+    overflow-wrap: anywhere;
+}
+.jd-member-info strong {
+    color: var(--navy);
+    font-size: 14px;
+}
+.jd-member-info span {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 12px;
+}
+.jd-role {
+    flex-shrink: 0;
+    padding: 7px 12px;
+    background: #eef2f3;
+    color: #5b7179;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+.jd-role.is-manager {
+    background: #e3f5ef;
+    color: #16746f;
+}
+/* SUMMARY AND BUTTONS */
+.jd-summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 9px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line);
+}
+.jd-summary-row > span {
+    color: var(--muted);
+    font-size: 13px;
+}
+.jd-summary-row strong {
+    color: var(--navy);
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+.jd-join-form {
+    margin-top: 23px;
+}
+.jd-primary-btn, .jd-approve-btn, .jd-reject-btn {
+    min-height: 43px;
+    padding: 10px 19px;
+    border: 0;
+    border-radius: 11px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform .2s, background .2s;
+}
+.jd-primary-btn, .jd-approve-btn {
+    color: var(--white);
+    background: var(--navy);
+}
+.jd-primary-btn {
+    width: 100%;
+}
+.jd-reject-btn {
+    color: #a34141;
+    background: #fff0f0;
+    border: 1px solid #f0cece;
+}
+.jd-primary-btn:hover, .jd-approve-btn:hover {
+    background: #174a61;
+    transform: translateY(-2px);
+}
+.jd-reject-btn:hover {
+    background: #ffe3e3;
+    transform: translateY(-2px);
+}
+.jd-payments-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+}
+.jd-payments-link:hover {
+    color: var(--white);
+}
+.jd-notice, .jd-note {
+    padding: 16px;
+    border-radius: 13px;
+    background: #edf7f4;
+    color: #55737a;
+    font-size: 13px;
+    line-height: 1.9;
+}
+.jd-notice {
+    margin-top: 22px;
+}
+.jd-note {
+    border: 1px solid #d8eae5;
+}
+.jd-muted {
+    color: var(--muted);
+}
+.jd-requests {
+    margin-top: 23px;
+}
+.jd-request-user {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+    flex: 1;
+}
+.jd-request-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+.jd-request-actions form {
+    margin: 0;
+}
+.jd-empty {
+    padding: 36px 14px;
+    text-align: center;
+}
+.jd-empty img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-bottom: 12px;
+}
+.jd-empty h3 {
+    margin: 0 0 10px;
+    font-size: 17px;
+    color: var(--navy);
+}
+.jd-empty p {
+    max-width: 340px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.9;
+}
+/* =========================================
+   04. EXPLORE JAMIYAHS | CLEAN LAYOUT
+========================================= */
+.explore-page {
+    position: relative;
+    isolation: isolate;
+    padding: 48px 0 90px;
+    overflow: hidden;
+}
+.explore-page > .dashboard-container {
+    position: relative;
+    z-index: 2;
+}
+.explore-decor {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+.explore-riyal {
+    position: absolute;
+    display: block;
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    opacity: 0.11;
+}
+.explore-riyal-1 {
+    top: 7%;
+    right: 3%;
+}
+.explore-riyal-2 {
+    top: 19%;
+    left: 6%;
+    width: 35px;
+    height: 35px;
+}
+.explore-riyal-3 {
+    top: 36%;
+    right: 5%;
+    width: 30px;
+    height: 30px;
+}
+.explore-riyal-4 {
+    top: 52%;
+    left: 3%;
+    width: 49px;
+    height: 49px;
+}
+.explore-riyal-5 {
+    top: 68%;
+    right: 8%;
+    width: 34px;
+    height: 34px;
+}
+.explore-riyal-6 {
+    top: 80%;
+    left: 9%;
+    width: 38px;
+    height: 38px;
+}
+.explore-riyal-7 {
+    bottom: 4%;
+    right: 30%;
+    width: 30px;
+    height: 30px;
+}
+.explore-riyal-8 {
+    top: 10%;
+    left: 34%;
+    width: 27px;
+    height: 27px;
+}
+.explore-heading {
+    max-width: 800px;
+    margin-bottom: 26px;
+    text-align: right;
+}
+.explore-heading h1 {
+    margin: 0 0 10px;
+    color: var(--navy);
+    font-size: clamp(30px, 3.5vw, 41px);
+    line-height: 1.4;
+}
+.explore-heading p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.9;
+}
+.explore-tools {
+    margin-bottom: 43px;
+}
+.explore-search-form {
+    margin: 0 0 17px;
+}
+.explore-search-row {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+}
+.explore-search-input {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+    min-height: 55px;
+    padding: 0 18px;
+    background: var(--white);
+    border: 1px solid #dce8e4;
+    border-radius: 13px;
+    transition: border-color .2s, box-shadow .2s;
+}
+.explore-search-input:focus-within {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(21, 159, 156, .09);
+}
+.explore-search-input img {
+    display: block;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+.explore-search-input input {
+    width: 100%;
+    min-width: 0;
+    min-height: 53px;
+    color: var(--navy);
+    background: transparent;
+    border: 0;
+    outline: 0;
+    font: inherit;
+    font-size: 14px;
+}
+.explore-search-input input::placeholder {
+    color: #8a9da2;
+}
+.explore-search-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-width: 105px;
+    min-height: 55px;
+    padding: 12px 24px;
+    color: var(--white);
+    background: var(--navy);
+    border: 0;
+    border-radius: 13px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+}
+.explore-search-btn:hover {
+    background: #174a61;
+    transform: translateY(-2px);
+}
+.explore-search-btn:focus-visible,
+.explore-filters a:focus-visible,
+.explore-details-btn:focus-visible,
+.explore-reset-btn:focus-visible {
+    outline: 3px solid var(--teal);
+    outline-offset: 3px;
+}
+.explore-filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+.explore-filters a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 9px 16px;
+    color: #607980;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 800;
+    transition: background .2s, border-color .2s, color .2s;
+}
+.explore-filters a:hover {
+    color: var(--navy);
+    border-color: #bad8d2;
+}
+.explore-filters a.is-active {
+    color: var(--white);
+    background: var(--navy);
+    border-color: var(--navy);
+}
+.explore-list-header {
+    margin-bottom: 20px;
+}
+.explore-list-title h2 {
+    margin: 0 0 8px;
+    color: var(--navy);
+    font-size: 25px;
+}
+.explore-list-title p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+.explore-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 20px;
+}
+.explore-card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+    padding: 25px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    transition: transform .25s, box-shadow .25s, border-color .25s;
+}
+.explore-card:hover {
+    transform: translateY(-4px);
+    border-color: #c4dfd9;
+    box-shadow: var(--shadow);
+}
+.explore-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.explore-card-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    background: #e9f7f3;
+    border-radius: 15px;
+}
+.explore-card-icon img {
+    display: block;
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+}
+.explore-status-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 31px;
+    padding: 7px 12px;
+    background: #eff3f2;
+    border-radius: 18px;
+    color: #657b81;
+    font-size: 12px;
+    font-weight: 800;
+}
+.explore-status-badge.is-open {
+    color: #187556;
+    background: #e5f6ed;
+}
+.explore-status-badge.is-active-status {
+    color: #285d8a;
+    background: #eaf3fc;
+}
+.explore-status-badge.is-completed {
+    color: #60757d;
+    background: #edf2f3;
+}
+.explore-card-body h3 {
+    margin: 0 0 9px;
+    color: var(--navy);
+    font-size: 23px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.explore-card-description {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.9;
+    overflow-wrap: anywhere;
+}
+.explore-membership-note {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 9px;
+    margin-top: 15px;
+    padding: 9px 13px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.6;
+}
+.explore-membership-note::before {
+    content: "";
+    display: block;
+    flex-shrink: 0;
+    width: 7px;
+    height: 7px;
+    background: currentColor;
+    border-radius: 50%;
+}
+.explore-membership-note.is-manager {
+    color: #14607a;
+    background: #e9f3fa;
+    border-color: #d8eaf4;
+}
+.explore-membership-note.is-member {
+    color: #166e52;
+    background: #e9f7ef;
+    border-color: #d5eadd;
+}
+.explore-membership-note.is-pending {
+    color: #926818;
+    background: #fff7e5;
+    border-color: #f1e0b8;
+}
+.explore-membership-note.is-rejected {
+    color: #9f4949;
+    background: #fff0f0;
+    border-color: #f2d4d4;
+}
+.explore-card-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: auto;
+    padding: 19px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+}
+.explore-card-stat {
+    min-width: 0;
+}
+.explore-card-stat span {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--muted);
+    font-size: 12px;
+}
+.explore-card-stat strong {
+    display: block;
+    color: var(--navy);
+    font-size: 15px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+}
+.explore-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.explore-card-tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 29px;
+    padding: 6px 11px;
+    color: #587680;
+    background: #eef4f2;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 700;
+}
+.explore-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 2px;
+}
+.explore-details-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 43px;
+    padding: 10px 18px;
+    color: var(--white);
+    background: var(--navy);
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 800;
+    transition: background .2s, transform .2s;
+}
+.explore-details-btn:hover {
+    color: var(--white);
+    background: #174a61;
+    transform: translateY(-2px);
+}
+.explore-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 320px;
+    padding: 40px 22px;
+    text-align: center;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+}
+.explore-empty-icon {
+    display: grid;
+    place-items: center;
+    width: 70px;
+    height: 70px;
+    margin-bottom: 18px;
+    background: #e9f7f3;
+    border-radius: 19px;
+}
+.explore-empty-icon img {
+    display: block;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+.explore-empty-state h3 {
+    margin: 0 0 10px;
+    color: var(--navy);
+    font-size: 20px;
+}
+.explore-empty-state p {
+    max-width: 410px;
+    margin: 0 0 19px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.9;
+}
+.explore-reset-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 43px;
+    padding: 10px 18px;
+    color: var(--white);
+    background: var(--navy);
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 800;
+}
+.explore-reset-btn:hover {
+    color: var(--white);
+    background: #174a61;
+}
+
+
+
+
+/* 05. PAYOUT SCHEDULE */
+.jd-schedule {
+    margin-top: 23px;
+}
+.jd-schedule-info {
+    padding: 17px 20px;
+    margin-bottom: 23px;
+    background: #edf7f4;
+    border: 1px solid #d6ebe5;
+    border-radius: 13px;
+    color: #426e70;
+    font-size: 13px;
+    line-height: 1.9;
+}
+.jd-schedule-table-wrap + .jd-schedule-info {
+    margin-top: 23px;
+    margin-bottom: 0;
+}
+.jd-schedule-form {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+.jd-order-row {
+    display: grid;
+    grid-template-columns: 110px minmax(0,1fr);
+    align-items: center;
+    gap: 15px;
+    padding: 15px 18px;
+    background: #f8fbfa;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+}
+.jd-order-row label {
+    color: var(--navy);
+    font-size: 14px;
+    font-weight: 800;
+}
+.jd-order-row select {
+    width: 100%;
+    min-width: 0;
+    min-height: 47px;
+    padding: 11px 13px;
+    color: var(--navy);
+    background: var(--white);
+    border: 1px solid #dce6e4;
+    border-radius: 11px;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+.jd-order-row select:focus-visible {
+    outline: none;
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(21,159,156,.10);
+}
+.jd-schedule-hint {
+    margin: 3px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.9;
+}
+.jd-schedule-submit {
+    align-self: flex-start;
+    width: auto;
+    margin-top: 5px;
+}
+.jd-schedule-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.jd-schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: right;
+    font-size: 14px;
+}
+.jd-schedule-table th {
+    padding: 17px 15px;
+    color: #58717b;
+    background: #f1f7f5;
+    font-size: 13px;
+    font-weight: 800;
+}
+.jd-schedule-table td {
+    padding: 17px 15px;
+    color: var(--navy);
+    border-bottom: 1px solid var(--line);
+    overflow-wrap: anywhere;
+}
+.jd-schedule-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+.jd-turn-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    color: #16746f;
+    background: #e4f5f0;
+    border-radius: 10px;
+    font-weight: 800;
+}
+/* 06. PRIVATE INVITATION - MANAGER */
+.jd-invite-card {
+    min-width: 0;
+    margin-top: 22px;
+    padding: 20px;
+    background: #f4faf8;
+    border: 1px solid #d8ebe5;
+    border-radius: 15px;
+}
+.jd-invite-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    margin-bottom: 17px;
+}
+.jd-invite-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 43px;
+    height: 43px;
+    background: #e4f3ef;
+    border-radius: 12px;
+}
+.jd-invite-icon img {
+    width: 23px;
+    height: 23px;
+    object-fit: contain;
+}
+.jd-invite-heading > div:last-child {
+    min-width: 0;
+}
+.jd-invite-heading h3 {
+    margin: 0 0 6px;
+    color: var(--navy);
+    font-size: 16px;
+}
+.jd-invite-heading p, .jd-invite-note {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.8;
+}
+.jd-invite-card label {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 800;
+}
+.jd-invite-card input {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 12px;
+    color: var(--navy);
+    background: #fff;
+    border: 1px solid #dce8e4;
+    border-radius: 10px;
+    font-size: 12px;
+    text-align: left;
+    direction: ltr;
+}
+.jd-invite-card input:focus {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+}
+.jd-copy-invite {
+    width: 100%;
+    min-height: 43px;
+    margin-top: 11px;
+    padding: 10px 15px;
+    color: #fff;
+    background: var(--navy);
+    border: 0;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+}
+.jd-copy-invite:hover {
+    background: #174a61;
+    transform: translateY(-2px);
+}
+.jd-copy-invite:focus-visible, .jd-regenerate-invite button:focus-visible {
+    outline: 3px solid var(--teal);
+    outline-offset: 3px;
+}
+.jd-invite-feedback {
+    min-height: 18px;
+    margin: 9px 0 0;
+    color: #16746f;
+    font-size: 12px;
+    line-height: 1.6;
+}
+.jd-regenerate-invite {
+    margin-top: 12px;
+}
+.jd-regenerate-invite button {
+    padding: 8px 0;
+    color: #647d83;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.jd-regenerate-invite button:hover {
+    color: var(--navy);
+}
+.jd-invite-note {
+    margin-top: 12px;
+}
+.jd-invite-notice {
+    margin: 12px 0 0;
+    padding: 11px;
+    color: #916a27;
+    background: #fff7e6;
+    border: 1px solid #f0dfb9;
+    border-radius: 10px;
+    font-size: 12px;
+    line-height: 1.8;
+}
+/* 07. PRIVATE INVITATION PAGE */
+.private-invite-page {
+    padding: 60px 0 90px;
+}
+.private-invite-card {
+    width: 100%;
+    max-width: 670px;
+    margin: 0 auto;
+    padding: 39px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    text-align: center;
+}
+.private-invite-icon {
+    display: grid;
+    place-items: center;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
+    background: #e9f7f3;
+    border-radius: 20px;
+}
+.private-invite-icon img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+}
+.private-invite-eyebrow {
+    color: var(--teal);
+    font-size: 13px;
+    font-weight: 800;
+}
+.private-invite-card h1 {
+    margin: 10px 0;
+    color: var(--navy);
+    font-size: clamp(24px,3vw,34px);
+    overflow-wrap: anywhere;
+}
+.private-invite-description {
+    margin: 0 auto 25px;
+    max-width: 460px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.9;
+}
+.private-invite-details {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 13px;
+    margin-bottom: 24px;
+    text-align: right;
+}
+.private-invite-details > div {
+    min-width: 0;
+    padding: 18px;
+    background: #f5faf8;
+    border: 1px solid #e1ece8;
+    border-radius: 13px;
+}
+.private-invite-details span {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--muted);
+    font-size: 12px;
+}
+.private-invite-details strong {
+    color: var(--navy);
+    font-size: 16px;
+    overflow-wrap: anywhere;
+}
+.private-invite-form button {
+    width: 100%;
+    min-height: 49px;
+    padding: 12px 20px;
+    color: #fff;
+    background: var(--navy);
+    border: 0;
+    border-radius: 12px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background .2s;
+}
+.private-invite-form button:hover {
+    background: #174a61;
+}
+.private-invite-message {
+    padding: 17px;
+    color: #426e70;
+    background: #edf7f4;
+    border: 1px solid #d8ebe5;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.9;
+}
+.private-invite-disclaimer {
+    margin: 22px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.9;
+}
+.private-invite-back {
+    display: inline-block;
+    margin-top: 18px;
+    color: var(--teal);
+    font-size: 13px;
+    font-weight: 800;
+}
+.private-invite-back:hover {
+    color: var(--navy);
+}
+/* 08. IPAD */
+
+/* 09. SMALL IPAD */
+
+/* 10. MOBILE */
+
+/* 11. SMALL MOBILE */
+
+/* 12. ACCESSIBILITY */
+
+.jd-delivery-link {
+    margin-top: 12px;
+    background: #16746f;
+}
+.jd-delivery-link:hover {
+    background: #115b57;
+}
+/* =========================================
+   13. PAYOUT DELIVERY STATUS
+========================================= */
+.jd-schedule-table {
+    min-width: 560px;
+}
+.jd-schedule-table th,
+.jd-schedule-table td {
+    vertical-align: middle;
+}
+.jd-delivery-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 13px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+.jd-delivery-status.is-delivered {
+    background: #e4f5ed;
+    color: #1c7851;
+}
+.jd-delivery-status.is-pending {
+    background: #fff3e5;
+    color: #9c6716;
+}
+.jd-delivery-status.is-upcoming {
+    background: #edf2f4;
+    color: #607783;
+}
+
+
+/* =========================================
+   14. MY JAMIYAHS RESPONSIVE OVERRIDES
+========================================= */
+
+
+
+
+
+/* =========================================
+   CREATE JAMIYAH | FINAL RESPONSIVE OVERRIDES
+   Keep these after older shared media rules.
+========================================= */
+
+
+
+
+
+/* =========================================
+   JAMIYAH DETAILS | PAYOUT TIMELINE
+========================================= */
+.jd-journey {
+    margin-top: 24px;
+}
+.jd-journey-label {
+    display: inline-block;
+    margin-bottom: 6px;
+    color: var(--teal);
+    font-size: 12px;
+    font-weight: 800;
+}
+.jd-journey-progress {
+    height: 8px;
+    margin-bottom: 28px;
+    overflow: hidden;
+    background: #e9f0ee;
+    border-radius: 999px;
+}
+.jd-journey-progress-fill {
+    height: 100%;
+    background: #17847b;
+    border-radius: inherit;
+    transition: width 0.3s ease;
+}
+.jd-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.jd-timeline-entry {
+    position: relative;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 16px;
+    min-width: 0;
+}
+.jd-timeline-entry:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: 43px;
+    right: 21px;
+    bottom: -20px;
+    z-index: 0;
+    width: 2px;
+    background: #dceae6;
+}
+.jd-timeline-marker {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: #16766d;
+    background: #e5f5ef;
+    border: 1px solid #cae8df;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: 800;
+}
+.jd-timeline-marker img {
+    width: 21px;
+    height: 21px;
+    object-fit: contain;
+}
+.jd-timeline-entry.is-delivered .jd-timeline-marker {
+    background: #caeddf;
+}
+.jd-timeline-entry.is-ready .jd-timeline-marker {
+    color: #ffffff;
+    background: #16766d;
+}
+.jd-turn-card {
+    min-width: 0;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e0ebe7;
+    border-radius: 18px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.jd-turn-card[open],
+.jd-turn-card:hover {
+    border-color: #b9dcd1;
+    box-shadow: 0 12px 28px rgba(16, 51, 74, 0.06);
+}
+.jd-turn-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 21px;
+    cursor: pointer;
+    list-style: none;
+}
+.jd-turn-summary::-webkit-details-marker {
+    display: none;
+}
+.jd-turn-summary-main {
+    min-width: 0;
+}
+.jd-turn-overline {
+    color: #5a7e83;
+    font-size: 12px;
+    font-weight: 700;
+}
+.jd-turn-summary h3 {
+    margin: 6px 0;
+    color: var(--navy);
+    font-size: 19px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.jd-turn-amount {
+    color: var(--muted);
+    font-size: 13px;
+}
+.jd-turn-summary-end {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    gap: 10px;
+    flex-shrink: 0;
+}
+.jd-expand-cue {
+    color: #14877c;
+    font-size: 12px;
+    font-weight: 800;
+}
+.jd-turn-card[open] .jd-expand-cue {
+    color: #607e83;
+}
+.jd-turn-card[open] .jd-expand-cue::after {
+    content: " -";
+}
+.jd-expand-cue::after {
+    content: " +";
+}
+.jd-turn-content {
+    padding: 0 21px 21px;
+    border-top: 1px solid #e9f0ee;
+}
+.jd-turn-payment-summary {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 19px 0;
+}
+.jd-turn-payment-summary > div:first-child {
+    display: flex;
+    gap: 9px;
+    flex-shrink: 0;
+    color: #667f85;
+    font-size: 13px;
+}
+.jd-turn-payment-summary strong {
+    color: var(--navy);
+}
+.jd-mini-progress {
+    flex: 1;
+    height: 7px;
+    overflow: hidden;
+    background: #e7efec;
+    border-radius: 99px;
+}
+.jd-mini-progress span {
+    display: block;
+    height: 100%;
+    background: #198b7a;
+    border-radius: inherit;
+}
+.jd-turn-content h4 {
+    margin: 0 0 9px;
+    color: var(--navy);
+    font-size: 14px;
+}
+.jd-cycle-payment {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #ecf2ef;
+    font-size: 13px;
+}
+.jd-cycle-payment > span:first-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+.jd-payment-badge {
+    flex-shrink: 0;
+    padding: 6px 10px;
+    color: #647b83;
+    background: #eef2f3;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 800;
+}
+.jd-payment-badge.is-verified {
+    color: #187651;
+    background: #e7f7ee;
+}
+.jd-payment-badge.is-pending {
+    color: #90661d;
+    background: #fff3dc;
+}
+.jd-payment-badge.is-rejected {
+    color: #9b3c43;
+    background: #ffeded;
+}
+.jd-turn-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 18px;
+}
+.jd-turn-actions form {
+    margin: 0;
+}
+.jd-inline-payments-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 42px;
+    color: #087e75;
+    font-size: 13px;
+    font-weight: 800;
+}
+.jd-inline-payments-link:hover {
+    color: var(--navy);
+    text-decoration: underline;
+}
+.jd-delivery-confirmed,
+.jd-turn-hint {
+    margin: 0;
+    color: #54797a;
+    font-size: 13px;
+    line-height: 1.8;
+}
+.jd-delivery-status.is-ready {
+    color: #146f56;
+    background: #e0f5e9;
+}
+
+
+/* =========================================
+   TIMELINE | NATIVE PROGRESS BARS
+========================================= */
+.jd-native-progress {
+    display: block;
+    width: 100%;
+    height: 9px;
+    overflow: hidden;
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    border-radius: 999px;
+    background: #e6efec;
+    accent-color: #159f9c;
+}
+
+.jd-native-progress::-webkit-progress-bar {
+    background: #e6efec;
+    border-radius: 999px;
+}
+
+.jd-native-progress::-webkit-progress-value {
+    background: #159f9c;
+    border-radius: 999px;
+}
+
+.jd-native-progress::-moz-progress-bar {
+    background: #159f9c;
+    border-radius: 999px;
+}
+
+.jd-journey-native-progress {
+    height: 11px;
+    margin-bottom: 28px;
+}
+
+/* =========================================
+   JAMIYAH DETAIL | PRIMARY TIMELINE ACTION
+========================================= */
+.jd-main-action {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    width: 100%;
+    min-width: 0;
+    margin-top: 20px;
+    padding: 15px;
+    box-sizing: border-box;
+    color: #ffffff;
+    background: linear-gradient(125deg, #10334a, #155b65);
+    border: 1px solid transparent;
+    border-radius: 15px;
+    text-decoration: none;
+    box-shadow: 0 12px 25px rgba(16, 51, 74, 0.12);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.jd-main-action:hover {
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 18px 30px rgba(16, 51, 74, 0.20);
+}
+.jd-main-action:focus-visible {
+    outline: 3px solid #159f9c;
+    outline-offset: 4px;
+}
+.jd-main-action-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 14px;
+}
+.jd-main-action-icon img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+.jd-main-action-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    text-align: right;
+}
+.jd-main-action-content strong {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 800;
+}
+.jd-main-action-content small {
+    color: #d2e7e6;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.jd-main-action:hover .jd-main-action-indicator {
+    transform: translateX(-4px);
+}
+#journey {
+    scroll-margin-top: 115px;
+}
+
+/* =========================================
+   15. RESPONSIVE | TABLET 1024px
+   Keep desktop layout, colors and visual identity.
+========================================= */
+@media (max-width: 1024px) {
+    .jamiyah-create-layout,
+    .jamiyah-create-heading {
+        max-width: 100%;
+    }
+    .jamiyah-create-card {
+        padding: 29px;
+    }
+    .my-jamiyahs-grid,
+    .explore-grid {
+        gap: 16px;
+    }
+    .my-jamiyah-card,
+    .explore-card {
+        padding: 23px;
+    }
+    .jd-layout {
+        grid-template-columns: minmax(0, 1.35fr) minmax(250px, 1fr);
+        gap: 17px;
+    }
+    .jd-main-action-content small {
+        overflow-wrap: anywhere;
+    }
+    .jd-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .jd-panel {
+        padding: 24px;
+    }
+    .jd-manager-card {
+        padding: 15px;
+    }
+    .private-invite-page {
+        padding: 45px 0 70px;
+    }
+    .private-invite-card {
+        max-width: 620px;
+    }
+}
+
+/* =========================================
+   16. RESPONSIVE | SMALL TABLET 850px
+========================================= */
+@media (max-width: 850px) {
+    .jd-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .jd-sidebar {
+        min-width: 0;
+    }
+    .my-jamiyahs-hero {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+    .my-jamiyahs-grid,
+    .explore-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .my-jamiyah-card,
+    .explore-card {
+        padding: 26px;
+    }
+    .my-jamiyah-card-head {
+        min-height: 0;
+    }
+    .jd-manager-card {
+        padding: 19px;
+    }
+    .jd-invite-card {
+        max-width: 100%;
+    }
+}
+
+/* =========================================
+   17. RESPONSIVE | MOBILE 768px
+========================================= */
+@media (max-width: 768px) {
+    /* Layout safety: prevent cards and form controls from stretching the page */
+    .jamiyah-create-page,
+    .my-jamiyahs-page,
+    .jamiyah-detail-page,
+    .explore-page,
+    .private-invite-page {
+        max-width: 100%;
+    }
+    .jamiyah-create-page *,
+    .my-jamiyahs-page *,
+    .jamiyah-detail-page *,
+    .explore-page *,
+    .private-invite-page * {
+        box-sizing: border-box;
+    }
+    .jamiyah-create-card,
+    .my-jamiyah-card,
+    .explore-card,
+    .jd-panel,
+    .jd-turn-card,
+    .private-invite-card {
+        min-width: 0;
+    }
+    /* Create */
+    .jamiyah-create-page {
+        padding: 33px 0 65px;
+    }
+    .jamiyah-create-heading {
+        margin-bottom: 21px;
+    }
+    .jamiyah-create-heading h1 {
+        font-size: 29px;
+    }
+    .jamiyah-create-heading p {
+        font-size: 14px;
+    }
+    .jamiyah-create-layout {
+        display: block;
+        width: 100%;
+    }
+    .jamiyah-create-card {
+        padding: 23px 19px;
+        border-radius: 19px;
+    }
+    .jamiyah-card-heading {
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+    .jamiyah-create-heading-icon {
+        width: 47px;
+        height: 47px;
+        border-radius: 13px;
+    }
+    .jamiyah-card-heading h2 {
+        font-size: 20px;
+    }
+    .jamiyah-form-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 22px;
+    }
+    .jamiyah-form-field input,
+    .jamiyah-form-field textarea,
+    .jamiyah-form-field select {
+        max-width: 100%;
+        font-size: 16px;
+    }
+    .jamiyah-form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .jamiyah-submit-btn,
+    .jamiyah-cancel-btn {
+        width: 100%;
+        min-height: 48px;
+    }
+    .jamiyah-create-riyal {
+        opacity: 0.08;
+    }
+    .jamiyah-create-riyal-3,
+    .jamiyah-create-riyal-6 {
+        display: none;
+    }
+    /* My Jamiyahs */
+    .my-jamiyahs-page {
+        padding: 36px 0 65px;
+    }
+    .my-jamiyahs-hero {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
+    }
+    .my-jamiyahs-hero h1 {
+        font-size: 29px;
+    }
+    .my-jamiyahs-create-btn {
+        width: 100%;
+        min-height: 48px;
+    }
+    .my-jamiyahs-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+    }
+    .my-jamiyahs-toolbar-text h2 {
+        font-size: 22px;
+    }
+    .my-jamiyahs-toolbar-actions,
+    .my-jamiyahs-filters {
+        width: 100%;
+    }
+    .my-jamiyahs-filters {
+        display: flex;
+        gap: 8px;
+    }
+    .my-jamiyahs-filters a {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 10px 7px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+    .my-jamiyah-card {
+        padding: 19px;
+        border-radius: 19px;
+    }
+    .my-jamiyah-card-head h3 {
+        font-size: 21px;
+    }
+    .my-jamiyah-card-description {
+        font-size: 12px;
+    }
+    .my-jamiyah-card-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 13px;
+    }
+    .my-jamiyah-card-icon img {
+        width: 23px;
+        height: 23px;
+    }
+    .my-jamiyah-detail-value {
+        font-size: 19px;
+    }
+    .my-jamiyah-card-footer {
+        width: 100%;
+    }
+    .my-jamiyah-details-btn {
+        width: 100%;
+        min-width: 0;
+        min-height: 48px;
+        white-space: normal;
+    }
+    .my-jamiyahs-empty {
+        min-height: 310px;
+        padding: 30px 20px;
+    }
+    /* Explore */
+    .explore-page {
+        padding: 34px 0 68px;
+    }
+    .explore-heading {
+        margin-bottom: 21px;
+    }
+    .explore-heading h1 {
+        font-size: 29px;
+    }
+    .explore-heading p {
+        font-size: 13px;
+    }
+    .explore-tools {
+        margin-bottom: 33px;
+    }
+    .explore-search-row {
+        flex-direction: column;
+    }
+    .explore-search-input {
+        width: 100%;
+    }
+    .explore-search-input input {
+        font-size: 16px;
+    }
+    .explore-search-btn {
+        width: 100%;
+        min-height: 48px;
+    }
+    .explore-filters {
+        gap: 8px;
+    }
+    .explore-filters a {
+        flex: 1 1 auto;
+        padding: 9px 11px;
+        font-size: 12px;
+    }
+    .explore-list-title h2 {
+        font-size: 22px;
+    }
+    .explore-card {
+        padding: 20px 18px;
+        border-radius: 19px;
+    }
+    .explore-card-body h3 {
+        font-size: 21px;
+    }
+    .explore-card-stats {
+        gap: 9px;
+    }
+    .explore-card-stat strong {
+        font-size: 13px;
+    }
+    .explore-details-btn {
+        width: 100%;
+        min-height: 46px;
+    }
+    .explore-riyal {
+        opacity: 0.08;
+    }
+    /* Details and timeline */
+    .jamiyah-detail-page {
+        padding: 28px 0 65px;
+    }
+    .jd-hero {
+        padding: 26px 20px;
+        border-radius: 19px;
+    }
+    .jd-hero-content {
+        flex-direction: column;
+        gap: 16px;
+    }
+    .jd-hero-icon {
+        width: 56px;
+        height: 56px;
+    }
+    .jd-hero-icon img {
+        width: 29px;
+        height: 29px;
+    }
+    .jd-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 11px;
+    }
+    .jd-stat {
+        padding: 18px;
+        border-radius: 16px;
+    }
+    .jd-stat strong {
+        font-size: clamp(19px, 5vw, 26px);
+    }
+    .jd-stat > span {
+        font-size: 12px;
+    }
+    .jd-panel {
+        padding: 21px 18px;
+        border-radius: 18px;
+    }
+    .jd-panel-heading {
+        flex-wrap: wrap;
+    }
+    .jd-panel-heading h2 {
+        font-size: 19px;
+    }
+    .jd-manager-card {
+        flex-wrap: wrap;
+        padding: 15px;
+        gap: 11px;
+        border-radius: 13px;
+    }
+    .jd-manager-card .jd-member-info {
+        flex: 1 1 120px;
+    }
+    .jd-manager-card .jd-role {
+        margin-inline-start: auto;
+    }
+    .jd-regular-members {
+        margin-top: 19px;
+        padding-top: 18px;
+    }
+    .jd-members-private-note {
+        align-items: flex-start;
+        padding: 15px;
+    }
+    .jd-members-private-note p {
+        font-size: 12px;
+    }
+    .jd-request {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .jd-request-actions {
+        width: 100%;
+    }
+    .jd-request-actions form {
+        flex: 1 1 0;
+    }
+    .jd-request-actions button {
+        width: 100%;
+        min-height: 45px;
+    }
+    .jd-order-row {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+        padding: 14px;
+    }
+    .jd-order-row select {
+        font-size: 16px;
+    }
+    .jd-schedule-submit {
+        align-self: stretch;
+        width: 100%;
+        min-height: 48px;
+    }
+    .jd-schedule-table-wrap {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+    .jd-schedule-table {
+        min-width: 560px;
+        font-size: 12px;
+    }
+    .jd-schedule-table th,
+    .jd-schedule-table td {
+        padding: 13px 11px;
+    }
+    .jd-delivery-status {
+        padding: 7px 10px;
+        font-size: 11px;
+    }
+    .jd-invite-card {
+        padding: 16px;
+        border-radius: 13px;
+    }
+    .jd-invite-heading {
+        gap: 10px;
+    }
+    .jd-invite-heading h3 {
+        font-size: 15px;
+    }
+    .jd-invite-card input {
+        font-size: 16px;
+    }
+    .jd-copy-invite {
+        min-height: 46px;
+    }
+    /* Timeline */
+    .jd-timeline-entry {
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 9px;
+    }
+    .jd-timeline-entry:not(:last-child)::before {
+        right: 16px;
+    }
+    .jd-timeline-marker {
+        width: 34px;
+        height: 34px;
+        font-size: 13px;
+    }
+    .jd-turn-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+    }
+    .jd-turn-summary-end {
+        align-items: flex-start;
+        flex-shrink: 1;
+        width: 100%;
+    }
+    .jd-turn-summary h3 {
+        font-size: 17px;
+    }
+    .jd-turn-content {
+        padding: 0 15px 16px;
+    }
+    .jd-turn-payment-summary {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .jd-mini-progress {
+        flex: auto;
+        width: 100%;
+    }
+    .jd-turn-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .jd-turn-actions form,
+    .jd-turn-actions button,
+    .jd-inline-payments-link {
+        width: 100%;
+        justify-content: center;
+    }
+    .jd-main-action {
+        padding: 15px;
+        gap: 12px;
+    }
+    .jd-main-action-icon {
+        width: 44px;
+        height: 44px;
+    }
+    .jd-main-action-icon img {
+        width: 23px;
+        height: 23px;
+    }
+    .jd-main-action-content strong {
+        font-size: 14px;
+    }
+    .jd-main-action-content small {
+        font-size: 11px;
+    }
+    /* Invitation */
+    .private-invite-page {
+        padding: 30px 0 65px;
+    }
+    .private-invite-card {
+        padding: 26px 19px;
+        border-radius: 19px;
+    }
+    .private-invite-icon {
+        width: 60px;
+        height: 60px;
+    }
+    .private-invite-details {
+        gap: 10px;
+    }
+    .private-invite-details > div {
+        padding: 14px;
+    }
+    .private-invite-details strong {
+        font-size: 14px;
+    }
+}
+
+/* =========================================
+   18. RESPONSIVE | SMALL MOBILE 390px
+========================================= */
+@media (max-width: 390px) {
+    .jamiyah-create-card {
+        padding: 22px 15px;
+    }
+    .my-jamiyah-card-details {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .my-jamiyah-card-top {
+        align-items: flex-start;
+    }
+    .my-jamiyah-card-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .explore-card-stats {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 13px;
+    }
+    .explore-card-stat {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+    .explore-card-stat span {
+        margin-bottom: 0;
+    }
+    .jd-hero {
+        padding: 23px 17px;
+    }
+    .jd-stat {
+        padding: 15px;
+    }
+    .jd-stat strong {
+        font-size: 21px;
+    }
+    .jd-member {
+        gap: 9px;
+    }
+    .jd-member-avatar {
+        width: 38px;
+        height: 38px;
+    }
+    .jd-manager-card .jd-role {
+        padding: 7px 10px;
+        font-size: 11px;
+    }
+    .jd-members-section-label {
+        font-size: 13px;
+    }
+    .private-invite-details {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .jd-invite-card {
+        padding: 14px;
+    }
+}
+
+/* =========================================
+   19. ACCESSIBILITY
+========================================= */
+@media (prefers-reduced-motion: reduce) {
+    .jamiyah-create-page *,
+    .jamiyah-create-page *::before,
+    .jamiyah-create-page *::after,
+    .my-jamiyahs-page *,
+    .my-jamiyahs-page *::before,
+    .my-jamiyahs-page *::after,
+    .jamiyah-detail-page *,
+    .jamiyah-detail-page *::before,
+    .jamiyah-detail-page *::after,
+    .explore-page *,
+    .explore-page *::before,
+    .explore-page *::after,
+    .private-invite-page *,
+    .private-invite-page *::before,
+    .private-invite-page *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}

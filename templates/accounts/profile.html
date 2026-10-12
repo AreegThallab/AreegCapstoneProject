@@ -1,0 +1,234 @@
+
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+{% block title %}الملف الشخصي | دَوْرة{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+{% block content %}
+<section class="profile-page">
+    <div class="dashboard-container">
+        <!-- 01. PAGE HEADING -->
+        <div class="profile-page-heading">
+            <div>
+                <h1>الملف الشخصي</h1>
+                <p>معلومات حسابك، وجمعياتك، ونشاطك في مكان واحد.</p>
+            </div>
+            <a href="{% url 'dashboard' %}" class="profile-back-link">العودة للوحة التحكم</a>
+        </div>
+        <!-- 02. PROFILE HERO -->
+        <div class="profile-hero">
+            <div class="profile-identity">
+                <div class="profile-main-avatar">
+                    <img src="{% static 'images/icons/user.svg' %}" alt="أيقونة الحساب الشخصي" aria-hidden="true">
+                </div>
+                <div class="profile-identity-text">
+                    <span class="profile-overline">حسابي في دَوْرة</span>
+                    <h2>{{ profile.full_name }}</h2>
+                    <p class="profile-username">@{{ request.user.username }}</p>
+                    <p class="profile-joined">عضو منذ {{ request.user.date_joined|date:"F Y" }}</p>
+                </div>
+            </div>
+            <div class="profile-hero-actions">
+                <a href="#account-info" class="profile-primary-btn">تعديل بياناتي</a>
+            </div>
+        </div>
+        <!-- 03. ACCOUNT STATISTICS -->
+        <div class="profile-stats">
+            <article class="profile-stat-card">
+                <div class="profile-stat-icon">
+                    <img src="{% static 'images/icons/account-card.svg' %}" alt="أيقونة إجمالي الجمعيات" aria-hidden="true">
+                </div>
+                <div>
+                    <span class="profile-stat-label">إجمالي جمعياتي</span>
+                    <strong>{{ total_jamiyahs }}</strong>
+                </div>
+            </article>
+            <article class="profile-stat-card">
+                <div class="profile-stat-icon">
+                    <img src="{% static 'images/icons/managed.svg' %}" alt="أيقونة الجمعيات التي أديرها" aria-hidden="true">
+                </div>
+                <div>
+                    <span class="profile-stat-label">جمعيات أديرها</span>
+                    <strong>{{ managed_jamiyahs }}</strong>
+                </div>
+            </article>
+            <article class="profile-stat-card">
+                <div class="profile-stat-icon">
+                    <img src="{% static 'images/icons/group.svg' %}" alt="أيقونة الجمعيات المشترك فيها" aria-hidden="true">
+                </div>
+                <div>
+                    <span class="profile-stat-label">جمعيات مشترك فيها</span>
+                    <strong>{{ joined_jamiyahs }}</strong>
+                </div>
+            </article>
+            <article class="profile-stat-card">
+                <div class="profile-stat-icon">
+                    <img src="{% static 'images/icons/receipt.svg' %}" alt="أيقونة الدفعات الموثقة" aria-hidden="true">
+                </div>
+                <div>
+                    <span class="profile-stat-label">دفعات موثّقة</span>
+                    <strong>{{ verified_payments }}</strong>
+                </div>
+            </article>
+        </div>
+        <!-- 04. ACCOUNT + ACTIVITY -->
+        <div class="profile-content-grid">
+            <!-- Account Information -->
+            <section class="profile-panel profile-account-panel" id="account-info">
+                <div class="profile-panel-header">
+                    <div>
+                        <h2>معلومات الحساب</h2>
+                        <p>راجع بياناتك وحدّثها عند الحاجة.</p>
+                    </div>
+                </div>
+                <form method="POST" class="profile-form" novalidate>
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                        <div class="profile-alert" role="alert">{{ form.non_field_errors }}</div>
+                    {% endif %}
+                    <div class="profile-form-grid">
+                        <div class="profile-field">
+                            <label for="profile-username">اسم المستخدم</label>
+                            <input id="profile-username" type="text" value="{{ request.user.username }}" readonly>
+                            <small>لا يمكن تغييره من هذه الصفحة.</small>
+                        </div>
+                        <div class="profile-field">
+                            <label for="profile-email">البريد الإلكتروني</label>
+                            <input id="profile-email" type="email" value="{{ request.user.email }}" dir="ltr" readonly>
+                        </div>
+                        <div class="profile-field">
+                            <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
+                            {{ form.full_name }}
+                            {% for error in form.full_name.errors %}
+                                <small class="profile-field-error" role="alert">{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        <div class="profile-field">
+                            <label for="{{ form.phone_number.id_for_label }}">{{ form.phone_number.label }}</label>
+                            {{ form.phone_number }}
+                            {% for error in form.phone_number.errors %}
+                                <small class="profile-field-error" role="alert">{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="profile-form-footer">
+                        <span>اسم المستخدم والبريد الإلكتروني للعرض فقط حاليًا.</span>
+                        <button type="submit" class="profile-save-btn">حفظ التغييرات</button>
+                    </div>
+                </form>
+            </section>
+            <!-- RECENT ACTIVITY -->
+            <section class="profile-panel profile-activity-panel">
+                <div class="profile-panel-header">
+                    <div>
+                        <h2>النشاط الأخير</h2>
+                        <p>آخر التحديثات المتعلقة بحسابك.</p>
+                    </div>
+                </div>
+                <div class="profile-empty-state">
+                    <div class="profile-empty-icon">
+                        <img src="{% static 'images/icons/activity.svg' %}" alt="أيقونة سجل النشاط" aria-hidden="true">
+                    </div>
+                    <h3>سجل النشاط قيد التجهيز</h3>
+                    <p>بنعرض هنا سجل الانضمام للجمعيات وتوثيق الدفعات والتحديثات، بعد تفعيل ميزة النشاط.</p>
+                </div>
+            </section>
+        </div>
+        <!-- 05. CURRENT JAMIYAHS -->
+        <section class="profile-panel profile-jamiyahs-panel">
+            <div class="profile-panel-header">
+                <div>
+                    <h2>جمعياتي الحالية</h2>
+                    <p>الجمعيات المفتوحة والجارية التي تديرها أو تشارك فيها.</p>
+                </div>
+                <span class="profile-section-count">{{ current_jamiyahs_count }} جمعية</span>
+            </div>
+            {% if recent_memberships %}
+                <div class="profile-jamiyahs-list">
+                    {% for membership in recent_memberships %}
+                        <a href="{% url 'jamiyah_detail' membership.jamiyah.pk %}" class="profile-jamiyah-item" aria-label="عرض تفاصيل جمعية {{ membership.jamiyah.name }}">
+                            <div class="profile-jamiyah-details">
+                                <div class="profile-jamiyah-icon">
+                                    <img src="{% static 'images/icons/group.svg' %}" alt="أيقونة جمعية حالية" aria-hidden="true">
+                                </div>
+                                <div class="profile-jamiyah-info">
+                                    <h3>{{ membership.jamiyah.name }}</h3>
+                                    <p>مبلغ الاشتراك: <strong>{{ membership.jamiyah.contribution_amount }}</strong> ر.س</p>
+                                    <div class="profile-jamiyah-meta">
+                                        <span>{{ membership.jamiyah.get_visibility_display }}</span>
+                                        <span>{{ membership.jamiyah.get_status_display }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-jamiyah-side">
+                                <span class="profile-jamiyah-role {% if membership.role == 'manager' %}is-manager{% endif %}">{{ membership.get_role_display }}</span>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+                {% if current_jamiyahs_count > 3 %}
+                    <p class="profile-list-note">
+                        نعرض آخر 3 جمعيات حالية فقط.
+                        <a href="{% url 'my_jamiyahs' %}">عرض جميع جمعياتي</a>
+                    </p>
+                {% endif %}
+            {% else %}
+                <div class="profile-empty-state profile-empty-wide">
+                    <div class="profile-empty-icon">
+                        <img src="{% static 'images/icons/account-card.svg' %}" alt="أيقونة عدم وجود جمعيات حالية" aria-hidden="true">
+                    </div>
+                    <h3>ما عندك جمعيات حالية</h3>
+                    <p>ابدأ بإنشاء جمعية جديدة أو انضم إلى جمعية متاحة.</p>
+                    <a href="{% url 'create_jamiyah' %}" class="profile-empty-action">إنشاء جمعية</a>
+                </div>
+            {% endif %}
+        </section>
+        <!-- 06. PREVIOUS JAMIYAHS -->
+        <section class="profile-panel profile-jamiyahs-panel profile-previous-panel">
+            <div class="profile-panel-header">
+                <div>
+                    <h2>جمعياتي السابقة</h2>
+                    <p>الجمعيات التي اكتملت جميع أدوارها وتم تأكيد تسليم مبالغها.</p>
+                </div>
+                <span class="profile-section-count">{{ previous_jamiyahs_count }} جمعية</span>
+            </div>
+            {% if previous_memberships %}
+                <div class="profile-jamiyahs-list">
+                    {% for membership in previous_memberships %}
+                        <a href="{% url 'jamiyah_detail' membership.jamiyah.pk %}" class="profile-jamiyah-item" aria-label="عرض سجل الجمعية المكتملة {{ membership.jamiyah.name }}">
+                            <div class="profile-jamiyah-details">
+                                <div class="profile-jamiyah-icon">
+                                    <img src="{% static 'images/icons/group.svg' %}" alt="أيقونة جمعية سابقة" aria-hidden="true">
+                                </div>
+                                <div class="profile-jamiyah-info">
+                                    <h3>{{ membership.jamiyah.name }}</h3>
+                                    <p>مبلغ الاشتراك: <strong>{{ membership.jamiyah.contribution_amount }}</strong> ر.س</p>
+                                    <div class="profile-jamiyah-meta">
+                                        <span>{{ membership.jamiyah.get_visibility_display }}</span>
+                                        <span>مكتملة</span>
+                                        {% if membership.jamiyah.completed_at %}
+                                            <span>اكتملت في {{ membership.jamiyah.completed_at|date:"Y/m/d" }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-jamiyah-side">
+                                <span class="profile-jamiyah-role {% if membership.role == 'manager' %}is-manager{% endif %}">{{ membership.get_role_display }}</span>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="profile-empty-state profile-empty-wide">
+                    <div class="profile-empty-icon">
+                        <img src="{% static 'images/icons/group.svg' %}" alt="أيقونة أرشيف الجمعيات السابقة" aria-hidden="true">
+                    </div>
+                    <h3>ما عندك جمعيات سابقة حتى الآن</h3>
+                    <p>بعد اكتمال جميع أدوار أي جمعية تشارك فيها، بتظهر هنا مع تفاصيلها وسجلها.</p>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+</section>
+{% endblock %}

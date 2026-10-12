@@ -1,0 +1,89 @@
+
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}لوحة التحكم | دَوْرة{% endblock %}
+
+{% block content %}
+
+<!-- =========================================
+     01. WELCOME SECTION
+========================================= -->
+<section class="dashboard-welcome">
+    <div class="dashboard-container">
+        <div class="dashboard-welcome-content">
+            <span class="dashboard-welcome-eyebrow">مساحتك في دَوْرة</span>
+            <h1>أهلًا، {{ request.user.profile.full_name|default:request.user.username }}</h1>
+            <p>جمعياتك وأدوارك ودفعاتك، كلها في مكان واحد. تابع نشاطك وابدأ بخطوتك الجاية بسهولة.</p>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================
+     02. QUICK ACTIONS
+========================================= -->
+<section class="dashboard-overview">
+
+    <!-- DECORATIVE RIYAL SYMBOLS -->
+    <div class="dashboard-home-decor" aria-hidden="true">
+        <img class="dashboard-home-riyal dashboard-home-riyal-1" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي">
+        <img class="dashboard-home-riyal dashboard-home-riyal-2" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي">
+        <img class="dashboard-home-riyal dashboard-home-riyal-3" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي">
+        <img class="dashboard-home-riyal dashboard-home-riyal-4" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي">
+        <img class="dashboard-home-riyal dashboard-home-riyal-5" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي">
+        <img class="dashboard-home-riyal dashboard-home-riyal-6" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي">
+    </div>
+
+    <div class="dashboard-container dashboard-overview-content">
+
+        <!-- SECTION HEADING -->
+        <div class="dashboard-section-heading">
+            <span class="dashboard-section-eyebrow">خدماتك</span>
+            <h2>وش تبي تسوي اليوم؟</h2>
+            <p>اختر الخدمة اللي تناسبك وتابع إدارة جمعياتك من مكان واحد.</p>
+        </div>
+
+        <!-- QUICK ACTION CARDS -->
+        <div class="dashboard-cards">
+
+            <!-- 01. MY JAMIYAHS -->
+            <a href="{% url 'my_jamiyahs' %}" class="dashboard-card">
+                <div class="dashboard-card-icon">
+                    <img src="{% static 'images/icons/account-card.svg' %}" alt="أيقونة جمعياتي">
+                </div>
+                <div class="dashboard-card-content">
+                    <h3>جمعياتي</h3>
+                    <p>تابع الجمعيات اللي أنشأتها أو انضممت لها، واطّلع على أدوار الاستلام والدفعات.</p>
+                </div>
+                <span class="dashboard-card-action">عرض جمعياتي</span>
+            </a>
+
+            <!-- 02. EXPLORE JAMIYAHS -->
+            <a href="{% url 'explore_jamiyahs' %}" class="dashboard-card">
+                <div class="dashboard-card-icon">
+                    <img src="{% static 'images/icons/search.svg' %}" alt="أيقونة استكشاف الجمعيات">
+                </div>
+                <div class="dashboard-card-content">
+                    <h3>استكشف الجمعيات</h3>
+                    <p>تصفّح الجمعيات العامة، وتعرّف على تفاصيلها وشروطها قبل طلب الانضمام.</p>
+                </div>
+                <span class="dashboard-card-action">استكشف الجمعيات</span>
+            </a>
+
+            <!-- 03. CREATE JAMIYAH -->
+            <a href="{% url 'create_jamiyah' %}" class="dashboard-card">
+                <div class="dashboard-card-icon">
+                    <img src="{% static 'images/icons/plus.svg' %}" alt="أيقونة إنشاء جمعية">
+                </div>
+                <div class="dashboard-card-content">
+                    <h3>إنشاء جمعية</h3>
+                    <p>أنشئ جمعية جديدة، وحدّد عدد الأعضاء وقيمة الاشتراك ومواعيد الاستلام.</p>
+                </div>
+                <span class="dashboard-card-action">إنشاء جمعية</span>
+            </a>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

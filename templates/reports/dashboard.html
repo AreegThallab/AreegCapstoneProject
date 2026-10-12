@@ -1,0 +1,192 @@
+
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}التقارير والإحصائيات | دَوْرة{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reports.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="reports-page">
+    <div class="dashboard-container">
+
+        <!-- =========================================
+             01. PAGE HEADER
+        ========================================= -->
+        <header class="reports-heading">
+            <h1>التقارير والإحصائيات</h1>
+            <p>نظرة شاملة على جمعياتك وحالتها، وتقارير كل جمعية في مكان واحد.</p>
+        </header>
+
+        <!-- =========================================
+             02. JAMIYAH STATISTICS
+        ========================================= -->
+        <section class="reports-section" aria-labelledby="reports-stats-title">
+
+            <div class="reports-section-heading">
+                <div>
+                    <h2 id="reports-stats-title">ملخص الجمعيات</h2>
+                    <p>حالة الجمعيات التي تديرها أو تشارك فيها.</p>
+                </div>
+            </div>
+
+            <div class="reports-stats">
+
+                <!-- TOTAL JAMIYAHS -->
+                <article class="reports-stat">
+                    <div class="reports-stat-icon">
+                        <img
+                            src="{% static 'images/icons/group.svg' %}"
+                            alt="أيقونة إجمالي الجمعيات"
+                        >
+                    </div>
+
+                    <div class="reports-stat-content">
+                        <span>إجمالي الجمعيات</span>
+                        <strong>{{ total_jamiyahs }}</strong>
+                        <p>الجمعيات المسجلة في حسابك</p>
+                    </div>
+                </article>
+
+                <!-- OPEN JAMIYAHS -->
+                <article class="reports-stat">
+                    <div class="reports-stat-icon reports-stat-icon-open">
+                        <img
+                            src="{% static 'images/icons/plus.svg' %}"
+                            alt="أيقونة الجمعيات المفتوحة"
+                        >
+                    </div>
+
+                    <div class="reports-stat-content">
+                        <span>جمعيات مفتوحة</span>
+                        <strong>{{ open_count }}</strong>
+                        <p>تستقبل طلبات الانضمام</p>
+                    </div>
+                </article>
+
+                <!-- ACTIVE JAMIYAHS -->
+                <article class="reports-stat">
+                    <div class="reports-stat-icon reports-stat-icon-active">
+                        <img
+                            src="{% static 'images/icons/activity.svg' %}"
+                            alt="أيقونة الجمعيات الجارية"
+                        >
+                    </div>
+
+                    <div class="reports-stat-content">
+                        <span>جمعيات جارية</span>
+                        <strong>{{ active_count }}</strong>
+                        <p>بدأت أدوار الاستلام فيها</p>
+                    </div>
+                </article>
+
+                <!-- COMPLETED JAMIYAHS -->
+                <article class="reports-stat">
+                    <div class="reports-stat-icon reports-stat-icon-completed">
+                        <img
+                            src="{% static 'images/icons/check.svg' %}"
+                            alt="أيقونة الجمعيات المكتملة"
+                        >
+                    </div>
+
+                    <div class="reports-stat-content">
+                        <span>جمعيات مكتملة</span>
+                        <strong>{{ completed_count }}</strong>
+                        <p>اكتملت جميع أدوارها</p>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- =========================================
+             03. JAMIYAH REPORTS
+        ========================================= -->
+        <section class="reports-section reports-list-panel" aria-labelledby="reports-list-title">
+
+            <div class="reports-section-heading">
+                <div>
+                    <h2 id="reports-list-title">تقارير جمعياتي</h2>
+                    <p>اختر جمعية للاطلاع على تقرير الدفعات وأدوار الاستلام والتسليمات.</p>
+                </div>
+
+                <div class="reports-list-heading-icon">
+                    <img
+                        src="{% static 'images/icons/file.svg' %}"
+                        alt="أيقونة تقارير الجمعيات"
+                    >
+                </div>
+            </div>
+
+            {% if memberships %}
+                <div class="reports-jamiyahs-list">
+
+                    {% for membership in memberships %}
+                        <article class="reports-jamiyah-card">
+
+                            <div class="reports-jamiyah-identity">
+                                <div class="reports-jamiyah-icon">
+                                    <img
+                                        src="{% static 'images/icons/group.svg' %}"
+                                        alt="أيقونة الجمعية"
+                                    >
+                                </div>
+
+                                <div class="reports-jamiyah-details">
+                                    <h3>{{ membership.jamiyah.name }}</h3>
+
+                                    <p>
+                                        الاشتراك:
+                                        {{ membership.jamiyah.contribution_amount|floatformat:2 }}
+                                        ر.س
+                                    </p>
+
+                                    <div class="reports-jamiyah-tags">
+                                        <span class="reports-jamiyah-status {% if membership.jamiyah.status == 'completed' %}is-completed{% elif membership.jamiyah.status == 'active' %}is-active{% else %}is-open{% endif %}">
+                                            {{ membership.jamiyah.get_status_display }}
+                                        </span>
+
+                                        <span class="reports-jamiyah-role">
+                                            {{ membership.get_role_display }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <a
+                                href="{% url 'jamiyah_report' membership.jamiyah.pk %}"
+                                class="reports-view-btn"
+                                aria-label="عرض تقرير جمعية {{ membership.jamiyah.name }}"
+                            >
+                                عرض التقرير
+                            </a>
+
+                        </article>
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+                <div class="reports-empty">
+                    <div class="reports-empty-icon">
+                        <img
+                            src="{% static 'images/icons/file.svg' %}"
+                            alt="أيقونة عدم وجود تقارير"
+                        >
+                    </div>
+
+                    <h3>ما عندك جمعيات مسجلة حتى الآن</h3>
+                    <p>بعد إنشاء جمعية أو قبول عضويتك، بتظهر تقاريرها هنا.</p>
+
+                    <a href="{% url 'explore_jamiyahs' %}">
+                        استكشف الجمعيات
+                    </a>
+                </div>
+            {% endif %}
+        </section>
+
+    </div>
+</section>
+{% endblock %}

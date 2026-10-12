@@ -1,0 +1,442 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="theme-color" content="#10334a">
+
+    <title>{% block title %}دَوْرة | المنصة{% endblock %}</title>
+
+    <!-- FONT -->
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+    <link href="https://cdn.jsdelivr.net/npm/@dawod/thmanyah-font-web/sans.css" rel="stylesheet">
+
+    <!-- FAVICON -->
+
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/dawrah-icon.svg' %}">
+
+    <!-- DASHBOARD CSS -->
+
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+    {% block extra_css %}{% endblock %}
+
+</head>
+
+<body class="dashboard-body">
+
+    <!-- 01. NAVIGATION -->
+
+    <header class="dashboard-header">
+
+        <div class="dashboard-container dashboard-nav">
+
+            <!-- Logo -->
+
+            <a class="dashboard-brand" href="{% url 'dashboard' %}" aria-label="دَوْرة - لوحة التحكم">
+
+                <img src="{% static 'images/dawrah-logo.svg' %}" alt="شعار دَوْرة">
+
+            </a>
+
+            <!-- MOBILE MENU BUTTON -->
+            <button
+                type="button"
+                class="dashboard-menu-toggle"
+                aria-label="فتح القائمة"
+                aria-controls="dashboard-mobile-menu"
+                aria-expanded="false"
+                data-menu-icon="{% static 'images/icons/menu.svg' %}"
+                data-close-icon="{% static 'images/icons/close.svg' %}"
+            >
+                <img src="{% static 'images/icons/menu.svg' %}" alt="أيقونة فتح القائمة">
+            </button>
+
+            <!-- MOBILE DRAWER / DESKTOP NAVIGATION -->
+            <div class="dashboard-mobile-panel" id="dashboard-mobile-menu" aria-label="قائمة المنصة">
+                <div class="dashboard-mobile-panel-heading">
+                    <a href="{% url 'dashboard' %}" aria-label="دَوْرة - لوحة التحكم">
+                        <img src="{% static 'images/dawrah-logo.svg' %}" alt="شعار دَوْرة">
+                    </a>
+                    <button type="button" class="dashboard-menu-close" aria-label="إغلاق القائمة">
+                        <img src="{% static 'images/icons/close.svg' %}" alt="أيقونة إغلاق القائمة">
+                    </button>
+                </div>
+
+            <!-- MAIN NAVIGATION -->
+
+            <nav class="dashboard-links" aria-label="التنقل داخل المنصة">
+
+                <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">لوحة التحكم</a>
+
+                <a href="{% url 'my_jamiyahs' %}" class="{% if request.resolver_match.url_name == 'my_jamiyahs' %}active{% endif %}">جمعياتي</a>
+
+                <a href="{% url 'explore_jamiyahs' %}" class="{% if request.resolver_match.url_name == 'explore_jamiyahs' %}active{% endif %}">استكشف الجمعيات</a>
+
+                <a href="{% url 'create_jamiyah' %}" class="{% if request.resolver_match.url_name == 'create_jamiyah' %}active{% endif %}">إنشاء جمعية</a>
+
+                <a href="{% url 'reports_dashboard' %}" class="{% if request.resolver_match.url_name == 'reports_dashboard' or request.resolver_match.url_name == 'jamiyah_report' %}active{% endif %}">التقارير</a>
+
+            </nav>
+
+            <!-- NOTIFICATIONS, PROFILE AND LOGOUT -->
+
+            <div class="dashboard-actions">
+
+                <!-- NOTIFICATIONS -->
+
+                <details class="dashboard-notifications">
+
+                    <summary class="dashboard-notifications-trigger" aria-label="فتح التنبيهات">
+
+                        <img src="{% static 'images/icons/bell.svg' %}" alt="أيقونة التنبيهات" aria-hidden="true">
+
+                        {% if notification_count > 0 %}
+
+                            <span class="dashboard-notifications-count">{{ notification_count }}</span>
+
+                        {% endif %}
+
+                    </summary>
+
+                    <div class="dashboard-notifications-menu">
+
+                        <div class="dashboard-notifications-heading">
+
+                            <h2>التنبيهات</h2>
+
+                            <span>{{ notification_count }} تحتاج متابعة</span>
+
+                        </div>
+
+                        <div class="dashboard-notifications-content">
+
+                            <!-- MANAGER: PENDING JOIN REQUESTS -->
+
+                            {% for membership in pending_join_notifications %}
+
+                                <a href="{% url 'jamiyah_detail' membership.jamiyah.pk %}" class="dashboard-notification-item is-action">
+
+                                    <span class="dashboard-notification-icon">
+
+                                        <img src="{% static 'images/icons/user.svg' %}" alt="أيقونة طلب الانضمام" aria-hidden="true">
+
+                                    </span>
+
+                                    <span class="dashboard-notification-text">
+
+                                        <strong>طلب انضمام جديد</strong>
+
+                                        <span>{{ membership.user.username }} طلب الانضمام إلى {{ membership.jamiyah.name }}.</span>
+
+                                        <small>مراجعة الطلب</small>
+
+                                    </span>
+
+                                </a>
+
+                            {% endfor %}
+
+                            <!-- MANAGER: PENDING PAYMENT REPORTS -->
+
+                            {% for payment in pending_payment_notifications %}
+
+                                <a href="{% url 'payment_dashboard' payment.jamiyah.pk %}" class="dashboard-notification-item is-action">
+
+                                    <span class="dashboard-notification-icon">
+
+                                        <img src="{% static 'images/icons/receipt.svg' %}" alt="أيقونة الدفعات" aria-hidden="true">
+
+                                    </span>
+
+                                    <span class="dashboard-notification-text">
+
+                                        <strong>دفعة تنتظر التأكيد</strong>
+
+                                        <span>{{ payment.membership.user.username }} سجّل دفعة في {{ payment.jamiyah.name }}، الدورة {{ payment.payout_turn.position }}.</span>
+
+                                        <small>مراجعة الدفعة</small>
+
+                                    </span>
+
+                                </a>
+
+                            {% endfor %}
+
+                            <!-- MEMBER: MEMBERSHIP UPDATES -->
+
+                            {% for membership in membership_updates %}
+
+                                <div class="dashboard-notification-item">
+
+                                    <span class="dashboard-notification-icon">
+
+                                        <img src="{% static 'images/icons/group.svg' %}" alt="أيقونة الجمعية" aria-hidden="true">
+
+                                    </span>
+
+                                    <span class="dashboard-notification-text">
+
+                                        {% if membership.status == 'approved' %}
+
+                                            <strong>عضويتك مقبولة</strong>
+
+                                            <span>تم قبول عضويتك في {{ membership.jamiyah.name }}.</span>
+
+                                            <a href="{% url 'jamiyah_detail' membership.jamiyah.pk %}">تفاصيل الجمعية</a>
+
+                                        {% else %}
+
+                                            <strong>طلب انضمام مرفوض</strong>
+
+                                            <span>طلب انضمامك إلى {{ membership.jamiyah.name }} مرفوض.</span>
+
+                                        {% endif %}
+
+                                    </span>
+
+                                </div>
+
+                            {% endfor %}
+
+                            <!-- MEMBER: PAYMENT RESULTS -->
+
+                            {% for payment in payment_updates %}
+
+                                <a href="{% url 'payment_dashboard' payment.jamiyah.pk %}" class="dashboard-notification-item">
+
+                                    <span class="dashboard-notification-icon">
+
+                                        <img src="{% static 'images/icons/receipt.svg' %}" alt="أيقونة حالة الدفعة" aria-hidden="true">
+
+                                    </span>
+
+                                    <span class="dashboard-notification-text">
+
+                                        {% if payment.status == 'verified' %}
+
+                                            <strong>تم تأكيد بلاغ دفعتك</strong>
+
+                                        {% else %}
+
+                                            <strong>تم رفض بلاغ دفعتك</strong>
+
+                                        {% endif %}
+
+                                        <span>{{ payment.jamiyah.name }} — الدورة {{ payment.payout_turn.position }}.</span>
+
+                                        <small>عرض سجل الدفعات</small>
+
+                                    </span>
+
+                                </a>
+
+                            {% endfor %}
+
+                            <!-- MEMBER: PAYOUT DELIVERY CONFIRMATIONS -->
+
+                            {% for turn in delivery_notifications %}
+
+                                <div class="dashboard-notification-item is-action">
+
+                                    <span class="dashboard-notification-icon">
+
+                                        <img src="{% static 'images/icons/receipt.svg' %}" alt="أيقونة تأكيد تسليم الجمعية" aria-hidden="true">
+
+                                    </span>
+
+                                    <div class="dashboard-notification-text">
+
+                                        <strong>أكد المدير تسليم مبلغ دورك</strong>
+
+                                        <span>أكد مدير جمعية «{{ turn.jamiyah.name }}» تسليم مبلغ الدورة {{ turn.position }} خارج المنصة.</span>
+
+                                        <a href="{% url 'payout_delivery_dashboard' turn.jamiyah.pk %}">عرض تفاصيل التسليم</a>
+
+                                        <form method="POST" action="{% url 'mark_payout_delivery_seen' turn.jamiyah.pk turn.pk %}" class="dashboard-notification-read-form">
+
+                                            {% csrf_token %}
+
+                                            <button type="submit" class="dashboard-notification-read-btn">تحديد كمقروء</button>
+
+                                        </form>
+
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+
+                            <!-- MEMBER: COMPLETED JAMIYAHS -->
+
+                            {% for membership in completion_notifications %}
+
+                                <div class="dashboard-notification-item is-action">
+
+                                    <span class="dashboard-notification-icon">
+
+                                        <img src="{% static 'images/icons/group.svg' %}" alt="أيقونة جمعية مكتملة" aria-hidden="true">
+
+                                    </span>
+
+                                    <div class="dashboard-notification-text">
+
+                                        <strong>اكتملت جمعيتك بنجاح</strong>
+
+                                        <span>اكتملت جميع أدوار جمعية «{{ membership.jamiyah.name }}»، وتم توثيق تسليم مبالغها.</span>
+
+                                        <a href="{% url 'jamiyah_detail' membership.jamiyah.pk %}">عرض تفاصيل الجمعية</a>
+
+                                        <form method="POST" action="{% url 'mark_jamiyah_completion_seen' membership.jamiyah.pk %}" class="dashboard-notification-read-form">
+
+                                            {% csrf_token %}
+
+                                            <button type="submit" class="dashboard-notification-read-btn">تحديد كمقروء</button>
+
+                                        </form>
+
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+
+                            <!-- EMPTY NOTIFICATIONS -->
+
+                            {% if not pending_join_notifications and not pending_payment_notifications and not membership_updates and not payment_updates and not delivery_notifications and not completion_notifications %}
+
+                                <div class="dashboard-notifications-empty">
+
+                                    <img src="{% static 'images/icons/bell.svg' %}" alt="أيقونة عدم وجود تنبيهات" aria-hidden="true">
+
+                                    <strong>ما عندك تنبيهات حاليًا</strong>
+
+                                    <p>طلبات الانضمام والدفعات وتأكيدات التسليم واكتمال الجمعيات بتظهر هنا.</p>
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                        <div class="dashboard-notifications-footer">التنبيهات تُعرض حسب حالات العضويات والدفعات وتأكيدات التسليم واكتمال الجمعيات.</div>
+
+                    </div>
+
+                </details>
+
+                <!-- PROFILE -->
+
+                <a href="{% url 'profile' %}" class="dashboard-profile" aria-label="الملف الشخصي">
+
+                    <span class="dashboard-avatar" aria-hidden="true">
+
+                        <img src="{% static 'images/icons/user.svg' %}" alt="أيقونة الملف الشخصي">
+
+                    </span>
+
+                    <span class="dashboard-profile-name">
+
+                        مرحبًا، {{ request.user.profile.full_name|default:request.user.username }}
+
+                    </span>
+
+                </a>
+
+                <!-- LOGOUT -->
+
+                <form method="POST" action="{% url 'logout' %}" class="dashboard-logout-form">
+
+                    {% csrf_token %}
+
+                    <button type="submit" class="dashboard-logout">خروج</button>
+
+                </form>
+
+            </div>
+
+            </div><!-- /dashboard-mobile-panel -->
+        </div>
+
+    </header>
+
+    <!-- MOBILE BACKDROP -->
+    <button type="button" class="dashboard-menu-backdrop" aria-label="إغلاق القائمة"></button>
+
+    <!-- 02. SHARED BRAND DECORATIONS -->
+
+    <div class="dashboard-decor" aria-hidden="true">
+
+        <img class="dashboard-watermark" src="{% static 'images/dawrah-icon.svg' %}" alt="علامة دَوْرة الزخرفية">
+
+        <img class="dashboard-riyal-mark dashboard-riyal-mark-1" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي أعلى اليمين">
+
+        <img class="dashboard-riyal-mark dashboard-riyal-mark-2" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي منتصف اليمين">
+
+        <img class="dashboard-riyal-mark dashboard-riyal-mark-3" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي منتصف اليسار">
+
+        <img class="dashboard-riyal-mark dashboard-riyal-mark-4" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي أسفل اليسار">
+
+        <img class="dashboard-riyal-mark dashboard-riyal-mark-5" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي أسفل اليمين">
+
+    </div>
+
+    <!-- 03. DJANGO MESSAGES -->
+
+    {% if messages %}
+
+        <div class="dashboard-container dashboard-messages" aria-live="polite">
+
+            {% for message in messages %}
+
+                <div class="dashboard-message{% if message.tags %} message-{{ message.tags }}{% endif %}" role="status">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+    <!-- 04. MAIN CONTENT -->
+
+    <main class="dashboard-main" id="main-content">
+
+        {% block content %}{% endblock %}
+
+    </main>
+
+    <!-- 05. FOOTER -->
+
+    <footer class="dashboard-footer">
+
+        <div class="dashboard-container dashboard-footer-inner">
+
+            <p>دَوْرة · كل دور محسوب</p>
+
+            <span>© {% now "Y" %} مشروع تعليمي</span>
+
+        </div>
+
+    </footer>
+
+    <!-- 06. DASHBOARD JAVASCRIPT -->
+    <script src="{% static 'js/dashboard.js' %}" defer></script>
+
+    <!-- 07. PAGE-SPECIFIC JAVASCRIPT -->
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>

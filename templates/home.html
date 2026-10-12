@@ -1,0 +1,663 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}دَوْرة | كل دور محسوب{% endblock %}
+
+{% block content %}
+
+<!-- =========================================
+     01. HERO SECTION
+========================================= -->
+<section class="hero" aria-labelledby="hero-title">
+
+    <!-- Background Circles -->
+    <div class="orbit orbit-one" aria-hidden="true"></div>
+    <div class="orbit orbit-two" aria-hidden="true"></div>
+    <div class="orbit orbit-three" aria-hidden="true"></div>
+
+    <!-- Floating Riyal Symbols -->
+    <img
+        class="float-riyal coin-one"
+        src="{% static 'images/riyal-symbol.svg' %}"
+        alt="زخرفة رمز الريال السعودي"
+        aria-hidden="true"
+    >
+
+    <img
+        class="float-riyal coin-two"
+        src="{% static 'images/riyal-symbol.svg' %}"
+        alt="زخرفة رمز الريال السعودي"
+        aria-hidden="true"
+    >
+
+    <img
+        class="float-riyal coin-three"
+        src="{% static 'images/riyal-symbol.svg' %}"
+        alt="زخرفة رمز الريال السعودي"
+        aria-hidden="true"
+    >
+
+    <img
+        class="float-riyal coin-four"
+        src="{% static 'images/riyal-symbol.svg' %}"
+        alt="زخرفة رمز الريال السعودي"
+        aria-hidden="true"
+    >
+
+    <div class="container hero-center">
+
+        <h1 id="hero-title">
+            جمعيتك في مكان واحد،
+            <span>وكل دور محسوب.</span>
+        </h1>
+
+        <p class="hero-description">
+            أنشئ جمعيتك الخاصة أو استكشف الجمعيات العامة،
+            واختر دور الاستلام المناسب لك،
+            وتابع اشتراكاتك بكل وضوح.
+        </p>
+
+        <div class="hero-actions">
+
+            <a href="{% url 'login' %}" class="btn btn-primary">
+                ابدأ مع دَوْرة
+            </a>
+
+            <a href="#how" class="btn btn-outline">
+                اكتشف كيف تعمل
+            </a>
+
+        </div>
+    </div>
+</section>
+
+<!-- =========================================
+     02. DARK INTRO SECTION
+========================================= -->
+<section class="dark-band" aria-labelledby="band-title">
+
+    <!-- Decorative Elements -->
+    <div class="dark-circle dark-circle-one" aria-hidden="true"></div>
+    <div class="dark-circle dark-circle-two" aria-hidden="true"></div>
+
+    <img
+        class="float-riyal dark-coin-one"
+        src="{% static 'images/riyal-symbol.svg' %}"
+        alt="زخرفة رمز الريال السعودي"
+        aria-hidden="true"
+    >
+
+    <img
+        class="float-riyal dark-coin-two"
+        src="{% static 'images/riyal-symbol.svg' %}"
+        alt="زخرفة رمز الريال السعودي"
+        aria-hidden="true"
+    >
+
+    <div class="container band-content">
+
+        <span class="section-kicker mint">
+            <span aria-hidden="true">ــــ</span>
+            ليش دَوْرة؟
+            <span aria-hidden="true">ــــ</span>
+        </span>
+
+        <h2 id="band-title">
+            كل جمعية لها دَوْرة
+        </h2>
+
+        <p>
+            من أول انضمام إلى آخر دور،
+            كل التفاصيل في مكان واحد.
+        </p>
+
+        <div class="band-features">
+
+            <div class="band-feature">
+                <img
+                    src="{% static 'images/icons/users.svg' %}"
+                    alt="أيقونة تنظيم أعضاء الجمعية"
+                    aria-hidden="true"
+                >
+                <strong>أعضاء منظّمون</strong>
+            </div>
+
+            <div class="band-feature">
+                <img
+                    src="{% static 'images/icons/calendar.svg' %}"
+                    alt="أيقونة ترتيب الأدوار"
+                    aria-hidden="true"
+                >
+                <strong>أدوار واضحة</strong>
+            </div>
+
+            <div class="band-feature">
+                <img
+                    src="{% static 'images/icons/wallet.svg' %}"
+                    alt="أيقونة توثيق الدفعات"
+                    aria-hidden="true"
+                >
+                <strong>دفعات موثّقة</strong>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- =========================================
+     03. HOW IT WORKS
+========================================= -->
+<section
+    class="section how-section"
+    id="how"
+    aria-labelledby="how-title"
+>
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span class="section-kicker">
+                <span aria-hidden="true">ــــ</span>
+                كيف تعمل دَوْرة؟
+                <span aria-hidden="true">ــــ</span>
+            </span>
+
+            <h2 id="how-title">
+                أربع خطوات، وجمعيتك مرتّبة
+            </h2>
+
+            <p>
+                من إنشاء الحساب إلى متابعة آخر دور،
+                رحلتك مع دَوْرة واضحة وبسيطة.
+            </p>
+
+        </div>
+
+        <div class="journey">
+
+            <!-- Create Account -->
+            <article class="journey-step">
+                <div class="journey-circle">
+                    <img
+                        src="{% static 'images/icons/users.svg' %}"
+                        alt="أيقونة إنشاء الحساب"
+                        aria-hidden="true"
+                    >
+                </div>
+
+                <h3>أنشئ حسابك</h3>
+
+                <p>
+                    ابدأ بحساب يجمع جمعياتك
+                    وطلباتك في مكان واحد.
+                </p>
+            </article>
+
+            <!-- Choose Jamiyah -->
+            <article class="journey-step">
+                <div class="journey-circle">
+                    <img
+                        src="{% static 'images/icons/globe.svg' %}"
+                        alt="أيقونة استكشاف الجمعيات"
+                        aria-hidden="true"
+                    >
+                </div>
+
+                <h3>اختر جمعيتك</h3>
+
+                <p>
+                    أنشئ جمعية جديدة أو اطلب
+                    الانضمام لجمعية عامة.
+                </p>
+            </article>
+
+            <!-- Payout Schedule -->
+            <article class="journey-step">
+                <div class="journey-circle">
+                    <img
+                        src="{% static 'images/icons/calendar.svg' %}"
+                        alt="أيقونة جدول أدوار الاستلام"
+                        aria-hidden="true"
+                    >
+                </div>
+
+                <h3>اعرف دورك</h3>
+
+                <p>
+                    بعد اكتمال الأعضاء، يعتمد المدير
+                    ترتيب الاستلام ومواعيد الأدوار.
+                </p>
+            </article>
+
+            <!-- Track Payments -->
+            <article class="journey-step">
+                <div class="journey-circle">
+                    <img
+                        src="{% static 'images/icons/wallet.svg' %}"
+                        alt="أيقونة متابعة الاشتراكات"
+                        aria-hidden="true"
+                    >
+                </div>
+
+                <h3>تابع اشتراكاتك</h3>
+
+                <p>
+                    بلّغ عن دفعاتك وتابع مراجعتها،
+                    وتحقق من حالة تسليم كل دور.
+                </p>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<!-- =========================================
+     04. DAWRAH HUB
+========================================= -->
+<section
+    class="section hub-section"
+    id="hub"
+    aria-labelledby="hub-title"
+>
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span class="section-kicker">
+                <span aria-hidden="true">ــــ</span>
+                كل شيء في مكان واحد
+                <span aria-hidden="true">ــــ</span>
+            </span>
+
+            <h2 id="hub-title">
+                كل شيء يدور حول جمعيتك
+            </h2>
+
+            <p>
+                من إدارة الأعضاء إلى متابعة الدفعات،
+                دَوْرة تجمع تفاصيل جمعيتك وتنظّمها.
+            </p>
+
+        </div>
+
+        <div class="hub-diagram">
+
+            <!-- Connecting Lines -->
+            <svg
+                class="hub-lines"
+                viewBox="0 0 1000 560"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+            >
+                <line
+                    class="hub-line"
+                    data-target="members"
+                    x1="500"
+                    y1="280"
+                    x2="500"
+                    y2="76"
+                ></line>
+
+                <line
+                    class="hub-line"
+                    data-target="rounds"
+                    x1="500"
+                    y1="280"
+                    x2="170"
+                    y2="205"
+                ></line>
+
+                <line
+                    class="hub-line"
+                    data-target="payments"
+                    x1="500"
+                    y1="280"
+                    x2="830"
+                    y2="205"
+                ></line>
+
+                <line
+                    class="hub-line"
+                    data-target="notifications"
+                    x1="500"
+                    y1="280"
+                    x2="270"
+                    y2="450"
+                ></line>
+
+                <line
+                    class="hub-line"
+                    data-target="reports"
+                    x1="500"
+                    y1="280"
+                    x2="730"
+                    y2="450"
+                ></line>
+            </svg>
+
+            <!-- Center -->
+            <div class="hub-center">
+                <img
+                    src="{% static 'images/dawrah-logo.svg' %}"
+                    alt="شعار دَوْرة"
+                >
+            </div>
+
+            <!-- Members -->
+            <div
+                class="hub-node hub-members"
+                data-node="members"
+            >
+                <div class="hub-node-icon">
+                    <img
+                        src="{% static 'images/icons/users.svg' %}"
+                        alt="أيقونة الأعضاء"
+                        aria-hidden="true"
+                    >
+                </div>
+                <h3>الأعضاء</h3>
+            </div>
+
+            <!-- Rounds -->
+            <div
+                class="hub-node hub-rounds"
+                data-node="rounds"
+            >
+                <div class="hub-node-icon">
+                    <img
+                        src="{% static 'images/icons/calendar.svg' %}"
+                        alt="أيقونة الأدوار"
+                        aria-hidden="true"
+                    >
+                </div>
+                <h3>الأدوار</h3>
+            </div>
+
+            <!-- Payments -->
+            <div
+                class="hub-node hub-payments"
+                data-node="payments"
+            >
+                <div class="hub-node-icon">
+                    <img
+                        src="{% static 'images/icons/wallet.svg' %}"
+                        alt="أيقونة الدفعات"
+                        aria-hidden="true"
+                    >
+                </div>
+                <h3>الدفعات</h3>
+            </div>
+
+            <!-- Notifications -->
+            <div
+                class="hub-node hub-notifications"
+                data-node="notifications"
+            >
+                <div class="hub-node-icon">
+                    <img
+                        src="{% static 'images/icons/notification.svg' %}"
+                        alt="أيقونة الإشعارات"
+                        aria-hidden="true"
+                    >
+                </div>
+                <h3>الإشعارات</h3>
+            </div>
+
+            <!-- Reports -->
+            <div
+                class="hub-node hub-reports"
+                data-node="reports"
+            >
+                <div class="hub-node-icon">
+                    <img
+                        src="{% static 'images/icons/shield.svg' %}"
+                        alt="أيقونة التقارير"
+                        aria-hidden="true"
+                    >
+                </div>
+                <h3>التقارير</h3>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- =========================================
+     05. FEATURES SECTION
+========================================= -->
+<section
+    class="section features-section"
+    id="features"
+    aria-labelledby="features-title"
+>
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span class="section-kicker">
+                <span aria-hidden="true">ــــ</span>
+                التفاصيل في مكان واحد
+                <span aria-hidden="true">ــــ</span>
+            </span>
+
+            <h2 id="features-title">
+                بدل ما تضيع التفاصيل بين الرسائل
+            </h2>
+
+            <p>
+                إدارة أوضح، ومتابعة أسهل،
+                وكل خطوة لها مكانها.
+            </p>
+
+        </div>
+
+        <div class="features-grid">
+
+            <!-- Feature 1 -->
+            <article class="feature-card">
+                <div class="feature-icon">
+                    <img
+                        src="{% static 'images/icons/calendar.svg' %}"
+                        alt="أيقونة المواعيد"
+                        aria-hidden="true"
+                    >
+                </div>
+
+                <h3>أدوار ومواعيد واضحة</h3>
+
+                <p>
+                    تابع ترتيب الاستلام ومواعيد
+                    كل دورة في جمعيتك.
+                </p>
+            </article>
+
+            <!-- Feature 2 -->
+            <article class="feature-card">
+                <div class="feature-icon">
+                    <img
+                        src="{% static 'images/icons/file.svg' %}"
+                        alt="أيقونة توثيق الدفعات"
+                        aria-hidden="true"
+                    >
+                </div>
+
+                <h3>متابعة الدفعات</h3>
+
+                <p>
+                    سجّل بلاغ الدفع، وتابع حالته
+                    بعد مراجعة مدير الجمعية.
+                </p>
+            </article>
+
+            <!-- Feature 3 -->
+            <article class="feature-card">
+                <div class="feature-icon">
+                    <img
+                        src="{% static 'images/icons/shield.svg' %}"
+                        alt="أيقونة إدارة الطلبات"
+                        aria-hidden="true"
+                    >
+                </div>
+
+                <h3>طلبات وقرارات منظّمة</h3>
+
+                <p>
+                    راجع طلبات الانضمام،
+                    ووثّق قرارات الدفعات والتسليم.
+                </p>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<!-- =========================================
+     06. FAQ SECTION
+========================================= -->
+<section
+    class="section faq-section"
+    id="faq"
+    aria-labelledby="faq-title"
+>
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span class="section-kicker">
+                <span aria-hidden="true">ــــ</span>
+                عندك سؤال؟
+                <span aria-hidden="true">ــــ</span>
+            </span>
+
+            <h2 id="faq-title">
+                الأسئلة الشائعة
+            </h2>
+
+            <p>
+                إجابات مختصرة عن طريقة عمل دَوْرة.
+            </p>
+
+        </div>
+
+        <div class="faq-list">
+
+            <!-- Question 1 -->
+            <details>
+                <summary>
+                    هل دَوْرة تحول الأموال بين الأعضاء؟
+                </summary>
+
+                <p>
+                    لا، دَوْرة منصة تعليمية لتنظيم الجمعيات
+                    وتوثيق بلاغات الدفعات والتسليمات،
+                    ولا تستقبل الأموال أو تنفّذ تحويلات بنكية.
+                </p>
+            </details>
+
+            <!-- Question 2 -->
+            <details>
+                <summary>
+                    من يعتمد انضمامي للجمعية؟
+                </summary>
+
+                <p>
+                    منشئ الجمعية هو مديرها،
+                    وهو المسؤول عن مراجعة طلبات الانضمام
+                    والموافقة عليها أو رفضها.
+                </p>
+            </details>
+
+            <!-- Question 3 -->
+            <details>
+                <summary>
+                    كيف يتحدد دور الاستلام؟
+                </summary>
+
+                <p>
+                    بعد اكتمال الأعضاء،
+                    يحدّد مدير الجمعية ترتيب الاستلام،
+                    وتُعرض المواعيد في جدول الأدوار.
+                </p>
+            </details>
+
+            <!-- Question 4 -->
+            <details>
+                <summary>
+                    هل أقدر أنشئ جمعية خاصة؟
+                </summary>
+
+                <p>
+                    نعم، الجمعية الخاصة تكون برابط دعوة،
+                    ولا تظهر في قائمة الجمعيات العامة.
+                    ويحتاج طلب الانضمام إلى موافقة مدير الجمعية.
+                </p>
+            </details>
+
+            <!-- Question 5 -->
+            <details>
+                <summary>
+                    كيف أعرف أن دفعتي تأكدت؟
+                </summary>
+
+                <p>
+                    بعد الإبلاغ عن الدفعة،
+                    يراجعها مدير الجمعية،
+                    وتظهر حالتها في سجل الدفعات
+                    ضمن حسابك في دَوْرة.
+                </p>
+            </details>
+
+            <!-- Question 6 -->
+            <details>
+                <summary>
+                    كيف أعرف أن الجمعية اكتملت؟
+                </summary>
+
+                <p>
+                    بعد تأكيد تسليم جميع أدوار الاستلام،
+                    تتحول حالة الجمعية إلى مكتملة،
+                    وتبقى تفاصيلها وسجلاتها محفوظة للرجوع إليها.
+                </p>
+            </details>
+
+        </div>
+    </div>
+</section>
+
+<!-- =========================================
+     07. FINAL CTA
+========================================= -->
+<section class="final-section" id="start">
+
+    <div class="container">
+        <div class="final-content">
+
+            <div class="cta-ring" aria-hidden="true"></div>
+
+            <span class="section-kicker mint">
+                <span aria-hidden="true">ــــ</span>
+                دَوْرة تجمعكم
+                <span aria-hidden="true">ــــ</span>
+            </span>
+
+            <h2>جاهز تبدأ أول دَوْرة؟</h2>
+
+            <p>
+                جمعيتك مرتّبة من البداية للنهاية،
+                وكل دور محسوب.
+            </p>
+
+            <a href="{% url 'login' %}" class="btn btn-light">
+                ابدأ مع دَوْرة
+            </a>
+
+            <small>
+                تنظيم ومتابعة وتوثيق ــــ كل التفاصيل في مكان واحد.
+            </small>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

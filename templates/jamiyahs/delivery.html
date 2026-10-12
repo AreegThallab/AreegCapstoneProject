@@ -1,0 +1,97 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+{% block title %}تسليم مبالغ الجمعية | دَوْرة{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/delivery.css' %}">
+{% endblock %}
+{% block content %}
+<section class="delivery-page">
+    <div class="dashboard-container">
+        <!-- 01. HEADER -->
+        <div class="delivery-heading">
+            <div>
+                <span class="delivery-eyebrow">إدارة دورات الجمعية</span>
+                <h1>تأكيد تسليم مبالغ الجمعية</h1>
+                <p>{{ jamiyah.name }} — متابعة تسليم مبلغ كل دورة للمستلم المحدد.</p>
+            </div>
+            <a href="{% url 'jamiyah_detail' jamiyah.pk %}" class="delivery-back">العودة لتفاصيل الجمعية</a>
+        </div>
+        <!-- 02. INFORMATION -->
+        <div class="delivery-info">
+            <img src="{% static 'images/icons/activity.svg' %}" alt="" aria-hidden="true">
+            <p>التسليم يتم خارج منصة دَوْرة. هذه الصفحة توثّق تأكيد المدير أن مبلغ الدورة سُلّم للمستفيد، ولا تنفّذ أي
+                تحويل مالي.</p>
+        </div>
+        <!-- 03. DELIVERY ROUNDS -->
+        <div class="delivery-grid">
+            {% for row in delivery_rows %}
+            <article class="delivery-card">
+                <div class="delivery-card-top">
+                    <div>
+                        <span class="delivery-round-label">الدورة {{ row.turn.position }}</span>
+                        <h2>{{ row.turn.membership.user.profile.full_name|default:row.turn.membership.user.username }}
+                        </h2>
+                        <p>موعد الاستلام: {{ row.turn.payout_date|date:"Y/m/d" }}</p>
+                    </div>
+                    {% if row.turn.delivered_at %}
+                    <span class="delivery-status is-delivered">تم التسليم</span>
+                    {% elif row.ready_to_deliver %}
+                    <span class="delivery-status is-ready">جاهزة للتسليم</span>
+                    {% else %}
+                    <span class="delivery-status">بانتظار اكتمال الدفعات</span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    {% if row.turn.delivered_at %}
+                    <span>المبلغ المؤكد تسليمه</span>
+                    {% else %}
+                    <span>مبلغ الاستلام المتوقع</span>
+                    {% endif %}
+                    <strong>{{ row.payout_amount|floatformat:2 }} ر.س</strong>
+                </div>
+
+                {% if row.turn.delivered_at %}
+                <div class="delivery-confirmation">
+                    <strong>أكد المدير تسليم مبلغ هذه الدورة.</strong>
+                    <span>تاريخ التأكيد: {{ row.turn.delivered_at|date:"Y/m/d - h:i A" }}</span>
+                    {% if row.turn.delivered_by %}
+                    <span>بواسطة: {{ row.turn.delivered_by.username }}</span>
+                    {% endif %}
+                </div>
+                {% if row.is_recipient and not row.turn.recipient_seen_at %}
+                <form method="POST" action="{% url 'mark_payout_delivery_seen' jamiyah.pk row.turn.pk %}"
+                    class="delivery-action">
+                    {% csrf_token %}
+                    <button type="submit" class="delivery-read-btn">اطلعت على تأكيد التسليم</button>
+                </form>
+                {% endif %}
+                {% elif is_manager and row.ready_to_deliver %}
+                <form method="POST" action="{% url 'confirm_payout_delivery' jamiyah.pk row.turn.pk %}"
+                    class="delivery-confirm-form">
+                    {% csrf_token %}
+                    <button type="submit" class="delivery-confirm-btn"
+                        data-recipient="{{ row.turn.membership.user.profile.full_name|default:row.turn.membership.user.username }}">
+                        تأكيد تسليم مبلغ الدورة
+                    </button>
+                </form>
+                {% elif is_manager %}
+                <p class="delivery-pending-note">يظهر زر التأكيد بعد اكتمال عدد الأعضاء وتوثيق جميع دفعات هذه الدورة.
+                </p>
+                {% elif row.is_recipient %}
+                <p class="delivery-pending-note">لم يؤكد المدير تسليم مبلغ دورك حتى الآن.</p>
+                {% endif %}
+            </article>
+            {% empty %}
+            <div class="delivery-empty">
+                <h2>لا توجد دورات بعد</h2>
+                <p>يجب إنشاء جدول أدوار الاستلام أولًا.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/delivery.js' %}" defer></script>
+{% endblock %}

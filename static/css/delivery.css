@@ -1,0 +1,290 @@
+
+/* =========================================
+   DAWRAH | PAYOUT DELIVERY
+========================================= */
+/* 01. PAGE AND HEADING */
+.delivery-page {
+    padding: 50px 0 95px;
+}
+.delivery-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+.delivery-eyebrow {
+    display: inline-block;
+    margin-bottom: 11px;
+    color: var(--teal);
+    font-size: 13px;
+    font-weight: 800;
+}
+.delivery-heading h1 {
+    margin: 0 0 10px;
+    color: var(--navy);
+    font-size: clamp(25px, 3.3vw, 37px);
+    line-height: 1.5;
+}
+.delivery-heading p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.9;
+}
+.delivery-back {
+    flex-shrink: 0;
+    color: var(--teal);
+    font-size: 13px;
+    font-weight: 800;
+}
+.delivery-back:hover {
+    color: var(--navy);
+}
+/* 02. INFORMATION */
+.delivery-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    margin-bottom: 28px;
+    padding: 19px 21px;
+    background: #edf7f4;
+    border: 1px solid #d8ebe5;
+    border-radius: 15px;
+}
+.delivery-info img {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+.delivery-info p {
+    margin: 0;
+    color: #55737a;
+    font-size: 13px;
+    line-height: 1.9;
+}
+/* 03. DELIVERY CARDS */
+.delivery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 22px;
+}
+.delivery-card {
+    min-width: 0;
+    padding: 28px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    transition: transform .2s, box-shadow .2s;
+}
+.delivery-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+}
+.delivery-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 24px;
+}
+.delivery-card-top > div {
+    min-width: 0;
+}
+.delivery-round-label {
+    color: var(--teal);
+    font-size: 12px;
+    font-weight: 800;
+}
+.delivery-card-top h2 {
+    margin: 9px 0;
+    color: var(--navy);
+    font-size: 21px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.delivery-card-top p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.8;
+}
+.delivery-status {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    color: #667b82;
+    background: #edf2f2;
+    border-radius: 25px;
+    font-size: 11px;
+    font-weight: 800;
+}
+.delivery-status.is-ready {
+    color: #916a27;
+    background: #fff3db;
+}
+.delivery-status.is-delivered {
+    color: #16746f;
+    background: #e4f5f0;
+}
+/* 04. ROUND SUMMARY */
+.delivery-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 19px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+}
+.delivery-summary > div {
+    min-width: 0;
+}
+.delivery-summary span {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--muted);
+    font-size: 12px;
+}
+.delivery-summary strong {
+    display: block;
+    color: var(--navy);
+    font-size: 18px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+/* 05. CONFIRMATION */
+.delivery-confirmation {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 21px;
+    padding: 18px;
+    color: #426e70;
+    background: #edf7f4;
+    border: 1px solid #d8ebe5;
+    border-radius: 13px;
+}
+.delivery-confirmation strong {
+    font-size: 14px;
+    line-height: 1.7;
+}
+.delivery-confirmation span {
+    font-size: 12px;
+    line-height: 1.7;
+}
+.delivery-confirm-form,
+.delivery-action {
+    margin-top: 19px;
+}
+.delivery-confirm-btn,
+.delivery-read-btn {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 20px;
+    color: #fff;
+    background: var(--navy);
+    border: 0;
+    border-radius: 12px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+}
+.delivery-confirm-btn:hover,
+.delivery-read-btn:hover {
+    background: #174a61;
+    transform: translateY(-2px);
+}
+.delivery-confirm-btn:focus-visible,
+.delivery-read-btn:focus-visible {
+    outline: 3px solid var(--teal);
+    outline-offset: 3px;
+}
+.delivery-read-btn {
+    background: #16746f;
+}
+.delivery-pending-note {
+    margin: 19px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.9;
+}
+.delivery-empty {
+    grid-column: 1 / -1;
+    padding: 60px 20px;
+    text-align: center;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+}
+.delivery-empty h2 {
+    margin: 0 0 10px;
+    color: var(--navy);
+}
+.delivery-empty p {
+    margin: 0;
+    color: var(--muted);
+}
+/* 06. IPAD */
+@media (max-width: 1024px) {
+    .delivery-grid {
+        gap: 16px;
+    }
+    .delivery-card {
+        padding: 23px;
+    }
+    .delivery-card-top {
+        flex-wrap: wrap;
+    }
+}
+/* 07. MOBILE */
+@media (max-width: 650px) {
+    .delivery-page {
+        padding: 35px 0 65px;
+    }
+    .delivery-heading {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .delivery-heading h1 {
+        font-size: 26px;
+    }
+    .delivery-grid {
+        grid-template-columns: 1fr;
+        gap: 17px;
+    }
+    .delivery-card {
+        padding: 21px 18px;
+        border-radius: 18px;
+    }
+    .delivery-card-top {
+        margin-bottom: 18px;
+    }
+    .delivery-card-top h2 {
+        font-size: 19px;
+    }
+    .delivery-info {
+        padding: 16px;
+    }
+}
+/* 08. SMALL MOBILE */
+@media (max-width: 390px) {
+    .delivery-summary {
+        grid-template-columns: 1fr;
+        gap: 17px;
+    }
+    .delivery-status {
+        white-space: normal;
+    }
+}
+/* 09. ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce) {
+    .delivery-page *,
+    .delivery-page *::before,
+    .delivery-page *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}

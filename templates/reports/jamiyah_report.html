@@ -1,0 +1,214 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}تقرير {{ jamiyah.name }} | دَوْرة{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reports.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="report-detail-page">
+    <div class="dashboard-container">
+
+        <!-- TOP BAR -->
+        <div class="report-detail-toolbar">
+            <div class="report-detail-breadcrumb">
+                <a href="{% url 'reports_dashboard' %}">التقارير</a>
+                <span>/</span>
+                <span>{{ jamiyah.name }}</span>
+            </div>
+
+            <a href="{% url 'reports_dashboard' %}" class="report-back-btn">
+                <img src="{% static 'images/icons/chevron.svg' %}" alt="أيقونة العودة للتقارير">
+                <span>العودة للتقارير</span>
+            </a>
+        </div>
+
+        <!-- HERO -->
+        <div class="report-detail-hero">
+            <div class="report-detail-hero-content">
+                <span class="report-detail-eyebrow">تقرير تفصيلي</span>
+                <h1>{{ jamiyah.name }}</h1>
+                <p>
+                    نظرة شاملة على حالة الجمعية، والدفعات الموثقة، وأدوار الاستلام،
+                    وتأكيدات التسليم بشكل واضح ومنظم.
+                </p>
+
+                <div class="report-detail-hero-tags">
+                    <span class="report-detail-tag">{{ jamiyah.get_status_display }}</span>
+                    <span class="report-detail-tag">{{ jamiyah.get_visibility_display }}</span>
+                    <span class="report-detail-tag">{{ jamiyah.get_frequency_display }}</span>
+                    <span class="report-detail-tag">
+                        الأعضاء: {{ approved_count|default:0 }} / {{ jamiyah.max_members }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="report-detail-hero-icon">
+                <img src="{% static 'images/icons/file.svg' %}" alt="أيقونة التقرير التفصيلي">
+            </div>
+        </div>
+
+        <!-- QUICK SUMMARY -->
+        <div class="report-detail-summary-grid">
+            <article class="report-summary-card">
+                <div class="report-summary-card-icon">
+                    <img src="{% static 'images/icons/check.svg' %}" alt="أيقونة الدفعات الموثقة">
+                </div>
+                <div class="report-summary-card-text">
+                    <span>دفعات موثقة</span>
+                    <strong>{{ verified_count|default:0 }}</strong>
+                </div>
+            </article>
+
+            <article class="report-summary-card">
+                <div class="report-summary-card-icon">
+                    <img src="{% static 'images/icons/activity.svg' %}" alt="أيقونة الدفعات المعلقة">
+                </div>
+                <div class="report-summary-card-text">
+                    <span>دفعات معلقة</span>
+                    <strong>{{ pending_count|default:0 }}</strong>
+                </div>
+            </article>
+
+            <article class="report-summary-card">
+                <div class="report-summary-card-icon">
+                    <img src="{% static 'images/icons/receipt.svg' %}" alt="أيقونة التسليمات المؤكدة">
+                </div>
+                <div class="report-summary-card-text">
+                    <span>تسليمات مؤكدة</span>
+                    <strong>{{ delivered_count|default:0 }}</strong>
+                </div>
+            </article>
+
+            <article class="report-summary-card">
+                <div class="report-summary-card-icon">
+                    <img src="{% static 'images/icons/wallet.svg' %}" alt="أيقونة مبلغ الاشتراك">
+                </div>
+                <div class="report-summary-card-text">
+                    <span>مبلغ الاشتراك</span>
+                    <strong>{{ jamiyah.contribution_amount|floatformat:2 }} ر.س</strong>
+                </div>
+            </article>
+        </div>
+
+        <!-- INSIGHT PANELS -->
+        <div class="report-detail-panels">
+
+            <!-- RIGHT PANEL -->
+            <section class="report-panel report-panel-main">
+                <div class="report-panel-heading">
+                    <h2>سجل أدوار الاستلام</h2>
+                    <p>يعرض المستلم في كل دورة، وحالة الدفعات، وهل تم تأكيد التسليم أم لا.</p>
+                </div>
+
+                {% if report_rows %}
+                <div class="report-table-wrap">
+                    <table class="report-detail-table">
+                        <thead>
+                            <tr>
+                                <th>الدور</th>
+                                <th>المستلم</th>
+                                <th>موعد الاستلام</th>
+                                <th>الدفعات المؤكدة</th>
+                                <th>مبلغ الاستلام</th>
+                                <th>حالة التسليم</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in report_rows %}
+                            <tr>
+                                <td>{{ row.position }}</td>
+                                <td>{{ row.recipient_name }}</td>
+                                <td>{{ row.payout_date|date:"Y/m/d" }}</td>
+                                <td>{{ row.verified_count|default:0 }} / {{ row.required_count|default:jamiyah.max_members }}</td>
+                                <td>{{ row.amount|default:jamiyah.contribution_amount|floatformat:2 }} ر.س</td>
+                                <td>
+                                    {% if row.is_delivered %}
+                                    <span class="report-status-pill is-success">تم التسليم</span>
+                                    {% else %}
+                                    <span class="report-status-pill is-muted">لم يتم التسليم</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="report-empty-state">
+                    <img src="{% static 'images/icons/file.svg' %}" alt="أيقونة عدم وجود بيانات">
+                    <h3>لا توجد بيانات أدوار حاليًا</h3>
+                    <p>سيظهر سجل الأدوار هنا بعد إنشاء جدول الأدوار داخل الجمعية.</p>
+                </div>
+                {% endif %}
+            </section>
+
+            <!-- LEFT PANEL -->
+            <aside class="report-panel report-panel-side">
+                <div class="report-panel-heading">
+                    <h2>ملخص سريع</h2>
+                    <p>أهم المعلومات في مكان واحد لتسهيل المتابعة واتخاذ القرار.</p>
+                </div>
+
+                <div class="report-insight-list">
+                    <div class="report-insight-item">
+                        <span>اسم الجمعية</span>
+                        <strong>{{ jamiyah.name }}</strong>
+                    </div>
+
+                    <div class="report-insight-item">
+                        <span>نوع الجمعية</span>
+                        <strong>{{ jamiyah.get_visibility_display }}</strong>
+                    </div>
+
+                    <div class="report-insight-item">
+                        <span>دورية الجمعية</span>
+                        <strong>{{ jamiyah.get_frequency_display }}</strong>
+                    </div>
+
+                    <div class="report-insight-item">
+                        <span>حالة الجمعية</span>
+                        <strong>{{ jamiyah.get_status_display }}</strong>
+                    </div>
+
+                    <div class="report-insight-item">
+                        <span>عدد الأعضاء</span>
+                        <strong>{{ approved_count|default:0 }} / {{ jamiyah.max_members }}</strong>
+                    </div>
+
+                    <div class="report-insight-item">
+                        <span>إجمالي الدفعات الموثقة</span>
+                        <strong>{{ verified_amount|default:0|floatformat:2 }} ر.س</strong>
+                    </div>
+
+                    <div class="report-insight-item">
+                        <span>إجمالي التسليمات المؤكدة</span>
+                        <strong>{{ delivered_amount|default:0|floatformat:2 }} ر.س</strong>
+                    </div>
+                </div>
+
+                <div class="report-side-note">
+                    <img src="{% static 'images/icons/notification.svg' %}" alt="أيقونة تنبيه">
+                    <p>
+                        هذه البيانات توثيقية داخل النظام، وهدفها المتابعة والتنظيم
+                        وليست تنفيذ تحويلات مالية داخل المنصة.
+                    </p>
+                </div>
+
+                <div class="report-side-actions">
+                    <a href="{% url 'jamiyah_detail' jamiyah.pk %}" class="report-action-btn primary">
+                        تفاصيل الجمعية
+                    </a>
+                    <a href="{% url 'reports_dashboard' %}" class="report-action-btn secondary">
+                        العودة للتقارير
+                    </a>
+                </div>
+            </aside>
+
+        </div>
+
+    </div>
+</section>
+{% endblock %}

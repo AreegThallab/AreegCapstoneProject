@@ -1,0 +1,65 @@
+
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+{% block title %}دعوة للانضمام | دَوْرة{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/jamiyahs.css' %}">
+{% endblock %}
+{% block content %}
+<section class="private-invite-page">
+    <div class="dashboard-container">
+        <div class="private-invite-card">
+            <div class="private-invite-icon">
+                <img src="{% static 'images/icons/group.svg' %}" alt="" aria-hidden="true">
+            </div>
+            <span class="private-invite-eyebrow">دعوة خاصة</span>
+            <h1>انضم إلى {{ jamiyah.name }}</h1>
+            <p class="private-invite-description">
+                {% if jamiyah.description %}
+                    {{ jamiyah.description }}
+                {% else %}
+                    تمت دعوتك للانضمام إلى جمعية خاصة في دَوْرة.
+                {% endif %}
+            </p>
+            <div class="private-invite-details">
+                <div>
+                    <span>مبلغ الاشتراك</span>
+                    <strong>{{ jamiyah.contribution_amount }} ر.س</strong>
+                </div>
+                <div>
+                    <span>دورية الجمعية</span>
+                    <strong>{{ jamiyah.get_frequency_display }}</strong>
+                </div>
+                <div>
+                    <span>عدد الأعضاء</span>
+                    <strong>{{ approved_count }} من {{ jamiyah.max_members }}</strong>
+                </div>
+                <div>
+                    <span>تاريخ البداية</span>
+                    <strong>
+                        {% if jamiyah.start_date %}
+                            {{ jamiyah.start_date|date:"Y/m/d" }}
+                        {% else %}
+                            لم يُحدد
+                        {% endif %}
+                    </strong>
+                </div>
+            </div>
+            {% if my_membership.status == 'pending' %}
+                <div class="private-invite-message">تم إرسال طلبك، وهو الآن بانتظار موافقة مدير الجمعية.</div>
+            {% elif my_membership.status == 'rejected' %}
+                <div class="private-invite-message">تم رفض طلب انضمامك السابق لهذه الجمعية.</div>
+            {% elif can_request_join %}
+                <form method="POST" class="private-invite-form">
+                    {% csrf_token %}
+                    <button type="submit">طلب الانضمام للجمعية</button>
+                </form>
+            {% else %}
+                <div class="private-invite-message">الانضمام لهذه الجمعية غير متاح حاليًا.</div>
+            {% endif %}
+            <p class="private-invite-disclaimer">دَوْرة منصة لتنظيم الجمعيات وتوثيق الاشتراكات، ولا تنفذ تحويلات مالية.</p>
+            <a href="{% url 'dashboard' %}" class="private-invite-back">العودة للوحة التحكم</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

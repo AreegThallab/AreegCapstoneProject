@@ -1,0 +1,121 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#10334a">
+    <meta name="description" content="دَوْرة، منصة لتنظيم الجمعيات المالية ومتابعة الأدوار والاشتراكات.">
+
+    <title>{% block title %}دَوْرة | كل دور محسوب{% endblock %}</title>
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link href="https://cdn.jsdelivr.net/npm/@dawod/thmanyah-font-web/sans.css" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/dawrah-icon.svg' %}">
+
+    <!-- Shared and landing styles -->
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    {% block extra_css %}{% endblock %}
+
+    <!-- Mobile menu and hub interaction -->
+    <script src="{% static 'js/home.js' %}" defer></script>
+</head>
+<body>
+
+    <!-- =====================================
+         01. NAVBAR
+    ====================================== -->
+    <header class="site-header" id="top">
+        <div class="container nav-inner">
+
+            <a href="{% url 'home' %}" class="brand" aria-label="دَوْرة - الرئيسية">
+                <img src="{% static 'images/dawrah-logo.svg' %}" alt="شعار دَوْرة">
+            </a>
+
+            <nav class="nav-links" id="main-nav" aria-label="القائمة الرئيسية">
+                <a href="{% url 'home' %}#how">كيف تعمل؟</a>
+                <a href="{% url 'home' %}#hub">دَوْرة تجمعك</a>
+                <a href="{% url 'home' %}#features">المميزات</a>
+                <a href="{% url 'home' %}#faq">الأسئلة الشائعة</a>
+
+                <!-- Visible only on mobile -->
+                <div class="mobile-auth">
+                    {% if user.is_authenticated %}
+                        <form method="POST" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="mobile-auth-link">تسجيل الخروج</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="mobile-auth-link">تسجيل الدخول</a>
+                        <a href="{% url 'register' %}" class="mobile-auth-link">إنشاء حساب</a>
+                    {% endif %}
+                </div>
+            </nav>
+
+            <!-- Visible only on desktop -->
+            <div class="nav-auth">
+                {% if user.is_authenticated %}
+                    <form method="POST" action="{% url 'logout' %}" class="nav-logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-cta nav-logout">تسجيل الخروج</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'register' %}" class="nav-register">إنشاء حساب</a>
+                    <a href="{% url 'login' %}" class="nav-cta">تسجيل الدخول</a>
+                {% endif %}
+            </div>
+
+            <button
+                class="menu-toggle"
+                type="button"
+                aria-label="فتح القائمة"
+                aria-controls="main-nav"
+                aria-expanded="false"
+                data-menu-icon="{% static 'images/icons/menu.svg' %}"
+                data-close-icon="{% static 'images/icons/close.svg' %}"
+            >
+                <img src="{% static 'images/icons/menu.svg' %}" alt="" aria-hidden="true">
+            </button>
+        </div>
+    </header>
+
+    <!-- =====================================
+         02. DJANGO MESSAGES
+    ====================================== -->
+    {% if messages %}
+        <div class="container site-messages" aria-live="polite">
+            {% for message in messages %}
+                <div class="site-message{% if message.tags %} message-{{ message.tags }}{% endif %}" role="status">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- =====================================
+         03. PAGE CONTENT
+    ====================================== -->
+    <main id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- =====================================
+         04. FOOTER
+    ====================================== -->
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <a href="{% url 'home' %}" class="footer-brand" aria-label="دَوْرة - الرئيسية">
+                <img src="{% static 'images/dawrah-logo.svg' %}" alt="دَوْرة">
+            </a>
+            <p>كل دور محسوب، وكل جمعية منظمة.</p>
+            <span>© {% now "Y" %} دَوْرة · مشروع تعليمي</span>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

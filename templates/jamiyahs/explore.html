@@ -1,0 +1,164 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}استكشف الجمعيات | دَوْرة{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/jamiyahs.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="explore-page">
+    <!-- DECORATIVE RIYAL SYMBOLS -->
+    <div class="explore-decor" aria-hidden="true">
+        <img class="explore-riyal explore-riyal-1" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي">
+        <img class="explore-riyal explore-riyal-2" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي">
+        <img class="explore-riyal explore-riyal-3" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي">
+        <img class="explore-riyal explore-riyal-4" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي">
+        <img class="explore-riyal explore-riyal-5" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي">
+        <img class="explore-riyal explore-riyal-6" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي">
+        <img class="explore-riyal explore-riyal-7" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي">
+        <img class="explore-riyal explore-riyal-8" src="{% static 'images/riyal-symbol.svg' %}" alt="رمز الريال السعودي الزخرفي">
+    </div>
+
+    <div class="dashboard-container">
+        <!-- 01. PAGE HEADER -->
+        <div class="explore-heading">
+            <h1>استكشف الجمعيات</h1>
+            <p>تعرّف على الجمعيات العامة، وابحث عن الجمعية المناسبة لك، واطّلع على تفاصيلها قبل الانضمام.</p>
+        </div>
+
+        <!-- 02. SEARCH & FILTERS -->
+        <div class="explore-tools">
+            <form method="get" class="explore-search-form" role="search">
+                <div class="explore-search-row">
+                    <label class="explore-search-input" for="explore-search">
+                        <img src="{% static 'images/icons/search.svg' %}" alt="أيقونة البحث">
+                        <input id="explore-search" type="search" name="q" value="{{ query }}" placeholder="ابحث عن جمعية بالاسم" aria-label="ابحث عن جمعية بالاسم">
+                    </label>
+                    <input type="hidden" name="status" value="{{ selected_status }}">
+                    <button type="submit" class="explore-search-btn">بحث</button>
+                </div>
+            </form>
+
+            <nav class="explore-filters" aria-label="تصفية الجمعيات حسب الحالة">
+                {% if selected_status == 'all' %}
+                    <a href="?q={{ query|urlencode }}&amp;status=all" class="is-active" aria-current="page">الكل</a>
+                {% else %}
+                    <a href="?q={{ query|urlencode }}&amp;status=all">الكل</a>
+                {% endif %}
+
+                {% if selected_status == 'open' %}
+                    <a href="?q={{ query|urlencode }}&amp;status=open" class="is-active" aria-current="page">مفتوحة للانضمام</a>
+                {% else %}
+                    <a href="?q={{ query|urlencode }}&amp;status=open">مفتوحة للانضمام</a>
+                {% endif %}
+
+                {% if selected_status == 'active' %}
+                    <a href="?q={{ query|urlencode }}&amp;status=active" class="is-active" aria-current="page">الجارية</a>
+                {% else %}
+                    <a href="?q={{ query|urlencode }}&amp;status=active">الجارية</a>
+                {% endif %}
+
+                {% if selected_status == 'completed' %}
+                    <a href="?q={{ query|urlencode }}&amp;status=completed" class="is-active" aria-current="page">المكتملة</a>
+                {% else %}
+                    <a href="?q={{ query|urlencode }}&amp;status=completed">المكتملة</a>
+                {% endif %}
+            </nav>
+        </div>
+
+        <!-- 03. JAMIYAHS -->
+        <div class="explore-list-header">
+            <div class="explore-list-title">
+                <h2>الجمعيات العامة</h2>
+                <p>تصفّح الجمعيات المتاحة واطّلع على الاشتراكات والأعضاء وحالة الانضمام.</p>
+            </div>
+        </div>
+
+        {% if jamiyahs %}
+            <div class="explore-grid">
+                {% for jamiyah in jamiyahs %}
+                    <article class="explore-card">
+                        <div class="explore-card-top">
+                            <div class="explore-card-icon">
+                                <img src="{% static 'images/icons/group.svg' %}" alt="أيقونة الجمعية">
+                            </div>
+                            {% if jamiyah.status == 'open' %}
+                                <span class="explore-status-badge is-open">مفتوحة للانضمام</span>
+                            {% elif jamiyah.status == 'active' %}
+                                <span class="explore-status-badge is-active-status">جارية</span>
+                            {% elif jamiyah.status == 'completed' %}
+                                <span class="explore-status-badge is-completed">مكتملة</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="explore-card-body">
+                            <h3>{{ jamiyah.name }}</h3>
+                            <p class="explore-card-description">
+                                {% if jamiyah.description %}
+                                    {{ jamiyah.description|truncatechars:110 }}
+                                {% else %}
+                                    جمعية من {{ jamiyah.max_members }} أشخاص.
+                                {% endif %}
+                            </p>
+
+                            {% if jamiyah.viewer_membership %}
+                                {% if jamiyah.viewer_membership.status == 'approved' %}
+                                    {% if jamiyah.viewer_membership.role == 'manager' %}
+                                        <div class="explore-membership-note is-manager">أنت مدير هذه الجمعية</div>
+                                    {% else %}
+                                        <div class="explore-membership-note is-member">أنت عضو في هذه الجمعية</div>
+                                    {% endif %}
+                                {% elif jamiyah.viewer_membership.status == 'pending' %}
+                                    <div class="explore-membership-note is-pending">طلب انضمامك قيد المراجعة</div>
+                                {% elif jamiyah.viewer_membership.status == 'rejected' %}
+                                    <div class="explore-membership-note is-rejected">تم رفض طلب انضمامك سابقًا</div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+
+                        <div class="explore-card-stats">
+                            <div class="explore-card-stat">
+                                <span>مبلغ الاشتراك</span>
+                                <strong>{{ jamiyah.contribution_amount|floatformat:2 }} ر.س</strong>
+                            </div>
+                            <div class="explore-card-stat">
+                                <span>الأعضاء</span>
+                                <strong>{{ jamiyah.approved_count }} / {{ jamiyah.max_members }}</strong>
+                            </div>
+                            <div class="explore-card-stat">
+                                <span>المقاعد المتبقية</span>
+                                <strong>{{ jamiyah.remaining_seats }}</strong>
+                            </div>
+                        </div>
+
+                        <div class="explore-card-tags">
+                            <span class="explore-card-tag">{{ jamiyah.get_frequency_display }}</span>
+                        </div>
+
+                        <div class="explore-card-footer">
+                            <a href="{% url 'jamiyah_detail' jamiyah.pk %}" class="explore-details-btn" aria-label="عرض تفاصيل جمعية {{ jamiyah.name }}">
+                                {% if jamiyah.viewer_membership.status == 'approved' and jamiyah.viewer_membership.role == 'manager' %}
+                                    إدارة الجمعية
+                                {% else %}
+                                    عرض التفاصيل
+                                {% endif %}
+                            </a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="explore-empty-state">
+                <div class="explore-empty-icon">
+                    <img src="{% static 'images/icons/search.svg' %}" alt="أيقونة البحث عن الجمعيات">
+                </div>
+                <h3>ما لقينا جمعيات مطابقة</h3>
+                <p>جرّب تغيّر اسم البحث أو حالة الجمعية، أو ارجع لعرض الجمعيات العامة كلها.</p>
+                <a href="{% url 'explore_jamiyahs' %}" class="explore-reset-btn">عرض جميع الجمعيات</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
