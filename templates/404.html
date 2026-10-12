@@ -1,0 +1,100 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#10334a">
+    <meta name="description" content="الصفحة غير موجودة في منصة دَوْرة.">
+
+    <title>404 | الصفحة غير موجودة</title>
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link href="https://cdn.jsdelivr.net/npm/@dawod/thmanyah-font-web/sans.css" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/dawrah-icon.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/errors.css' %}">
+</head>
+<body class="error-body">
+    {% if request.user.is_authenticated %}
+        {% url 'dashboard' as home_destination %}
+    {% else %}
+        {% url 'home' as home_destination %}
+    {% endif %}
+
+    <main id="main-content">
+        <section class="error-page" aria-labelledby="error-title">
+            <div class="error-pattern" aria-hidden="true">
+                <img class="error-riyal error-riyal-one" src="{% static 'images/riyal-symbol.svg' %}" alt="">
+                <img class="error-riyal error-riyal-two" src="{% static 'images/riyal-symbol.svg' %}" alt="">
+                <img class="error-riyal error-riyal-three" src="{% static 'images/riyal-symbol.svg' %}" alt="">
+            </div>
+
+            <div class="container error-container">
+                <div class="error-content">
+                    <span class="error-kicker">صفحة غير موجودة</span>
+                    <h1 id="error-title" class="error-code">404</h1>
+                    <h2>يبدو أنك ضيّعت الطريق!</h2>
+                    <p>الصفحة اللي تدور عليها غير موجودة، أو يمكن تغيّر رابطها.</p>
+
+                    <div class="error-actions" aria-label="خيارات التنقل">
+                        <a class="btn btn-primary error-primary" href="{{ home_destination }}">
+                            العودة للرئيسية
+                        </a>
+                        <button
+                            class="btn btn-outline error-secondary"
+                            type="button"
+                            data-error-back
+                            data-fallback-url="{{ home_destination }}"
+                            aria-label="العودة للصفحة السابقة أو الرجوع للرئيسية"
+                        >
+                            العودة للخلف
+                        </button>
+                    </div>
+                </div>
+
+                <div class="error-visual" aria-hidden="true">
+                    <div class="error-orbit error-orbit-one"></div>
+                    <div class="error-orbit error-orbit-two"></div>
+                    <div class="error-mark">
+                        <img src="{% static 'images/dawrah-icon.svg' %}" alt="">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var backButton = document.querySelector("[data-error-back]");
+
+            if (!backButton) {
+                return;
+            }
+
+            backButton.addEventListener("click", function () {
+                var fallbackUrl = backButton.getAttribute("data-fallback-url") || "/";
+                var referrer = document.referrer;
+
+                try {
+                    var referrerUrl = referrer ? new URL(referrer) : null;
+                    var currentUrl = new URL(window.location.href);
+                    var isSameOrigin = referrerUrl && referrerUrl.origin === currentUrl.origin;
+                    var isDifferentPage = isSameOrigin && referrerUrl.pathname !== currentUrl.pathname;
+
+                    if (isDifferentPage) {
+                        window.location.assign(referrerUrl.href);
+                        return;
+                    }
+                } catch (error) {
+                    window.location.assign(fallbackUrl);
+                    return;
+                }
+
+                window.location.assign(fallbackUrl);
+            });
+        });
+    </script>
+</body>
+</html>
