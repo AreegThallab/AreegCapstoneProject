@@ -1,0 +1,71 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}إلغاء الجمعية | دَوْرة{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/jamiyahs.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="jamiyah-create-page jamiyah-cancel-page">
+    <div class="jamiyah-create-decor" aria-hidden="true">
+        <img class="jamiyah-create-riyal jamiyah-create-riyal-1" src="{% static 'images/riyal-symbol.svg' %}" alt="">
+        <img class="jamiyah-create-riyal jamiyah-create-riyal-2" src="{% static 'images/riyal-symbol.svg' %}" alt="">
+        <img class="jamiyah-create-riyal jamiyah-create-riyal-4" src="{% static 'images/riyal-symbol.svg' %}" alt="">
+        <img class="jamiyah-create-riyal jamiyah-create-riyal-7" src="{% static 'images/riyal-symbol.svg' %}" alt="">
+    </div>
+
+    <div class="dashboard-container jamiyah-create-container">
+        <header class="jamiyah-create-heading">
+            <span class="jamiyah-create-eyebrow">إدارة الجمعيات</span>
+            <h1>إلغاء الجمعية</h1>
+            <p>سيتم إغلاق الانضمام وتوليد الجدول لهذه الجمعية مع الاحتفاظ بجميع السجلات.</p>
+        </header>
+
+        <div class="jamiyah-create-layout">
+            <div class="jamiyah-create-card jamiyah-cancel-card">
+                <div class="jamiyah-card-heading">
+                    <div class="jamiyah-create-heading-icon jamiyah-cancel-icon">
+                        <img src="{% static 'images/icons/shield.svg' %}" alt="أيقونة تأكيد الإلغاء">
+                    </div>
+                    <div>
+                        <span class="jamiyah-section-label">{{ jamiyah.name }}</span>
+                        <h2>تأكيد إلغاء الجمعية</h2>
+                    </div>
+                </div>
+
+                <div class="jamiyah-cancel-warning" role="alert">
+                    <strong>تنبيه قبل الإلغاء</strong>
+                    <p>
+                        هذا الإجراء لا يحذف الجمعية ولا يحذف العضويات أو سجلات الدفع. سيتم فقط تغيير حالة الجمعية إلى ملغاة، ولن تكون متاحة للانضمام أو إنشاء جدول استلام.
+                    </p>
+                </div>
+
+                <dl class="jamiyah-cancel-summary">
+                    <div>
+                        <dt>الحالة الحالية</dt>
+                        <dd>{{ jamiyah.get_status_display }}</dd>
+                    </div>
+                    <div>
+                        <dt>عدد الأعضاء المطلوب</dt>
+                        <dd>{{ jamiyah.max_members }}</dd>
+                    </div>
+                    <div>
+                        <dt>مبلغ الاشتراك</dt>
+                        <dd>{{ jamiyah.contribution_amount|floatformat:2 }} ر.س</dd>
+                    </div>
+                </dl>
+
+                <form method="post" class="jamiyah-create-form">
+                    {% csrf_token %}
+                    <div class="jamiyah-form-actions">
+                        <button type="submit" class="jamiyah-danger-btn">تأكيد إلغاء الجمعية</button>
+                        <a href="{% url 'jamiyah_detail' jamiyah.pk %}" class="jamiyah-cancel-btn">العودة للتفاصيل</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

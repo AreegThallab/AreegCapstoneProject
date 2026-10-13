@@ -1,4 +1,3 @@
-
 {% extends 'dashboard/base_dashboard.html' %}
 {% load static %}
 {% block title %}الملف الشخصي | دَوْرة{% endblock %}
@@ -14,7 +13,6 @@
                 <h1>الملف الشخصي</h1>
                 <p>معلومات حسابك، وجمعياتك، ونشاطك في مكان واحد.</p>
             </div>
-            <a href="{% url 'dashboard' %}" class="profile-back-link">العودة للوحة التحكم</a>
         </div>
         <!-- 02. PROFILE HERO -->
         <div class="profile-hero">
@@ -147,10 +145,10 @@
             {% if recent_memberships %}
                 <div class="profile-jamiyahs-list">
                     {% for membership in recent_memberships %}
-                        <a href="{% url 'jamiyah_detail' membership.jamiyah.pk %}" class="profile-jamiyah-item" aria-label="عرض تفاصيل جمعية {{ membership.jamiyah.name }}">
+                        <a href="{% url 'jamiyah_detail' membership.jamiyah.pk %}" class="profile-jamiyah-item status-{{ membership.jamiyah.status }}" aria-label="عرض تفاصيل جمعية {{ membership.jamiyah.name }}">
                             <div class="profile-jamiyah-details">
                                 <div class="profile-jamiyah-icon">
-                                    <img src="{% static 'images/icons/group.svg' %}" alt="أيقونة جمعية حالية" aria-hidden="true">
+                                    <img src="{% static 'images/icons/group.svg' %}" alt="" aria-hidden="true">
                                 </div>
                                 <div class="profile-jamiyah-info">
                                     <h3>{{ membership.jamiyah.name }}</h3>
@@ -196,17 +194,17 @@
             {% if previous_memberships %}
                 <div class="profile-jamiyahs-list">
                     {% for membership in previous_memberships %}
-                        <a href="{% url 'jamiyah_detail' membership.jamiyah.pk %}" class="profile-jamiyah-item" aria-label="عرض سجل الجمعية المكتملة {{ membership.jamiyah.name }}">
+                        <a href="{% url 'jamiyah_detail' membership.jamiyah.pk %}" class="profile-jamiyah-item status-{{ membership.jamiyah.status }}" aria-label="عرض تفاصيل جمعية {{ membership.jamiyah.name }}">
                             <div class="profile-jamiyah-details">
                                 <div class="profile-jamiyah-icon">
-                                    <img src="{% static 'images/icons/group.svg' %}" alt="أيقونة جمعية سابقة" aria-hidden="true">
+                                    <img src="{% static 'images/icons/group.svg' %}" alt="" aria-hidden="true">
                                 </div>
                                 <div class="profile-jamiyah-info">
                                     <h3>{{ membership.jamiyah.name }}</h3>
                                     <p>مبلغ الاشتراك: <strong>{{ membership.jamiyah.contribution_amount }}</strong> ر.س</p>
                                     <div class="profile-jamiyah-meta">
                                         <span>{{ membership.jamiyah.get_visibility_display }}</span>
-                                        <span>مكتملة</span>
+                                        <span>{{ membership.jamiyah.get_status_display }}</span>
                                         {% if membership.jamiyah.completed_at %}
                                             <span>اكتملت في {{ membership.jamiyah.completed_at|date:"Y/m/d" }}</span>
                                         {% endif %}
@@ -214,6 +212,11 @@
                                 </div>
                             </div>
                             <div class="profile-jamiyah-side">
+                                    {% if membership.jamiyah.status == 'completed' %}
+                                        <span class="profile-jamiyah-stamp is-completed">مكتملة</span>
+                                    {% elif membership.jamiyah.status == 'cancelled' %}
+                                        <span class="profile-jamiyah-stamp is-cancelled">ملغاة</span>
+                                    {% endif %}
                                 <span class="profile-jamiyah-role {% if membership.role == 'manager' %}is-manager{% endif %}">{{ membership.get_role_display }}</span>
                             </div>
                         </a>
@@ -226,6 +229,49 @@
                     </div>
                     <h3>ما عندك جمعيات سابقة حتى الآن</h3>
                     <p>بعد اكتمال جميع أدوار أي جمعية تشارك فيها، بتظهر هنا مع تفاصيلها وسجلها.</p>
+                </div>
+            {% endif %}
+        </section>
+        <!-- 07. CANCELLED JAMIYAHS -->
+        <section class="profile-panel profile-jamiyahs-panel profile-cancelled-panel">
+            <div class="profile-panel-header">
+                <div>
+                    <h2>الجمعيات الملغاة</h2>
+                    <p>الجمعيات التي أُلغيت قبل بدء أدوار الاستلام، مع الاحتفاظ بسجلها.</p>
+                </div>
+                <span class="profile-section-count is-cancelled">{{ cancelled_jamiyahs_count }} جمعية</span>
+            </div>
+            {% if cancelled_memberships %}
+                <div class="profile-jamiyahs-list">
+                    {% for membership in cancelled_memberships %}
+                        <a href="{% url 'jamiyah_detail' membership.jamiyah.pk %}" class="profile-jamiyah-item status-cancelled" aria-label="عرض تفاصيل الجمعية الملغاة {{ membership.jamiyah.name }}">
+                            <div class="profile-jamiyah-details">
+                                <div class="profile-jamiyah-icon">
+                                    <img src="{% static 'images/icons/group.svg' %}" alt="" aria-hidden="true">
+                                </div>
+                                <div class="profile-jamiyah-info">
+                                    <h3>{{ membership.jamiyah.name }}</h3>
+                                    <p>مبلغ الاشتراك: <strong>{{ membership.jamiyah.contribution_amount }}</strong> ر.س</p>
+                                    <div class="profile-jamiyah-meta">
+                                        <span>{{ membership.jamiyah.get_visibility_display }}</span>
+                                        <span>{{ membership.jamiyah.get_status_display }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-jamiyah-side">
+                                <span class="profile-jamiyah-stamp is-cancelled">ملغاة</span>
+                                <span class="profile-jamiyah-role {% if membership.role == 'manager' %}is-manager{% endif %}">{{ membership.get_role_display }}</span>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="profile-empty-state profile-empty-wide">
+                    <div class="profile-empty-icon">
+                        <img src="{% static 'images/icons/group.svg' %}" alt="" aria-hidden="true">
+                    </div>
+                    <h3>ما عندك جمعيات ملغاة</h3>
+                    <p>أي جمعية تُلغى وتكون عضوًا معتمدًا فيها بتظهر هنا للرجوع إلى تفاصيلها.</p>
                 </div>
             {% endif %}
         </section>

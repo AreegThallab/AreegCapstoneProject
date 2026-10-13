@@ -2,7 +2,7 @@
 from django import forms
 from django.utils import timezone
 
-from .models import Jamiyah
+from .models import Jamiyah, Membership
 
 
 # =========================================
@@ -103,3 +103,61 @@ class JamiyahForm(forms.ModelForm):
             )
 
         return start_date
+
+
+# =========================================
+# 02. EDIT JAMIYAH FORM
+# =========================================
+
+class JamiyahEditForm(JamiyahForm):
+    """
+    Allows managers to update safe Jamiyah fields while preserving
+    workflow records and existing memberships.
+    """
+
+    def clean_start_date(self):
+        start_date = self.cleaned_data["start_date"]
+        current_start_date = self.instance.start_date if self.instance else None
+
+        if (
+            start_date < timezone.localdate()
+            and start_date != current_start_date
+        ):
+            raise forms.ValidationError(
+                "تاريخ البداية لا يمكن أن يكون في الماضي."
+            )
+
+        return start_date
+
+    def clean_max_members(self):
+        max_members = self.cleaned_data["max_members"]
+
+        if self.instance and self.instance.pk:
+            committed_memberships = Membership.objects.filter(
+                jamiyah=self.instance
+            ).exclude(
+                status=Membership.Status.REJECTED
+            ).count()
+
+            if max_members < committed_memberships:
+                raise forms.ValidationError(
+                    "عدد الأعضاء لا يمكن أن يكون أقل من الأعضاء المقبولين أو الطلبات المعلّقة."
+                )
+
+        return max_members
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if self.instance and self.instance.pk:
+            if self.instance.status != Jamiyah.Status.OPEN:
+                raise forms.ValidationError(
+                    "لا يمكن تعديل جمعية بدأت أو اكتملت أو أُلغيت."
+                )
+
+            if self.instance.payout_turns.exists():
+                raise forms.ValidationError(
+                    "لا يمكن تعديل جمعية لديها جدول استلام محفوظ."
+                )
+
+        return cleaned_data

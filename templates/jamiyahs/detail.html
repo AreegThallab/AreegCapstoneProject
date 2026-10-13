@@ -356,6 +356,34 @@
 
                     </div>
 
+                    {% if can_edit_jamiyah or can_cancel_jamiyah %}
+
+                    <div class="jd-manager-actions" aria-label="إجراءات إدارة الجمعية">
+
+                        {% if can_edit_jamiyah %}
+
+                        <a href="{% url 'edit_jamiyah' jamiyah.pk %}" class="jd-secondary-action">
+
+                            تعديل الجمعية
+
+                        </a>
+
+                        {% endif %}
+
+                        {% if can_cancel_jamiyah %}
+
+                        <a href="{% url 'cancel_jamiyah' jamiyah.pk %}" class="jd-danger-action">
+
+                            إلغاء الجمعية
+
+                        </a>
+
+                        {% endif %}
+
+                    </div>
+
+                    {% endif %}
+
                     <!-- MAIN ACTION: JUMP TO TIMELINE -->
 
                     {% if is_approved %}

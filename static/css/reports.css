@@ -1354,3 +1354,163 @@
         transition: none !important;
     }
 }
+
+
+/* =========================================
+   23. REPORT CARD STATUS STAMPS & BUTTON REFINEMENT
+   Scoped to reports pages only.
+========================================= */
+.reports-jamiyah-card {
+    position: relative;
+    box-sizing: border-box;
+}
+
+.reports-jamiyah-card.is-completed {
+    background: #f4fbf7;
+    border-color: #b8dfc8;
+}
+
+.reports-jamiyah-card.is-cancelled {
+    background: #fff7f7;
+    border-color: #edc1c1;
+}
+
+/* Compact angled stamps stay in their own space above the action button. */
+.reports-jamiyah-stamp {
+    position: absolute;
+    top: 9px;
+    left: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 65px;
+    padding: 4px 10px;
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.4;
+    transform: rotate(-7deg);
+    pointer-events: none;
+}
+
+.reports-jamiyah-stamp.is-completed {
+    color: #187b53;
+    background: #e9f7ee;
+}
+
+.reports-jamiyah-stamp.is-cancelled {
+    color: #ba4149;
+    background: #fff0f0;
+}
+
+.reports-jamiyah-card:is(.is-completed, .is-cancelled) .reports-view-btn {
+    margin-top: 13px;
+}
+
+.reports-jamiyah-status.is-cancelled {
+    color: #b63e46;
+    background: #fce8e8;
+}
+
+.reports-jamiyah-card:is(.is-open, .is-active) .reports-jamiyah-icon {
+    background: #ddf3e6;
+    border: 1px solid #bfe7cf;
+}
+
+/* One visual language for action buttons across list and detail pages. */
+.reports-page .reports-view-btn,
+.report-detail-page .report-back-btn,
+.report-detail-page .report-action-btn {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 11px 20px;
+    border-radius: 12px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;
+}
+
+.reports-page .reports-view-btn,
+.report-detail-page .report-action-btn.primary {
+    background: var(--navy);
+    border: 1px solid var(--navy);
+    color: #fff;
+}
+
+.report-detail-page .report-back-btn,
+.report-detail-page .report-action-btn.secondary {
+    background: #eaf5f1;
+    border: 1px solid #d7e8e2;
+    color: var(--navy);
+}
+
+.reports-page .reports-view-btn:hover,
+.report-detail-page .report-action-btn.primary:hover {
+    background: #174a61;
+    border-color: #174a61;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.report-detail-page .report-back-btn:hover,
+.report-detail-page .report-action-btn.secondary:hover {
+    background: #dff0ea;
+    border-color: #bddbd1;
+    color: var(--navy);
+    transform: translateY(-2px);
+}
+
+.reports-page .reports-view-btn:focus-visible,
+.report-detail-page .report-back-btn:focus-visible,
+.report-detail-page .report-action-btn:focus-visible {
+    outline: 3px solid #159f9c;
+    outline-offset: 3px;
+}
+
+/* Status is readable on the dark report hero without hiding the title. */
+.report-detail-stamp {
+    display: inline-flex;
+    vertical-align: middle;
+    align-items: center;
+    justify-content: center;
+    margin-inline-start: 13px;
+    padding: 5px 13px;
+    border: 1px solid currentColor;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.5;
+    transform: rotate(-6deg);
+}
+
+.report-detail-stamp.is-completed {
+    color: #dcf9e7;
+    background: rgba(24, 123, 83, .55);
+}
+
+.report-detail-stamp.is-cancelled {
+    color: #ffe9e9;
+    background: rgba(174, 47, 56, .67);
+}
+
+@media (max-width: 650px) {
+    .reports-jamiyah-card:is(.is-completed, .is-cancelled) {
+        padding-top: 44px;
+    }
+    .reports-jamiyah-stamp {
+        top: 12px;
+        left: 16px;
+    }
+    .reports-page .reports-view-btn,
+    .report-detail-page .report-back-btn {
+        width: 100%;
+    }
+}

@@ -1,4 +1,3 @@
-
 {% extends 'dashboard/base_dashboard.html' %}
 {% load static %}
 
@@ -24,8 +23,7 @@
             </a>
         </div>
 
-
-        <!-- 03. LIST HEADER AND FILTERS -->
+        <!-- 02. LIST HEADER AND FILTERS -->
         <div class="my-jamiyahs-toolbar">
             <div class="my-jamiyahs-toolbar-text">
                 <h2>قائمة الجمعيات</h2>
@@ -34,7 +32,6 @@
 
             <div class="my-jamiyahs-toolbar-actions">
                 <nav class="my-jamiyahs-filters" aria-label="تصفية الجمعيات">
-
                     {% if selected_filter == 'all' %}
                     <a href="{% url 'my_jamiyahs' %}?filter=all" class="is-active" aria-current="page">الكل</a>
                     {% else %}
@@ -52,16 +49,22 @@
                     {% else %}
                     <a href="{% url 'my_jamiyahs' %}?filter=joined">مشترك فيها</a>
                     {% endif %}
-
                 </nav>
             </div>
         </div>
 
-        <!-- 04. JAMIYAH CARDS -->
+        <!-- 03. JAMIYAH CARDS -->
         {% if memberships %}
         <div class="my-jamiyahs-grid">
             {% for membership in memberships %}
-            <article class="my-jamiyah-card">
+            <article class="my-jamiyah-card is-{{ membership.jamiyah.status }}">
+
+                <!-- Stamps for closed states -->
+                {% if membership.jamiyah.status == 'completed' %}
+                <span class="my-jamiyah-status-stamp is-completed" aria-label="الجمعية مكتملة">مكتملة</span>
+                {% elif membership.jamiyah.status == 'cancelled' %}
+                <span class="my-jamiyah-status-stamp is-cancelled" aria-label="الجمعية ملغاة">ملغاة</span>
+                {% endif %}
 
                 <!-- ROLE AND DATE -->
                 <div class="my-jamiyah-card-top">
@@ -112,7 +115,7 @@
                     <span class="my-jamiyah-tag">
                         {{ membership.jamiyah.get_visibility_display }}
                     </span>
-                    <span class="my-jamiyah-tag">
+                    <span class="my-jamiyah-tag my-jamiyah-status-tag is-{{ membership.jamiyah.status }}">
                         {{ membership.jamiyah.get_status_display }}
                     </span>
                 </div>
@@ -123,12 +126,11 @@
                         عرض تفاصيل الجمعية
                     </a>
                 </div>
-
             </article>
             {% endfor %}
         </div>
 
-        <!-- 05. EMPTY STATES -->
+        <!-- 04. EMPTY STATES -->
         {% else %}
         <div class="my-jamiyahs-empty">
             <div class="my-jamiyahs-empty-icon">

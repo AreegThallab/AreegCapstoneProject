@@ -24,6 +24,7 @@ class Jamiyah(models.Model):
         OPEN = "open", "مفتوحة للانضمام"
         ACTIVE = "active", "جارية"
         COMPLETED = "completed", "مكتملة"
+        CANCELLED = "cancelled", "ملغاة"
 
     # Contribution frequency choices
     class Frequency(models.TextChoices):

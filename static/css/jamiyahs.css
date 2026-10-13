@@ -286,7 +286,8 @@ PAYOUT SCHEDULE + PRIVATE INVITES
     border-top: 1px solid var(--line);
 }
 .jamiyah-submit-btn,
-.jamiyah-cancel-btn {
+.jamiyah-cancel-btn,
+.jamiyah-danger-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -317,10 +318,72 @@ PAYOUT SCHEDULE + PRIVATE INVITES
     background: #e9f3f0;
     transform: translateY(-2px);
 }
+.jamiyah-danger-btn {
+    color: #ffffff;
+    background: #a34141;
+    border: 1px solid #a34141;
+}
+.jamiyah-danger-btn:hover {
+    background: #8c3030;
+    transform: translateY(-2px);
+}
 .jamiyah-submit-btn:focus-visible,
-.jamiyah-cancel-btn:focus-visible {
+.jamiyah-cancel-btn:focus-visible,
+.jamiyah-danger-btn:focus-visible {
     outline: 3px solid var(--teal);
     outline-offset: 3px;
+}
+
+.jamiyah-cancel-card {
+    max-width: 760px;
+    margin: 0 auto;
+}
+.jamiyah-cancel-icon {
+    background: #fff0f0;
+}
+.jamiyah-cancel-warning {
+    padding: 18px;
+    color: #783838;
+    background: #fff5f5;
+    border: 1px solid #f1d0d0;
+    border-radius: 14px;
+}
+.jamiyah-cancel-warning strong {
+    display: block;
+    margin-bottom: 7px;
+    color: #8c3030;
+    font-size: 14px;
+}
+.jamiyah-cancel-warning p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.9;
+}
+.jamiyah-cancel-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin: 22px 0 0;
+}
+.jamiyah-cancel-summary div {
+    min-width: 0;
+    padding: 15px;
+    background: #f7fbfa;
+    border: 1px solid var(--line);
+    border-radius: 13px;
+}
+.jamiyah-cancel-summary dt {
+    margin-bottom: 7px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+}
+.jamiyah-cancel-summary dd {
+    margin: 0;
+    color: var(--navy);
+    font-size: 14px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
 }
 
 
@@ -1077,6 +1140,50 @@ PAYOUT SCHEDULE + PRIVATE INVITES
     color: var(--navy);
     font-size: 13px;
     overflow-wrap: anywhere;
+}
+.jd-manager-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 18px;
+}
+.jd-secondary-action,
+.jd-danger-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 43px;
+    padding: 10px 14px;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 800;
+    text-align: center;
+    transition: transform .2s, background .2s, border-color .2s;
+}
+.jd-secondary-action {
+    color: var(--navy);
+    background: #f4f8f7;
+    border: 1px solid var(--line);
+}
+.jd-secondary-action:hover {
+    color: var(--navy);
+    background: #e9f3f0;
+    transform: translateY(-2px);
+}
+.jd-danger-action {
+    color: #a34141;
+    background: #fff0f0;
+    border: 1px solid #f0cece;
+}
+.jd-danger-action:hover {
+    color: #8c3030;
+    background: #ffe3e3;
+    transform: translateY(-2px);
+}
+.jd-secondary-action:focus-visible,
+.jd-danger-action:focus-visible {
+    outline: 3px solid var(--teal);
+    outline-offset: 3px;
 }
 .jd-join-form {
     margin-top: 23px;
@@ -2559,9 +2666,13 @@ PAYOUT SCHEDULE + PRIVATE INVITES
         align-items: stretch;
     }
     .jamiyah-submit-btn,
-    .jamiyah-cancel-btn {
+    .jamiyah-cancel-btn,
+    .jamiyah-danger-btn {
         width: 100%;
         min-height: 48px;
+    }
+    .jamiyah-cancel-summary {
+        grid-template-columns: minmax(0, 1fr);
     }
     .jamiyah-create-riyal {
         opacity: 0.08;
@@ -2747,6 +2858,9 @@ PAYOUT SCHEDULE + PRIVATE INVITES
     }
     .jd-panel-heading h2 {
         font-size: 19px;
+    }
+    .jd-manager-actions {
+        grid-template-columns: minmax(0, 1fr);
     }
     .jd-manager-card {
         flex-wrap: wrap;
@@ -3001,5 +3115,108 @@ PAYOUT SCHEDULE + PRIVATE INVITES
     .private-invite-page *::after {
         transition: none !important;
         animation: none !important;
+    }
+}
+
+/* =========================================
+   MY JAMIYAHS | VISUAL STATUS STAMPS
+   Scoped to the My Jamiyahs cards only.
+========================================= */
+.my-jamiyahs-page .my-jamiyah-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+/* Keep all existing card content readable and clickable. */
+.my-jamiyahs-page .my-jamiyah-card > :not(.my-jamiyah-status-stamp) {
+    position: relative;
+    z-index: 1;
+}
+
+.my-jamiyahs-page .my-jamiyah-card.is-completed {
+    background: #f6fcf8;
+    border-color: #a9d8ba;
+}
+
+.my-jamiyahs-page .my-jamiyah-card.is-cancelled {
+    background: #fff8f8;
+    border-color: #ebafb2;
+}
+
+/* An outlined stamp sits over the upper-left corner, not over the title. */
+.my-jamiyahs-page .my-jamiyah-status-stamp {
+    position: absolute;
+    z-index: 2;
+    top: 57px;
+    left: -19px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 124px;
+    min-height: 36px;
+    border: 2px solid currentColor;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, .92);
+    transform: rotate(-17deg);
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: .01em;
+    line-height: 1.3;
+    pointer-events: none;
+    box-shadow: 0 3px 12px rgba(16, 51, 74, .05);
+}
+
+.my-jamiyahs-page .my-jamiyah-status-stamp.is-completed {
+    color: #1c8150;
+    border-color: #1c8150;
+}
+
+.my-jamiyahs-page .my-jamiyah-status-stamp.is-cancelled {
+    color: #ba4149;
+    border-color: #ba4149;
+}
+
+/* A soft whole-card treatment reinforces the stamp without hiding details. */
+.my-jamiyahs-page .my-jamiyah-card.is-completed:hover {
+    border-color: #71bf95;
+}
+.my-jamiyahs-page .my-jamiyah-card.is-cancelled:hover {
+    border-color: #d9878c;
+}
+
+/* Open and active Jamiyahs get a visibly green group-icon tile. */
+.my-jamiyahs-page .my-jamiyah-card.is-open .my-jamiyah-card-icon,
+.my-jamiyahs-page .my-jamiyah-card.is-active .my-jamiyah-card-icon {
+    background: #d6f4df;
+    border: 1px solid #9bd8af;
+}
+.my-jamiyahs-page .my-jamiyah-card.is-open .my-jamiyah-card-icon img,
+.my-jamiyahs-page .my-jamiyah-card.is-active .my-jamiyah-card-icon img {
+    filter: brightness(0) saturate(100%) invert(35%) sepia(47%) saturate(741%) hue-rotate(97deg) brightness(93%);
+}
+
+/* Colour only the status tag, not the visibility tag. */
+.my-jamiyahs-page .my-jamiyah-status-tag.is-open,
+.my-jamiyahs-page .my-jamiyah-status-tag.is-active {
+    color: #17643e;
+    background: #e3f5e9;
+}
+.my-jamiyahs-page .my-jamiyah-status-tag.is-completed {
+    color: #176d47;
+    background: #dff3e7;
+}
+.my-jamiyahs-page .my-jamiyah-status-tag.is-cancelled {
+    color: #a93640;
+    background: #fce7e8;
+}
+
+@media (max-width: 768px) {
+    .my-jamiyahs-page .my-jamiyah-status-stamp {
+        top: 54px;
+        left: -17px;
+        width: 108px;
+        min-height: 31px;
+        font-size: 13px;
     }
 }

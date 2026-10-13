@@ -124,7 +124,13 @@
                 <div class="reports-jamiyahs-list">
 
                     {% for membership in memberships %}
-                        <article class="reports-jamiyah-card">
+                        <article class="reports-jamiyah-card {% if membership.jamiyah.status == 'completed' %}is-completed{% elif membership.jamiyah.status == 'cancelled' %}is-cancelled{% elif membership.jamiyah.status == 'cancelled' %}is-cancelled{% elif membership.jamiyah.status == 'active' %}is-active{% else %}is-open{% endif %}">
+
+                            {% if membership.jamiyah.status == 'completed' %}
+                            <span class="reports-jamiyah-stamp is-completed" aria-label="الجمعية مكتملة">مكتملة</span>
+                            {% elif membership.jamiyah.status == 'cancelled' %}
+                            <span class="reports-jamiyah-stamp is-cancelled" aria-label="الجمعية ملغاة">ملغاة</span>
+                            {% endif %}
 
                             <div class="reports-jamiyah-identity">
                                 <div class="reports-jamiyah-icon">
@@ -144,7 +150,7 @@
                                     </p>
 
                                     <div class="reports-jamiyah-tags">
-                                        <span class="reports-jamiyah-status {% if membership.jamiyah.status == 'completed' %}is-completed{% elif membership.jamiyah.status == 'active' %}is-active{% else %}is-open{% endif %}">
+                                        <span class="reports-jamiyah-status {% if membership.jamiyah.status == 'completed' %}is-completed{% elif membership.jamiyah.status == 'cancelled' %}is-cancelled{% elif membership.jamiyah.status == 'active' %}is-active{% else %}is-open{% endif %}">
                                             {{ membership.jamiyah.get_status_display }}
                                         </span>
 

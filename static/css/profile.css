@@ -681,3 +681,128 @@
         margin-top: 18px;
     }
 }
+
+/* =========================================
+   PROFILE | FORM LAYOUT AND STATUS VISUALS
+   Scoped to the profile page only.
+========================================= */
+.profile-page,
+.profile-page * { box-sizing: border-box; }
+
+/* Make the editable account panel wide enough for desktop form columns. */
+.profile-content-grid {
+    grid-template-columns: minmax(0, 1.75fr) minmax(250px, .85fr);
+}
+.profile-account-panel,
+.profile-form,
+.profile-form-grid,
+.profile-field { min-width: 0; }
+.profile-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 18px;
+    align-items: start;
+}
+.profile-field label { display: block; line-height: 1.6; }
+.profile-page .profile-field input,
+.profile-page .profile-field select,
+.profile-page .profile-field textarea {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+.profile-page .profile-field input[dir="ltr"] { text-align: left; }
+.profile-field small { overflow-wrap: anywhere; }
+.profile-form-footer { min-width: 0; }
+
+/* Keep stamps within the card's normal layout, never over its text. */
+.profile-jamiyah-item.status-completed {
+    background: #f5fbf7;
+    border-color: #c1e4ce;
+}
+.profile-jamiyah-item.status-cancelled {
+    background: #fff8f8;
+    border-color: #ebc4c4;
+}
+.profile-jamiyah-item.status-active .profile-jamiyah-icon,
+.profile-jamiyah-item.status-open .profile-jamiyah-icon {
+    background: #ddf3e5;
+    border: 1px solid #c0e6d0;
+}
+.profile-jamiyah-item.status-completed .profile-jamiyah-icon {
+    background: #e2f5e9;
+}
+.profile-jamiyah-item.status-cancelled .profile-jamiyah-icon {
+    background: #ffeded;
+}
+.profile-jamiyah-item.status-active .profile-jamiyah-meta span:nth-child(2),
+.profile-jamiyah-item.status-open .profile-jamiyah-meta span:nth-child(2) {
+    color: #1c7549;
+    background: #e1f4e8;
+}
+.profile-jamiyah-item.status-completed .profile-jamiyah-meta span:nth-child(2) {
+    color: #187149;
+    background: #dcf2e4;
+}
+.profile-jamiyah-item.status-cancelled .profile-jamiyah-meta span:nth-child(2) {
+    color: #a43c40;
+    background: #ffe6e7;
+}
+.profile-jamiyah-side {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 11px;
+    min-width: 88px;
+}
+.profile-jamiyah-stamp {
+    display: inline-block;
+    padding: 5px 13px;
+    border: 2px double currentColor;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 1.5;
+    white-space: nowrap;
+    transform: rotate(-7deg);
+    pointer-events: none;
+}
+.profile-jamiyah-stamp.is-completed {
+    color: #187247;
+    background: #e5f6eb;
+}
+.profile-jamiyah-stamp.is-cancelled {
+    color: #b54348;
+    background: #fff0f0;
+}
+@media (max-width: 1150px) {
+    .profile-content-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 650px) {
+    .profile-form-grid { grid-template-columns: minmax(0, 1fr); }
+    .profile-jamiyah-item { flex-wrap: wrap; }
+    .profile-jamiyah-side {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+        min-width: 0;
+        width: 100%;
+        padding-inline-start: 0;
+    }
+}
+
+/* 13. CANCELLED JAMIYAHS ARCHIVE */
+.profile-cancelled-panel { margin-top: 24px; }
+.profile-cancelled-panel .profile-section-count.is-cancelled {
+    color: #a43c40;
+    background: #fff0f0;
+}
+.profile-cancelled-panel .profile-jamiyah-item.status-cancelled:hover {
+    border-color: #dda9ae;
+    box-shadow: 0 8px 22px rgba(165, 60, 65, 0.07);
+}
+@media (max-width: 650px) {
+    .profile-cancelled-panel { margin-top: 18px; }
+}

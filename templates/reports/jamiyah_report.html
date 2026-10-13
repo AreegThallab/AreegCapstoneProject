@@ -20,8 +20,7 @@
             </div>
 
             <a href="{% url 'reports_dashboard' %}" class="report-back-btn">
-                <img src="{% static 'images/icons/chevron.svg' %}" alt="أيقونة العودة للتقارير">
-                <span>العودة للتقارير</span>
+<span>العودة للتقارير</span>
             </a>
         </div>
 
@@ -29,6 +28,11 @@
         <div class="report-detail-hero">
             <div class="report-detail-hero-content">
                 <span class="report-detail-eyebrow">تقرير تفصيلي</span>
+                {% if jamiyah.status == 'completed' %}
+                <span class="report-detail-stamp is-completed" aria-label="الجمعية مكتملة">مكتملة</span>
+                {% elif jamiyah.status == 'cancelled' %}
+                <span class="report-detail-stamp is-cancelled" aria-label="الجمعية ملغاة">ملغاة</span>
+                {% endif %}
                 <h1>{{ jamiyah.name }}</h1>
                 <p>
                     نظرة شاملة على حالة الجمعية، والدفعات الموثقة، وأدوار الاستلام،

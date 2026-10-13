@@ -1,0 +1,138 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}تعديل الجمعية | دَوْرة{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/jamiyahs.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="jamiyah-create-page jamiyah-edit-page">
+    <div class="jamiyah-create-decor" aria-hidden="true">
+        <img class="jamiyah-create-riyal jamiyah-create-riyal-1" src="{% static 'images/riyal-symbol.svg' %}" alt="">
+        <img class="jamiyah-create-riyal jamiyah-create-riyal-2" src="{% static 'images/riyal-symbol.svg' %}" alt="">
+        <img class="jamiyah-create-riyal jamiyah-create-riyal-3" src="{% static 'images/riyal-symbol.svg' %}" alt="">
+        <img class="jamiyah-create-riyal jamiyah-create-riyal-4" src="{% static 'images/riyal-symbol.svg' %}" alt="">
+        <img class="jamiyah-create-riyal jamiyah-create-riyal-5" src="{% static 'images/riyal-symbol.svg' %}" alt="">
+    </div>
+
+    <div class="dashboard-container jamiyah-create-container">
+        <header class="jamiyah-create-heading">
+            <span class="jamiyah-create-eyebrow">إدارة الجمعيات</span>
+            <h1>تعديل الجمعية</h1>
+            <p>حدّث بيانات الجمعية قبل بدء جدول الاستلام مع الحفاظ على الأعضاء والسجلات الحالية.</p>
+        </header>
+
+        <div class="jamiyah-create-layout">
+            <div class="jamiyah-create-card">
+                <div class="jamiyah-card-heading">
+                    <div class="jamiyah-create-heading-icon">
+                        <img src="{% static 'images/icons/group.svg' %}" alt="أيقونة تفاصيل الجمعية">
+                    </div>
+                    <div>
+                        <span class="jamiyah-section-label">{{ jamiyah.name }}</span>
+                        <h2>تفاصيل الجمعية القابلة للتعديل</h2>
+                    </div>
+                </div>
+
+                <form method="post" class="jamiyah-create-form" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                    <div class="jamiyah-form-alert" role="alert">
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+
+                    <div class="jamiyah-form-field">
+                        <label for="{{ form.name.id_for_label }}">
+                            اسم الجمعية <span class="jamiyah-required">*</span>
+                        </label>
+                        {{ form.name }}
+                        {% for error in form.name.errors %}
+                        <small class="jamiyah-field-error" role="alert">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+
+                    <div class="jamiyah-form-field">
+                        <label for="{{ form.description.id_for_label }}">
+                            وصف الجمعية <span class="jamiyah-optional">اختياري</span>
+                        </label>
+                        {{ form.description }}
+                        {% for error in form.description.errors %}
+                        <small class="jamiyah-field-error" role="alert">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+
+                    <div class="jamiyah-form-grid">
+                        <div class="jamiyah-form-field">
+                            <label for="{{ form.contribution_amount.id_for_label }}">
+                                مبلغ الاشتراك (ر.س) <span class="jamiyah-required">*</span>
+                            </label>
+                            {{ form.contribution_amount }}
+                            <small class="jamiyah-field-hint">لا يتم تعديل أي سجلات دفع سابقة من هذه الصفحة.</small>
+                            {% for error in form.contribution_amount.errors %}
+                            <small class="jamiyah-field-error" role="alert">{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        <div class="jamiyah-form-field">
+                            <label for="{{ form.max_members.id_for_label }}">
+                                عدد الأعضاء <span class="jamiyah-required">*</span>
+                            </label>
+                            {{ form.max_members }}
+                            <small class="jamiyah-field-hint">لا يمكن تقليله تحت عدد الأعضاء المقبولين أو الطلبات المعلّقة.</small>
+                            {% for error in form.max_members.errors %}
+                            <small class="jamiyah-field-error" role="alert">{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="jamiyah-form-grid">
+                        <div class="jamiyah-form-field">
+                            <label for="{{ form.frequency.id_for_label }}">
+                                دورية الجمعية <span class="jamiyah-required">*</span>
+                            </label>
+                            {{ form.frequency }}
+                            {% for error in form.frequency.errors %}
+                            <small class="jamiyah-field-error" role="alert">{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        <div class="jamiyah-form-field">
+                            <label for="{{ form.start_date.id_for_label }}">
+                                تاريخ بداية الجمعية <span class="jamiyah-required">*</span>
+                            </label>
+                            {{ form.start_date }}
+                            {% for error in form.start_date.errors %}
+                            <small class="jamiyah-field-error" role="alert">{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="jamiyah-form-field">
+                        <label for="{{ form.visibility.id_for_label }}">
+                            نوع الجمعية <span class="jamiyah-required">*</span>
+                        </label>
+                        {{ form.visibility }}
+                        {% for error in form.visibility.errors %}
+                        <small class="jamiyah-field-error" role="alert">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+
+                    <div class="jamiyah-create-note">
+                        <div class="jamiyah-create-note-icon">
+                            <img src="{% static 'images/icons/shield.svg' %}" alt="أيقونة تنبيه">
+                        </div>
+                        <p>التعديل متاح فقط للجمعيات المفتوحة التي لم يتم إنشاء جدول استلام لها.</p>
+                    </div>
+
+                    <div class="jamiyah-form-actions">
+                        <button type="submit" class="jamiyah-submit-btn">حفظ التعديلات</button>
+                        <a href="{% url 'jamiyah_detail' jamiyah.pk %}" class="jamiyah-cancel-btn">إلغاء</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
