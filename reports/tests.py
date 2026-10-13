@@ -101,6 +101,12 @@ class ReportsAggregationAnnotationTests(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_explore_annotates_approved_member_count(self):
+        explore_jamiyah = make_jamiyah(
+            self.manager,
+            name="Open Explore Report Jamiyah",
+            status=Jamiyah.Status.OPEN,
+        )
+        add_membership(explore_jamiyah, self.member)
         self.client.force_login(self.outsider)
 
         response = self.client.get(reverse("explore_jamiyahs"))

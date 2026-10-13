@@ -11,8 +11,31 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from transactions.models import Payment
-from .forms import JamiyahForm
+from .forms import JamiyahEditForm, JamiyahForm
 from .models import Jamiyah, Membership, PayoutTurn
+
+
+def is_approved_manager(user, jamiyah):
+    return Membership.objects.filter(
+        jamiyah=jamiyah,
+        user=user,
+        role=Membership.Role.MANAGER,
+        status=Membership.Status.APPROVED
+    ).exists()
+
+
+def jamiyah_has_payout_schedule(jamiyah):
+    return PayoutTurn.objects.filter(
+        jamiyah=jamiyah
+    ).exists()
+
+
+def can_change_open_jamiyah(user, jamiyah):
+    return (
+        is_approved_manager(user, jamiyah)
+        and jamiyah.status == Jamiyah.Status.OPEN
+        and not jamiyah_has_payout_schedule(jamiyah)
+    )
 
 # =========================================
 # 01. CREATE JAMIYAH
@@ -50,8 +73,135 @@ def create_jamiyah(request):
         {"form": form}
     )
 
+
 # =========================================
-# 02. MY JAMIYAHS
+# 02. EDIT JAMIYAH
+
+# =========================================
+@login_required
+def edit_jamiyah(request, pk):
+    jamiyah = get_object_or_404(
+        Jamiyah.objects.select_related("creator"),
+        pk=pk
+    )
+
+    if not is_approved_manager(request.user, jamiyah):
+        raise Http404("غير مسموح.")
+
+    if not can_change_open_jamiyah(request.user, jamiyah):
+        messages.error(
+            request,
+            "لا يمكن تعديل هذه الجمعية بعد بدء جدول الاستلام أو تغيير حالتها."
+        )
+        return redirect("jamiyah_detail", pk=pk)
+
+    if request.method == "POST":
+        with transaction.atomic():
+            jamiyah = get_object_or_404(
+                Jamiyah.objects.select_for_update(),
+                pk=pk
+            )
+
+            if not is_approved_manager(request.user, jamiyah):
+                raise Http404("غير مسموح.")
+
+            if not can_change_open_jamiyah(request.user, jamiyah):
+                messages.error(
+                    request,
+                    "لا يمكن تعديل هذه الجمعية بعد بدء جدول الاستلام أو تغيير حالتها."
+                )
+                return redirect("jamiyah_detail", pk=pk)
+
+            form = JamiyahEditForm(
+                request.POST,
+                instance=jamiyah
+            )
+
+            if form.is_valid():
+                form.save()
+                messages.success(
+                    request,
+                    "تم حفظ تعديلات الجمعية بنجاح."
+                )
+                return redirect("jamiyah_detail", pk=pk)
+    else:
+        form = JamiyahEditForm(instance=jamiyah)
+
+    return render(
+        request,
+        "jamiyahs/edit.html",
+        {
+            "form": form,
+            "jamiyah": jamiyah,
+        }
+    )
+
+
+# =========================================
+# 03. CANCEL JAMIYAH
+
+# =========================================
+@login_required
+def cancel_jamiyah(request, pk):
+    jamiyah = get_object_or_404(
+        Jamiyah.objects.select_related("creator"),
+        pk=pk
+    )
+
+    if not is_approved_manager(request.user, jamiyah):
+        raise Http404("غير مسموح.")
+
+    if request.method == "POST":
+        with transaction.atomic():
+            jamiyah = get_object_or_404(
+                Jamiyah.objects.select_for_update(),
+                pk=pk
+            )
+
+            if not is_approved_manager(request.user, jamiyah):
+                raise Http404("غير مسموح.")
+
+            if jamiyah.status == Jamiyah.Status.CANCELLED:
+                messages.info(
+                    request,
+                    "هذه الجمعية ملغاة مسبقًا."
+                )
+                return redirect("jamiyah_detail", pk=pk)
+
+            if not can_change_open_jamiyah(request.user, jamiyah):
+                messages.error(
+                    request,
+                    "لا يمكن إلغاء هذه الجمعية بعد بدء جدول الاستلام أو تغيير حالتها."
+                )
+                return redirect("jamiyah_detail", pk=pk)
+
+            jamiyah.status = Jamiyah.Status.CANCELLED
+            jamiyah.save(update_fields=["status"])
+
+        messages.success(
+            request,
+            "تم إلغاء الجمعية مع الاحتفاظ بسجلاتها."
+        )
+        return redirect("jamiyah_detail", pk=pk)
+
+    if not can_change_open_jamiyah(request.user, jamiyah):
+        messages.error(
+            request,
+            "لا يمكن إلغاء هذه الجمعية بعد بدء جدول الاستلام أو تغيير حالتها."
+        )
+        return redirect("jamiyah_detail", pk=pk)
+
+    return render(
+        request,
+        "jamiyahs/cancel.html",
+        {
+            "jamiyah": jamiyah,
+        }
+    )
+
+
+# =========================================
+# 04. MY JAMIYAHS
 
 # =========================================
 @login_required
@@ -191,6 +341,7 @@ def jamiyah_detail(request, pk):
         )
         .order_by("position")
     )
+    has_payout_schedule = payout_turns.exists()
     # One query for the payment statuses of all scheduled turns.
     all_payments = Payment.objects.filter(
         jamiyah=jamiyah,
@@ -240,7 +391,12 @@ def jamiyah_detail(request, pk):
         and jamiyah.status == Jamiyah.Status.OPEN
         and approved_count == jamiyah.max_members
         and jamiyah.start_date is not None
-        and not payout_turns.exists()
+        and not has_payout_schedule
+    )
+    can_edit_or_cancel = (
+        is_manager
+        and jamiyah.status == Jamiyah.Status.OPEN
+        and not has_payout_schedule
     )
     invite_url = None
     if is_manager and jamiyah.visibility == Jamiyah.Visibility.PRIVATE:
@@ -265,6 +421,8 @@ def jamiyah_detail(request, pk):
         "timeline_rows": timeline_rows,
         "delivered_turns_count": delivered_turns_count,
         "can_generate_schedule": can_generate_schedule,
+        "can_edit_jamiyah": can_edit_or_cancel,
+        "can_cancel_jamiyah": can_edit_or_cancel,
         "invite_url": invite_url,
         "today": timezone.localdate(),
     }
@@ -283,7 +441,7 @@ def jamiyah_detail(request, pk):
 def request_join(request, pk):
     with transaction.atomic():
         jamiyah = get_object_or_404(
-            Jamiyah,
+            Jamiyah.objects.select_for_update(),
             pk=pk
         )
         if (
@@ -409,20 +567,13 @@ def manage_join_request(request, pk, membership_id):
 @login_required
 def explore_jamiyahs(request):
     query = request.GET.get("q", "").strip()[:150]
-    selected_status = request.GET.get("status", "all")
-
-    allowed_statuses = {
-        "all",
-        Jamiyah.Status.OPEN,
-        Jamiyah.Status.ACTIVE,
-        Jamiyah.Status.COMPLETED,
-    }
-    if selected_status not in allowed_statuses:
-        selected_status = "all"
 
     jamiyahs_qs = (
         Jamiyah.objects
-        .filter(visibility=Jamiyah.Visibility.PUBLIC)
+        .filter(
+            visibility=Jamiyah.Visibility.PUBLIC,
+            status=Jamiyah.Status.OPEN
+        )
         .annotate(
             approved_count=Count(
                 "memberships",
@@ -437,9 +588,6 @@ def explore_jamiyahs(request):
 
     if query:
         jamiyahs_qs = jamiyahs_qs.filter(name__icontains=query)
-
-    if selected_status != "all":
-        jamiyahs_qs = jamiyahs_qs.filter(status=selected_status)
 
     jamiyahs = list(jamiyahs_qs)
     membership_map = {
@@ -463,7 +611,6 @@ def explore_jamiyahs(request):
         {
             "jamiyahs": jamiyahs,
             "query": query,
-            "selected_status": selected_status,
         }
     )
 
