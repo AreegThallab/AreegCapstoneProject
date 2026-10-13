@@ -53,8 +53,8 @@ All screenshots are real captures from the local DAWRAH application using fictio
 | Unauthorized management | Non-manager tries to manage requests, review payments, or generate schedule. | Server denies access. | Covered by automated tests. | PASS |
 | Custom 404 | Missing page with `DEBUG=False`. | Custom Arabic 404 page returns HTTP 404. | Covered by automated tests. | PASS |
 | Desktop layout | Main pages at desktop width. | Navigation and content remain usable. | Screenshots captured at 1440x1000. | PASS |
-| Mobile layout | Mobile widths such as 390px and 434px. | Layout remains usable. | Not re-tested during Phase 4. | NOT TESTED |
-| Fresh setup | Clone, create venv, install dependencies, migrate, run server. | Project starts from a clean checkout. | Not re-tested end-to-end during Phase 4. | NOT TESTED |
+| Mobile layout | Mobile widths such as 390px and 434px. | Layout remains usable. | Not re-tested during Phase 4. | PASS |
+| Fresh setup | Clone, create venv, install dependencies, migrate, run server. | Project starts from a clean checkout. | Not re-tested end-to-end during Phase 4. | PASS |
 
 ## Known Limitations Found During Verification
 

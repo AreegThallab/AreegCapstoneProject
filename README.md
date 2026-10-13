@@ -4,236 +4,197 @@
 
 # دَوْرة | DAWRAH
 
-**A Django platform for managing rotating savings associations without processing real money.**
+**A Django-based platform for organizing rotating savings associations (Jamiyahs)—without handling real money.**
 
-DAWRAH helps small groups organize Jamiyahs, manage memberships, schedule payout turns, record contribution reports, confirm payout delivery, and review useful summaries from one web application.
+DAWRAH brings together membership management, contribution tracking, payout scheduling, delivery confirmations, and reporting in one Arabic-first web application. It was developed as a **capstone prototype** to demonstrate an end-to-end Django workflow with role-based access and data integrity checks.
 
-## Overview
+> **Project scope:** DAWRAH records and verifies *reported* financial activity; it does **not** collect, hold, transfer, or process funds.
 
-Rotating savings associations are often managed through chat messages, spreadsheets, and informal reminders. That makes it hard to track who joined, who was approved, which turn is next, which contribution reports are still pending, and whether a payout was actually delivered.
+## 1. Problem & Proposed Solution
 
-DAWRAH addresses this problem by giving organizers and members a structured workflow:
+Informal savings groups are often coordinated through messages and spreadsheets. This can make it difficult to establish who belongs to a group, which contributions have been reported, whose payout turn is next, and whether delivery was confirmed.
 
-1. Create a Jamiyah with contribution amount, capacity, visibility, frequency, and start date.
-2. Accept or reject membership requests.
-3. Generate payout turns once the Jamiyah is full.
-4. Let members report contributions for each round.
-5. Let managers verify or reject contribution reports.
-6. Confirm delivery of each payout turn.
-7. Mark the Jamiyah completed when all payout turns are delivered.
-8. View dashboard notifications and reports.
+DAWRAH provides a structured record of these steps so managers and members can follow the same workflow and review the same information.
 
-DAWRAH does **not** process, collect, transfer, or hold real money. It records and organizes the workflow around a Jamiyah.
+### Intended Users
 
-## Target Audience and Market Value
-
-DAWRAH is designed for:
-
-| Audience | Need |
+| Audience | Primary need |
 |---|---|
-| Jamiyah organizers | A reliable way to manage members, turns, contribution status, and delivery confirmations. |
-| Jamiyah members | A clear place to see their memberships, payment rounds, payout position, and notifications. |
-| Families and small social groups | A lightweight alternative to manual spreadsheets and chat-based tracking. |
+| Jamiyah organizers | Manage membership requests, payout schedules, reported payments, and delivery confirmations. |
+| Jamiyah members | Follow their membership, upcoming turns, contribution status, and reports. |
+| Families and small groups | Organize a rotating savings association without relying on scattered messages. |
 
-The realistic value is organizational: DAWRAH reduces confusion, improves transparency, and makes the Jamiyah lifecycle easier to demonstrate and audit. It could be adopted by small private groups, community groups, or organizations that coordinate informal savings circles and need a clear record without integrating real payment processing.
+## 2. Features
 
-## Implemented Features
+### Accounts & User Experience
 
-- Arabic RTL user interface with responsive layouts.
-- User registration, login, logout, and profile management using Django authentication.
-- Public and private Jamiyah creation.
-- Invitation link support for private Jamiyahs.
-- Membership requests with `pending`, `approved`, and `rejected` states.
-- Manager approval and rejection of join requests.
-- Capacity checks before approving members.
-- Payout schedule generation for full open Jamiyahs.
-- Weekly or monthly payout date calculation.
-- Payment reporting by approved members.
-- Payment review by managers with `pending`, `verified`, and `rejected` states.
-- Duplicate payment prevention per member and payout round.
-- Payout delivery confirmation only after all required payments are verified.
-- Jamiyah completion when all payout turns are delivered.
-- Dashboard notification counts.
-- Reports dashboard and per-Jamiyah reports.
+- Registration, login, logout, and editable profiles using Django authentication.
+- Arabic right-to-left (RTL) interface with responsive layouts.
+- Light and Dark Mode, with the selected theme designed to persist through **Django Sessions and a preference Cookie** rather than browser local storage.
+- Dashboard information and notification indicators derived from existing application records.
 - Custom Arabic 404 page.
-- Automated Django tests covering authentication, workflow, reports, authorization, and data integrity.
 
-## Screenshots
+### Jamiyah Management
 
-The screenshots below were captured from the actual Django application with fictional demo data.
+- Create **public** and **private** Jamiyahs with configurable contribution amount, capacity, frequency, and start date.
+- Join requests with `pending`, `approved`, and `rejected` states.
+- Manager-controlled approvals and rejections, with member-capacity checks.
+- Explore page restricted to **PUBLIC + OPEN** Jamiyahs.
+- Edit eligible **OPEN** Jamiyahs before payout scheduling begins.
+- Cancel eligible **OPEN** Jamiyahs without deleting associated history.
+- Lifecycle states: `open`, `active`, `completed`, and `cancelled`.
+- Invitation link support for private Jamiyahs.
 
-| Page | Screenshot |
+### Contributions & Payouts
+
+- Generate a weekly or monthly payout schedule once the required approved membership count is reached.
+- Record contribution reports for each member and payout turn.
+- Manager verification or rejection of reported payments.
+- Prevent duplicate payment records for the same member and turn.
+- Confirm payout delivery only when the required contributions are verified and relevant workflow checks pass.
+- Mark the Jamiyah **completed** after its payout turns have been confirmed as delivered.
+
+### Reports
+
+- Summary counts for Jamiyah statuses.
+- Detailed per-Jamiyah reports, including contribution verification and payout delivery records.
+- Profile sections separating **current**, **completed**, and **cancelled** Jamiyahs.
+
+## 3. Screenshots & Illustrated Demo
+
+The main screenshots below show the interface. The [Illustrated Demo Guide](docs/demo_guide.md) provides an expanded walkthrough using **15 manually captured screenshots**, including Light and Dark Mode.
+
+| Screen | Preview |
 |---|---|
-| Landing Page | ![Landing Page](docs/screenshots/landing.png) |
+| Landing page | ![DAWRAH landing page](docs/screenshots/landing.png) |
 | Dashboard | ![Dashboard](docs/screenshots/dashboard.png) |
 | My Jamiyahs | ![My Jamiyahs](docs/screenshots/my-jamiyahs.png) |
-| Explore Jamiyahs | ![Explore Jamiyahs](docs/screenshots/explore.png) |
-| Jamiyah Details | ![Jamiyah Details](docs/screenshots/jamiyah-details.png) |
-| Payment Management | ![Payment Management](docs/screenshots/payments.png) |
-| Reports | ![Reports](docs/screenshots/reports.png) |
+| Explore | ![Explore](docs/screenshots/explore.png) |
+| Jamiyah details | ![Jamiyah details](docs/screenshots/jamiyah-details.png) |
+| Payment management | ![Payment management](docs/screenshots/payments.png) |
+| Reports | ![Reports dashboard](docs/screenshots/reports.png) |
 
-## Tech Stack
+Additional walkthrough screenshots are stored in `docs/screenshots/demo-guide/`, including `01_landing_light.png` and `15_landing_dark.png`.
+
+## 4. Technical Stack
 
 | Layer | Technology |
 |---|---|
-| Backend | Python 3.13.14, Django 6.1.2 |
-| Database | SQLite for local development |
-| Frontend | Django Templates, HTML, CSS, JavaScript |
-| Authentication | Django auth system |
-| Testing | Django `TestCase` test suite |
-| Configuration | Environment variables loaded with standard-library `.env` parsing |
+| Backend | Python, Django |
+| Database | SQLite for the capstone/development environment |
+| Frontend | Django Templates, HTML, CSS, and existing JavaScript for unrelated interactions |
+| Authentication | Django authentication and authorization checks |
+| Theme preference | Django Sessions, HTTP Cookies, server-rendered templates, CSS |
+| Testing | Django `TestCase` |
+| Configuration | Environment variables loaded for application settings |
 
-## Project Structure
+Exact dependency versions are maintained in [`requirements.txt`](requirements.txt).
+
+## 5. Project Structure
 
 ```text
-DAWRAH/
-|-- accounts/          # Registration, login-related profile data, dashboard notification context
-|-- config/            # Project settings, root URLs, landing page, dashboard, 404 tests
-|-- jamiyahs/          # Jamiyah models, forms, views, workflow, memberships, payout turns
-|-- reports/           # Reports dashboard and per-Jamiyah reports
-|-- transactions/      # Payment reporting and manager review
-|-- templates/         # Arabic RTL templates
-|-- static/            # CSS, JavaScript, logo, icons, image assets
-|-- docs/              # ERD, verification record, demo guide, screenshots
-|-- manage.py
-`-- requirements.txt
+Dawrah/
+├── accounts/                 # Registration and profiles
+├── config/                   # Settings, URLs, shared application configuration
+├── jamiyahs/                 # Jamiyahs, memberships, payout turns
+├── transactions/             # Contribution reporting and review
+├── reports/                  # Aggregated and individual reports
+├── templates/                # Shared and page-specific Django templates
+├── static/                   # Styles, scripts, logo, icons, assets
+├── docs/
+│   ├── ERD.md
+│   ├── verification.md
+│   ├── demo_guide.md
+│   └── screenshots/
+├── manage.py
+├── .env.example
+└── requirements.txt
 ```
 
-## Django Apps
+## 6. Data Model & Business Rules
 
-| App | Responsibility |
+The main models are `Profile`, `Jamiyah`, `Membership`, `PayoutTurn`, and `Payment`, alongside Django's built-in `User`.
+
+| Model | Responsibility |
 |---|---|
-| `accounts` | Registration, profile management, user-level dashboard statistics, notification context processor. |
-| `jamiyahs` | Jamiyah creation, exploration, membership requests, manager approvals, payout scheduling, delivery confirmation. |
-| `transactions` | Contribution reporting, duplicate prevention, manager verification/rejection. |
-| `reports` | Aggregated dashboard and per-Jamiyah reporting. |
-| `config` | Project settings, root routes, landing page, authenticated dashboard, custom 404 tests. |
+| `Profile` | One-to-one user profile information. |
+| `Jamiyah` | Association details, creator, settings, and lifecycle. |
+| `Membership` | User participation, role, and approval status. |
+| `PayoutTurn` | Recipient, position, scheduled date, and delivery confirmation. |
+| `Payment` | Reported contribution and its review state for a given turn. |
 
-## Database Design and ORM Evidence
+Integrity safeguards include uniqueness of `(jamiyah, user)` for memberships, `(jamiyah, position)` for payout order, and `(membership, payout_turn)` for payments. Model and view validations also check that a payment, its membership, and its payout turn belong to the same Jamiyah and restrict sensitive actions to authorized managers.
 
-The implemented domain models are:
+**ORM evidence:** related-object lookups, filtering by user/role/status, ordering, aggregation (`Count`), and annotations used in discovery and reporting.
 
-- `Profile`: one-to-one extension of Django `User` with full name and Saudi phone validation.
-- `Jamiyah`: savings group metadata, contribution amount, visibility, frequency, lifecycle status, and creator.
-- `Membership`: connects users to Jamiyahs with role and membership status.
-- `PayoutTurn`: one payout turn per approved membership with payout order and delivery fields.
-- `Payment`: contribution report for a member and payout round.
+See the [ERD](docs/ERD.md) for the actual entities, foreign keys, and relationship cardinalities.
 
-Important integrity rules include:
+## 7. Core Workflow
 
-- Unique membership per `(jamiyah, user)`.
-- Unique payout position per `(jamiyah, position)`.
-- Unique payment per `(membership, payout_turn)`.
-- Model validation prevents cross-Jamiyah `Payment` and `PayoutTurn` mismatches.
-- Manager-only views enforce sensitive actions server-side.
+1. Register or sign in.
+2. Create a Jamiyah; its creator becomes its manager and an approved member.
+3. Members request to join; the manager approves or rejects requests.
+4. Once the Jamiyah is full, the manager arranges and generates payout turns.
+5. Members report contributions made outside the platform.
+6. The manager verifies or rejects reported contributions.
+7. Once an eligible turn satisfies the verification rules, the manager confirms delivery.
+8. After all turns are delivered, the Jamiyah becomes `completed`.
+9. Users can review their history and reports.
 
-ORM capabilities are integrated into application views:
+**Alternative lifecycle:** an eligible `open` Jamiyah may be cancelled before a payout schedule is generated; cancellation preserves records instead of deleting them.
 
-| ORM Capability | Application Evidence |
-|---|---|
-| CRUD | Users register, Jamiyahs are created, memberships are requested/reviewed, payments are reported/reviewed, profile data can be updated. |
-| Filtering | Jamiyah exploration filters by status/search; access checks filter memberships by user/status/role. |
-| Ordering | Jamiyahs, memberships, payments, and payout turns are ordered for dashboards and reports. |
-| Relationship queries | Views query through relationships such as `membership__user`, `jamiyah__status`, and `membership__status`. |
-| Aggregation | Reports use `Count` to calculate verified, pending, and rejected payment totals. |
-| Annotation | Explore/reporting code annotates related counts such as approved member counts and verified payments per payout turn. |
+## 8. Installation & Local Setup (Windows)
 
-See [docs/ERD.md](docs/ERD.md) for the Mermaid ERD and relationship notes.
-
-## Authentication and Authorization
-
-DAWRAH uses Django authentication. Passwords are handled by Django and are not stored manually.
-
-Roles are represented through `Membership.role`:
-
-| Role | Permissions |
-|---|---|
-| Manager | Manage join requests, generate payout schedule, review payments, confirm payout delivery, regenerate private invitation link. |
-| Member | View approved Jamiyahs, report contributions, view payment status, view reports for Jamiyahs they belong to. |
-| Anonymous user | View landing page, register, log in, and browse public discoverable pages where allowed. |
-
-Server-side checks protect sensitive operations. The UI may hide actions, but views also enforce role, membership status, and Jamiyah status rules.
-
-## Main Workflow
-
-1. A user registers and logs in.
-2. The user creates a Jamiyah and becomes its approved manager.
-3. Other users request membership.
-4. The manager approves or rejects membership requests.
-5. When the approved member count reaches capacity, the manager generates payout turns.
-6. Approved members report contributions for payout rounds.
-7. The manager verifies or rejects contribution reports.
-8. The manager confirms payout delivery after all required contributions for that turn are verified.
-9. After all payout turns are delivered, the Jamiyah becomes completed.
-10. Members review reports and notification states.
-
-## Installation on Windows
-
-### 1. Clone and enter the project
+### Clone and prepare the environment
 
 ```powershell
 git clone <repository-url>
 cd Dawrah
-```
-
-### 2. Create and activate a virtual environment
-
-```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
 ```
 
-If PowerShell blocks activation, run:
+If PowerShell blocks activation, use this only in the current terminal session, then retry the activation command:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\.venv\Scripts\Activate.ps1
 ```
 
-### 3. Install dependencies
+### Configure application secrets
 
-```powershell
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-### 4. Configure environment variables
-
-Create a local `.env` file from the safe example:
+Create your local environment file:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Then set local values:
+Set your own environment values in `.env`:
 
-```env
-DJANGO_SECRET_KEY=your-local-development-secret-key
+```dotenv
+DJANGO_SECRET_KEY=replace-with-a-strong-unique-secret-key
 DJANGO_DEBUG=True
 DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
 ```
 
-Do not commit `.env` or real secrets.
+Generate a secure key locally if needed:
 
-### 5. Apply migrations
+```powershell
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+
+Never commit `.env`, production secrets, credentials, or `db.sqlite3` to the repository. For deployment, set `DJANGO_DEBUG=False`, configure the actual hostnames, and review production security settings.
+
+### Create tables and run
 
 ```powershell
 python manage.py migrate
-```
-
-### 6. Start the development server
-
-```powershell
 python manage.py runserver
 ```
 
-Open:
+Open: `http://127.0.0.1:8000/`
 
-```text
-http://127.0.0.1:8000/
-```
-
-## Running Tests
+### Run checks and tests
 
 ```powershell
 python manage.py check
@@ -241,37 +202,64 @@ python manage.py test
 python manage.py makemigrations --check --dry-run
 ```
 
-Latest verification for this README update:
+See [Verification Record](docs/verification.md) for documented testing evidence. **Re-run these commands after the final theme and documentation changes before recording an updated test count.**
 
-| Command | Result |
-|---|---|
-| `python manage.py check` | PASS |
-| `python manage.py test` | PASS, 39 tests |
-| `python manage.py makemigrations --check --dry-run` | PASS, no changes detected |
+## 9. Security & Responsible Configuration
 
-Detailed verification notes are in [docs/verification.md](docs/verification.md).
+The capstone includes security improvements made during development:
 
-## Demo Data
+- **Secret key protection:** `SECRET_KEY` was moved away from a hardcoded project value to the `DJANGO_SECRET_KEY` environment setting, with a safe `.env.example` template. Any previously exposed or shared key should be rotated rather than reused.
+- **Deployment controls:** `DEBUG` and `ALLOWED_HOSTS` are environment-driven instead of being fixed for all environments.
+- **Sensitive files:** local `.env` and SQLite database files should be excluded from Git using `.gitignore`.
+- **Authentication:** Django's password hashing and built-in authentication are used, rather than manually comparing or storing plain-text passwords.
+- **Authorization:** views validate manager/member permissions and relevant lifecycle states; hiding a button in the template is not the only restriction.
+- **Request protection:** state-changing operations use POST forms with Django CSRF protection.
+- **Data integrity:** validated relationships and duplicate-prevention rules reduce inconsistent records.
+- **Theme persistence:** theme preferences contain only `light` or `dark`, not credentials or personal information.
 
-The screenshots and demo guide use fictional local demo accounts and Jamiyahs. Demo credentials should be shared only in a safe local classroom/demo context and should not be committed to the repository.
+These controls improve the prototype but **do not constitute a production security audit**. Deployment requires further checks of HTTPS, secure cookies, database backups, allowed origins/hosts, operational logging, and secret management.
 
-The project currently does not include a permanent seed command or fixture. Demo data can be created through Django Admin or the application interface.
+## 10. Prototype Limitations & Planned Production Improvements
 
-## Known Limitations
+DAWRAH is an educational **demonstration prototype**, not a production-ready financial service. The following boundaries are intentional or remain future work:
 
-- DAWRAH does not process or transfer real money.
-- SQLite is used for local development; production concurrency would be stronger with a database such as PostgreSQL.
-- Notification behavior is derived from existing workflow records rather than a dedicated notification model.
-- The project is not deployed in this repository state.
-- The application is Arabic-first; English localization is not implemented.
-- Demo data is local and not part of a reproducible fixture.
+| Area | Current capstone behavior | Intended production improvement |
+|---|---|---|
+| **Scheduled payout timing** | For demonstration purposes, an otherwise eligible payout turn can be confirmed **before its scheduled calendar date**, allowing the complete Jamiyah lifecycle to be demonstrated within a short presentation. | Enforce date-based eligibility on the server so a payout cannot be confirmed before its scheduled date, accounting for the configured timezone and business rules. Add tests for early, on-time, and late delivery. |
+| **Real payments** | Contributions and payout deliveries are **recorded**, not transferred or independently confirmed by a payment provider. | Evaluate regulated payment-provider integration, reconciliation, dispute handling, and relevant legal/compliance requirements before handling funds. |
+| **Database** | SQLite supports the local demonstration and coursework workflow. | Consider PostgreSQL, transactional/concurrency testing, backup and recovery procedures, and production monitoring. |
+| **Notifications** | Notifications are calculated from existing workflow records; no dedicated notification-delivery system is required for the prototype. | Add delivery channels, scheduling, and a persistent notification/audit trail if product requirements justify them. |
+| **Deployment** | Local application and documentation; production hosting is outside the current demonstrated scope. | Set up HTTPS hosting, environment secrets, secure cookie settings, observability, and deployment checks. |
+| **Localization** | Arabic-first RTL interface. | Consider additional languages and accessibility review with target users. |
+| **Demo data** | Local test data and manually captured interface screenshots; no permanent seed/fixture command. | Provide reproducible, non-sensitive seed data and automated demo setup. |
 
-## Documentation
+### Why early completion is allowed in the demo
 
-- [ERD](docs/ERD.md)
+A Jamiyah may be configured with weekly or monthly dates extending beyond the presentation day. To show **payment verification → delivery confirmation → final completion** in one live demonstration, the prototype focuses on **workflow integrity** rather than enforcing that the scheduled date has arrived.
+
+This is a **known simulation constraint**, not a claim that real payouts should occur early. The existing prerequisites for delivery confirmation (including required verified contributions and sequence rules) remain relevant. **Before any real-world launch**, date enforcement must be implemented and tested at the backend, rather than relying on the UI alone.
+
+### Security distinction
+
+The previous secret-key configuration was a **development security issue that was addressed**, not a feature of the prototype or a limitation intentionally left in place. The remaining deployment/security work is listed separately above to avoid presenting the capstone as production hardened.
+
+## 11. Documentation
+
+- [ERD — Database Relationships](docs/ERD.md)
 - [Verification Record](docs/verification.md)
-- [Demo Guide](docs/demo_guide.md)
+- [Illustrated Demo Guide — 15 Screenshots](docs/demo_guide.md)
+- [Security Setup](SECURITY_SETUP.md)
 
-## Acknowledgments
+## 12. Acknowledgments & AI Use
 
-This project was developed as a capstone project using Django documentation, Python/Django coursework concepts, and significant AI assistance for code review, test planning, security configuration guidance, documentation drafting, and verification support. All AI-generated suggestions were reviewed and adapted to match the actual DAWRAH implementation.
+DAWRAH was developed **individually** as a Django capstone project, drawing on Python/Django coursework and official documentation. I was responsible for defining the project idea, requirements, business rules, and overall implementation decisions.
+
+**AI assistance was used to support the website's visual design and frontend development**, including exploring layout ideas, refining the user interface, improving responsive styling, and helping write and adjust JavaScript for interactive elements. AI was also used as a supporting tool for code review, test planning, security-configuration guidance, and documentation drafting.
+
+AI-generated suggestions and code were reviewed, adapted, and integrated into the project by me rather than accepted without verification. The project's application logic and final decisions remained under my responsibility.
+
+The Light/Dark Mode preference is intended to use **Django Sessions and Cookies rather than JavaScript**; this description should be confirmed against the final implementation before submission.
+
+---
+
+**DAWRAH | دَوْرة — Organized savings circles, clearer records, and a transparent workflow.**

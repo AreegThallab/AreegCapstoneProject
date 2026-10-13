@@ -27,6 +27,9 @@ urlpatterns = [
     # Public Landing Page
     path("", views.home, name="home"),
 
+    # Theme preference
+    path("theme/switch/", views.switch_theme, name="switch_theme"),
+
     # Logged-in Dashboard
     path("dashboard/", views.dashboard, name="dashboard"),
 

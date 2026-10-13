@@ -1,11 +1,11 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="{{ active_theme|default:'light' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#10334a">
+    <meta name="theme-color" content="{% if active_theme == 'dark' %}#101C27{% else %}#10334a{% endif %}">
     <meta name="description" content="الصفحة غير موجودة في منصة دَوْرة.">
 
     <title>404 | الصفحة غير موجودة</title>
@@ -15,6 +15,7 @@
     <link rel="icon" type="image/svg+xml" href="{% static 'images/dawrah-icon.svg' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <link rel="stylesheet" href="{% static 'css/errors.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
 </head>
 <body class="error-body">
     {% if request.user.is_authenticated %}

@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="{{ active_theme|default:'light' }}">
 
 <head>
 
@@ -10,7 +10,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta name="theme-color" content="#10334a">
+    <meta name="theme-color" content="{% if active_theme == 'dark' %}#101C27{% else %}#10334a{% endif %}">
 
     <title>{% block title %}دَوْرة | المنصة{% endblock %}</title>
 
@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 
     {% block extra_css %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
 
 </head>
 
@@ -333,6 +334,8 @@
                     </div>
 
                 </details>
+
+                {% include "includes/theme_toggle.html" %}
 
                 <!-- PROFILE -->
 

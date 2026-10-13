@@ -1,219 +1,396 @@
-# DAWRAH Demo Guide
+# DAWRAH | دَوْرة — Illustrated Demo Guide
 
-Use this guide to demonstrate DAWRAH to the instructor in a concise, technical, and product-focused flow.
+This guide provides a visual walkthrough of **DAWRAH**, a Django web application for managing rotating savings associations (Jamiyahs).
 
-## 1. Product Introduction
+DAWRAH helps users create and join Jamiyahs, manage membership requests, organize payout turns, record contributions, confirm deliveries, and review reports.
 
-Introduce **دَوْرة | DAWRAH** as a rotating savings association management platform.
+**Important:** DAWRAH is a management and tracking platform. It does not execute real financial transfers.
 
-Key message:
+The screenshots in this guide were captured manually from the application to demonstrate its user interface and key features.
 
-> DAWRAH helps a Jamiyah organizer manage members, contribution reports, payout order, delivery confirmation, and reports without processing real money.
+---
 
-Target audience:
+## 1. Landing Page
 
-- Family Jamiyah organizers.
-- Friend groups that coordinate monthly contributions.
-- Small community groups that need a transparent tracking workflow.
+The landing page introduces DAWRAH and its main purpose: bringing Jamiyah management, payout turns, and contribution tracking together in one place.
 
-Value:
+![DAWRAH Landing Page — Light Mode](screenshots/demo-guide/01_landing_light.png)
 
-- Replaces scattered chat messages and spreadsheets.
-- Gives members visibility into payout turns and contribution status.
-- Gives managers server-side controls for approvals, verification, and completion.
+**Main features:**
 
-## 2. Suggested Demo Order
+- Learn how DAWRAH works.
+- Explore the platform's features.
+- Create a new account.
+- Log in to an existing account.
+- Switch between Light Mode and Dark Mode.
 
-### Step 1: Landing Page
+### Light and Dark Mode
 
-Show the public landing page.
+DAWRAH supports two visual themes. Users can change the interface appearance using the theme toggle in the navigation bar.
 
-Explain:
+The selected preference is managed through Django Sessions and Cookies, allowing the interface to remember the selected theme.
 
-- DAWRAH is Arabic-first and RTL.
-- It presents the product purpose before login.
-- Public users can register or log in.
+![DAWRAH Landing Page — Dark Mode](screenshots/demo-guide/15_landing_dark.png)
 
-### Step 2: Login and Dashboard
+---
 
-Log in with a fictional demo account provided locally by the instructor/demo environment.
+## 2. User Authentication
 
-Show:
+DAWRAH uses Django's authentication system to manage user registration and login.
 
-- Dashboard navigation.
-- Notification indicators.
-- Main actions: My Jamiyahs, Explore Jamiyahs, Create Jamiyah, Reports.
+### 2.1 Login
 
-Do not show or publish passwords in slides or README.
+Existing users can sign in using their username and password.
 
-### Step 3: Explore Jamiyahs
+![Login Page](screenshots/demo-guide/02_login.png)
 
-Open **Explore Jamiyahs**.
+**How it works:**
 
-Demonstrate:
+1. Open the Login page.
+2. Enter a valid username.
+3. Enter the account password.
+4. Click **تسجيل الدخول**.
+5. Access the dashboard after successful authentication.
 
-- Public Jamiyah discovery.
-- Search/filter behavior where available.
-- Status and capacity information.
-- Empty or restricted cases if applicable.
+### 2.2 Registration
 
-### Step 4: My Jamiyahs
+New users can create accounts through the registration form.
 
-Open **My Jamiyahs**.
+![Registration Page](screenshots/demo-guide/03_register.png)
 
-Show:
+The registration form collects the information required to create a user account and profile.
 
-- Memberships grouped by the user's current Jamiyahs.
-- Open, active, and completed lifecycle states.
-- Access to details and payment tracking.
+**Expected outcome:** After successful registration, the user can log in and start using DAWRAH.
 
-### Step 5: Jamiyah Details
+---
 
-Open a Jamiyah details page, preferably **جمعة الأصدقاء**.
+## 3. Dashboard
 
-Explain:
+The dashboard serves as the main navigation point after login.
 
-- Membership status.
-- Current payout schedule.
-- Approved members.
-- Contribution amount and member capacity.
-- Manager-only actions are protected by server-side authorization.
+![DAWRAH Dashboard](screenshots/demo-guide/04_dashboard.png)
 
-### Step 6: Membership Management
+Users can access the main services:
 
-If using a manager account, demonstrate a public/open Jamiyah with pending and rejected requests.
+- **جمعياتي:** View their Jamiyahs.
+- **استكشف الجمعيات:** Discover available public Jamiyahs.
+- **إنشاء جمعية:** Create a new Jamiyah.
+- **التقارير:** Review Jamiyah statistics and reports.
 
-Explain the rule:
+The navigation bar also provides access to the profile, notifications, theme toggle, and logout.
 
-- Only managers with approved membership can approve or reject requests.
-- Capacity is enforced before approval.
-- Rejected memberships cannot be silently converted through unauthorized routes.
+---
 
-### Step 7: Payout Schedule
+## 4. My Jamiyahs
 
-Show an active Jamiyah with payout turns.
+The **My Jamiyahs** page displays associations connected to the authenticated user.
 
-Explain:
+![My Jamiyahs](screenshots/demo-guide/05_my_jamiyahs.png)
 
-- Payout turns are generated only when the Jamiyah is full.
-- Each approved membership receives one payout turn.
-- The `(jamiyah, position)` uniqueness rule prevents duplicate payout positions.
+Users can:
 
-### Step 8: Payment Management
+- View Jamiyahs they manage.
+- View Jamiyahs they have joined.
+- Identify their role in each Jamiyah.
+- Check the Jamiyah's contribution amount, capacity, and status.
+- Open a Jamiyah to view more details.
 
-Open the payment dashboard.
+DAWRAH preserves associations across their lifecycle, including open, active, completed, and cancelled states.
 
-Show:
+---
 
-- Pending, verified, and rejected payment examples.
-- Duplicate payment prevention for the same member and round.
-- Manager review workflow if using a manager account.
+## 5. Explore Jamiyahs
 
-Technical note:
+The Explore page allows users to discover available public Jamiyahs.
 
-- `Payment.clean()` checks that the payment membership and payout turn belong to the same Jamiyah.
-- A database uniqueness constraint protects one payment per member per payout round.
+![Explore Jamiyahs](screenshots/demo-guide/06_explore_jamiyahs.png)
 
-### Step 9: Delivery Confirmation
+**How it works:**
 
-Show delivery status on a Jamiyah with verified payments.
+1. Open **استكشف الجمعيات**.
+2. Browse the available Jamiyahs.
+3. Search by Jamiyah name when needed.
+4. Open a Jamiyah to inspect its details.
+5. Submit a membership request when eligible.
 
-Explain:
+**Business rule:** Explore displays only Jamiyahs that are both **PUBLIC** and **OPEN**.
 
-- A payout turn can be delivered only after all required payments for that turn are verified.
-- Later turns cannot be delivered before previous turns.
-- The final delivered turn marks the Jamiyah completed.
+Private, active, completed, and cancelled Jamiyahs do not appear in public discovery.
 
-### Step 10: Reports
+---
 
-Open **Reports** and a per-Jamiyah report.
+## 6. Create a Jamiyah
 
-Highlight:
+Authenticated users can create and manage their own Jamiyahs.
 
-- Summary counts for Jamiyah statuses.
-- Payment totals by status.
-- Delivered payout totals.
-- Per-turn verified contribution counts.
+![Create Jamiyah Form](screenshots/demo-guide/07_create_jamiyah_form.png)
 
-Technical note:
+### How to create a Jamiyah
 
-- Reports use filtering, relationship queries, `Count`, `Q`, and `annotate`.
-- Report calculations are covered by automated tests.
+1. Click **إنشاء جمعية**.
+2. Enter the Jamiyah name.
+3. Optionally add a description.
+4. Specify the contribution amount.
+5. Set the required number of members.
+6. Select the contribution frequency.
+7. Choose the start date.
+8. Select whether the Jamiyah is public or private.
+9. Submit the form.
 
-## 3. Validation and Failure Examples
+**Expected outcome:** DAWRAH creates the Jamiyah with an **OPEN** status. The creator becomes its manager and an approved member.
 
-Choose one or two:
+Form validation helps prevent invalid values and incomplete required information.
 
-| Example | Expected Result |
+---
+
+## 7. Jamiyah Details and Management
+
+The Jamiyah Details page provides information about a specific association and the actions available to the current user.
+
+![Jamiyah Details](screenshots/demo-guide/09_jamiyah_details.png)
+
+The page displays:
+
+- Jamiyah name and description.
+- Contribution amount.
+- Required and approved member counts.
+- Available seats.
+- Status and visibility.
+- Manager and member information.
+- Available management actions.
+
+### Editing a Jamiyah
+
+An approved manager can edit an eligible Jamiyah while it remains **OPEN** and does not have a generated payout schedule.
+
+The manager selects **تعديل الجمعية**, changes permitted information, and saves the form.
+
+### Cancelling a Jamiyah
+
+An approved manager can cancel an eligible OPEN Jamiyah using **إلغاء الجمعية**.
+
+Cancellation requires confirmation and changes the Jamiyah status to **CANCELLED**.
+
+The Jamiyah is not permanently deleted, so its existing records remain available for review.
+
+**Important:** The screenshot above shows the management buttons. It does not depict the completed edit or cancellation confirmation workflow.
+
+---
+
+## 8. Membership Requests
+
+Users can request to join eligible public Jamiyahs, while managers review incoming requests.
+
+![Membership Requests](screenshots/demo-guide/10_membership_requests.png)
+
+### How a member joins
+
+1. Open a PUBLIC and OPEN Jamiyah.
+2. Submit a membership request.
+3. Wait for the manager's decision.
+
+### How a manager approves or rejects a request
+
+1. Open the managed Jamiyah.
+2. Navigate to the membership requests section.
+3. Review pending applicants.
+4. Select **قبول** to approve a request or **رفض** to reject it.
+
+The system tracks membership states:
+
+- `pending`
+- `approved`
+- `rejected`
+
+Approval is restricted by the Jamiyah's member capacity. Duplicate memberships are prevented.
+
+---
+
+## 9. Payout Schedule and Turns
+
+When the Jamiyah meets the requirements for starting, the manager can organize the payout order and generate the schedule.
+
+![Payout Timeline](screenshots/demo-guide/11_payout_timeline.png)
+
+### How it works
+
+1. Complete the required approved memberships.
+2. Arrange the eligible members into payout positions.
+3. Generate the payout schedule.
+4. Review the payout dates and recipients.
+5. Track each turn's contribution and delivery status.
+
+Each eligible approved member receives one payout position.
+
+The payout timeline helps members identify when their turn is scheduled and whether the required contributions have been verified.
+
+---
+
+## 10. Contribution Tracking and Verification
+
+DAWRAH records contributions for each payout turn without performing actual bank transfers.
+
+![Payment Tracking](screenshots/demo-guide/12_payment_tracking.png)
+
+### Member workflow
+
+1. Open the Jamiyah's payment management page.
+2. Review the contribution due for each turn.
+3. Use **تسجيل دفعة** when a contribution has been paid outside DAWRAH.
+4. Wait for manager verification.
+
+### Manager workflow
+
+1. Open the payment management page.
+2. Review reported contributions.
+3. Verify or reject eligible payment reports.
+4. Monitor the number of verified contributions in each turn.
+
+Payment states include:
+
+- **Pending:** The contribution report is awaiting review.
+- **Verified:** The contribution has been confirmed.
+- **Rejected:** The contribution report was rejected.
+- **Not recorded:** No payment report has been submitted for that turn.
+
+A payout turn may proceed to delivery confirmation only when the required contribution conditions are satisfied.
+
+---
+
+## 11. Delivery Confirmation and Jamiyah Completion
+
+DAWRAH supports confirming the delivery of each payout turn.
+
+### Confirming a payout
+
+After all required contributions for an eligible turn have been verified, the manager can confirm that the payout was delivered outside the platform.
+
+DAWRAH records the delivery confirmation and updates the turn's state.
+
+### Completing a Jamiyah
+
+When every payout turn has been delivered according to the system's business rules, the Jamiyah reaches the **COMPLETED** state.
+
+Completed Jamiyahs remain available for recordkeeping and reports.
+
+**Note:** The payout timeline screenshot illustrates how delivery states are presented. A separate screenshot of the final confirmation operation is not included in this guide.
+
+---
+
+## 12. User Profile
+
+Users can view their account information and participation statistics through the Profile page.
+
+![User Profile](screenshots/demo-guide/08_profile.png)
+
+The profile contains:
+
+- Account details.
+- Editable profile information.
+- Total Jamiyahs.
+- Managed and joined Jamiyahs.
+- Verified contribution count.
+- Current Jamiyahs.
+- Previous completed Jamiyahs.
+- Cancelled Jamiyahs.
+
+Jamiyahs are grouped by lifecycle state so cancelled associations are not incorrectly classified as current.
+
+---
+
+## 13. Reports and Statistics
+
+DAWRAH provides summary statistics and individual Jamiyah reports.
+
+### 13.1 Reports Dashboard
+
+![Reports Dashboard](screenshots/demo-guide/13_reports_dashboard.png)
+
+The Reports Dashboard displays:
+
+- Total Jamiyahs.
+- Open Jamiyahs.
+- Active Jamiyahs.
+- Completed Jamiyahs.
+- Links to individual Jamiyah reports.
+
+### 13.2 Individual Jamiyah Report
+
+![Individual Jamiyah Report](screenshots/demo-guide/14_jamiyah_report_detail.png)
+
+A Jamiyah report provides information such as:
+
+- Jamiyah status and membership details.
+- Verified contribution counts.
+- Pending contribution counts.
+- Confirmed deliveries.
+- Contribution amount.
+- Payout turn records.
+- Recorded contribution and delivery totals.
+
+Reports use the existing Jamiyah, membership, payment, and payout turn data.
+
+---
+
+## 14. Core Business Rules
+
+DAWRAH applies rules to protect the consistency of its workflows.
+
+| Area | Business Rule |
 |---|---|
-| Create Jamiyah with past start date | Server-side validation rejects the date. |
-| Try approving beyond capacity | Request remains pending or approval is blocked. |
-| Try generating a payout schedule before capacity is full | Schedule is not created. |
-| Try confirming delivery before all payments are verified | Delivery is blocked. |
-| Open a protected manager route as a non-manager | Server returns a restricted response. |
+| Jamiyah creation | Required information must pass validation. |
+| Membership | Duplicate membership records are prevented. |
+| Membership approval | Approval must respect the maximum member capacity. |
+| Jamiyah editing | Only eligible OPEN Jamiyahs can be edited by their managers. |
+| Jamiyah cancellation | Eligible OPEN Jamiyahs can be cancelled without deleting their records. |
+| Explore | Only PUBLIC and OPEN Jamiyahs are discoverable. |
+| Payout schedule | Only approved members receive payout turns. |
+| Payment records | Duplicate contributions for the same membership and turn are prevented. |
+| Delivery | Delivery confirmation requires the necessary verified contributions. |
+| Authorization | Manager-only actions are restricted to eligible managers. |
 
-## 4. Database Relationships to Explain
+---
 
-Use [ERD.md](ERD.md) during the technical discussion.
+## 15. Technical Highlights
 
-Core relationships:
-
-- `User` has one `Profile`.
-- `User` creates many `Jamiyahs`.
-- `User` joins Jamiyahs through `Membership`.
-- `Jamiyah` has many `Memberships`.
-- Approved `Membership` may have one `PayoutTurn`.
-- `Payment` links a `Membership`, `Jamiyah`, and `PayoutTurn`.
-
-Important constraints:
-
-- Unique Jamiyah membership per user.
-- Unique payout position per Jamiyah.
-- Unique payment per membership and payout turn.
-- Cross-Jamiyah validation in `Payment` and `PayoutTurn`.
-
-## 5. Technical Decisions
-
-| Decision | Reason |
+| Feature | Implementation |
 |---|---|
-| Django authentication | Avoid manual password handling and use built-in session security. |
-| Separate apps | Keeps accounts, Jamiyah workflow, payments, and reports organized. |
-| Model validation plus tests | Protects data integrity outside normal views. |
-| SQLite for local capstone | Simple setup for classroom review and local demonstration. |
-| No real payment integration | Keeps project scope focused on management and tracking. |
-| Environment variables | Keeps secrets and deployment settings out of source code. |
+| Backend | Python and Django |
+| Database | SQLite with Django ORM |
+| Authentication | Django authentication |
+| Authorization | Login protection and role-based workflow checks |
+| Data management | CRUD operations and ORM relationships |
+| Reporting | Aggregation of contribution and payout records |
+| User interface | Arabic RTL, responsive layouts |
+| Theme management | Light/Dark Mode using Django Sessions and Cookies |
+| Security | CSRF protection, validation, and environment-based settings |
 
-## 6. Market Potential
+---
 
-Describe DAWRAH as a focused workflow tool for small groups that already run Jamiyahs manually. The value is clarity, accountability, and easier record keeping.
+## 16. Screenshot Inventory
 
-Avoid claiming unverified market statistics. Present demand as a practical workflow need rather than a measured market size.
+| Filename | Screen |
+|---|---|
+| `01_landing_light.png` | Landing Page — Light Mode |
+| `02_login.png` | Login |
+| `03_register.png` | Registration |
+| `04_dashboard.png` | Dashboard |
+| `05_my_jamiyahs.png` | My Jamiyahs |
+| `06_explore_jamiyahs.png` | Explore Jamiyahs |
+| `07_create_jamiyah_form.png` | Create Jamiyah |
+| `08_profile.png` | User Profile |
+| `09_jamiyah_details.png` | Jamiyah Details |
+| `10_membership_requests.png` | Membership Requests |
+| `11_payout_timeline.png` | Payout Timeline |
+| `12_payment_tracking.png` | Payment Tracking |
+| `13_reports_dashboard.png` | Reports Dashboard |
+| `14_jamiyah_report_detail.png` | Individual Jamiyah Report |
+| `15_landing_dark.png` | Landing Page — Dark Mode |
 
-## 7. Limitations and Future Improvements
+---
 
-Current limitations:
+## Conclusion
 
-- Does not process or transfer real money.
-- No production deployment in the current repository state.
-- Demo data is local and not packaged as a fixture.
-- Notification records are derived from workflow state rather than stored separately.
-- SQLite is not ideal for high-concurrency production use.
+DAWRAH demonstrates a complete Django-based workflow for managing rotating savings associations, from account registration and Jamiyah creation to membership management, contribution tracking, payout delivery, and reporting.
 
-Future improvements:
-
-- PostgreSQL deployment.
-- Exportable reports.
-- Dedicated notification model.
-- Optional payment gateway integration as a clearly separated future feature.
-- Multi-language support.
-
-## 8. Closing
-
-End by showing:
-
-1. A completed Jamiyah report.
-2. The ERD.
-3. The test result summary.
-4. The known limitations.
-
-This demonstrates both product value and technical understanding.
+The platform focuses on organization, transparency, and preserving financial workflow records without executing real financial transfers.

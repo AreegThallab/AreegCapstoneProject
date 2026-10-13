@@ -1,0 +1,721 @@
+/* =========================================
+   DAWRAH | LIGHT / DARK THEME SYSTEM
+   Light mode is intentionally untouched. All visual changes are scoped to
+   [data-theme="dark"] plus the shared theme toggle.
+========================================= */
+
+:root {
+    color-scheme: light;
+}
+
+.theme-toggle-form {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+}
+
+.theme-toggle {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 43px;
+    height: 43px;
+    padding: 0;
+    color: var(--navy);
+    background: #edf3f3;
+    border: 1px solid #dbe8e5;
+    border-radius: 50%;
+    cursor: pointer;
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.theme-toggle:hover {
+    color: var(--teal);
+    background: #e1f1ed;
+    border-color: #bddbd4;
+    transform: translateY(-2px);
+}
+
+.theme-toggle:focus-visible {
+    outline: 3px solid var(--teal);
+    outline-offset: 3px;
+}
+
+.theme-toggle-icon {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+.theme-toggle svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.theme-toggle-moon {
+    opacity: 0;
+    transform: rotate(-18deg) scale(0.78);
+}
+
+[data-theme="dark"] .theme-toggle-sun {
+    opacity: 0;
+    transform: rotate(18deg) scale(0.78);
+}
+
+[data-theme="dark"] .theme-toggle-moon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+[data-theme="dark"] {
+    color-scheme: dark;
+    --navy: #EAF3F3;
+    --deep: #07131d;
+    --teal: #83C7B6;
+    --mint: #B7EFE3;
+    --gold: #f3c249;
+    --white: #1B2C3A;
+    --paper: #101C27;
+    --background: #101C27;
+    --muted: #A5B8C1;
+    --line: #314756;
+    --shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+    --dark-bg: #101C27;
+    --dark-card: #1B2C3A;
+    --dark-surface: #223847;
+    --dark-text: #EAF3F3;
+    --dark-muted: #A5B8C1;
+    --dark-border: #314756;
+    --dark-accent: #83C7B6;
+}
+
+[data-theme="dark"] body,
+[data-theme="dark"] .dashboard-body,
+[data-theme="dark"] .error-body {
+    color: var(--dark-text);
+    background: var(--dark-bg);
+}
+
+[data-theme="dark"] ::selection {
+    color: #07131d;
+    background: var(--dark-accent);
+}
+
+/* Navigation */
+[data-theme="dark"] .site-header,
+[data-theme="dark"] .dashboard-header {
+    background: rgba(16, 28, 39, 0.94);
+    border-bottom-color: var(--dark-border);
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.22);
+}
+
+[data-theme="dark"] .nav-links a,
+[data-theme="dark"] .dashboard-links a,
+[data-theme="dark"] .dashboard-link-pending,
+[data-theme="dark"] .dashboard-profile,
+[data-theme="dark"] .nav-register,
+[data-theme="dark"] .dashboard-profile-name {
+    color: var(--dark-muted);
+}
+
+[data-theme="dark"] .nav-links a:hover,
+[data-theme="dark"] .nav-links a:focus-visible,
+[data-theme="dark"] .dashboard-links a:hover,
+[data-theme="dark"] .dashboard-links a.active,
+[data-theme="dark"] .dashboard-profile:hover,
+[data-theme="dark"] .nav-register:hover {
+    color: var(--dark-accent);
+}
+
+[data-theme="dark"] .theme-toggle,
+[data-theme="dark"] .dashboard-avatar,
+[data-theme="dark"] .dashboard-notifications-trigger,
+[data-theme="dark"] .menu-toggle,
+[data-theme="dark"] .dashboard-menu-toggle {
+    color: var(--dark-text);
+    background: var(--dark-surface);
+    border-color: var(--dark-border);
+}
+
+[data-theme="dark"] .theme-toggle:hover,
+[data-theme="dark"] .dashboard-profile:hover .dashboard-avatar,
+[data-theme="dark"] .dashboard-notifications-trigger:hover,
+[data-theme="dark"] .menu-toggle:hover,
+[data-theme="dark"] .dashboard-menu-toggle:hover {
+    color: var(--dark-bg);
+    background: var(--dark-accent);
+    border-color: var(--dark-accent);
+}
+
+[data-theme="dark"] .nav-links,
+[data-theme="dark"] .dashboard-mobile-panel {
+    background: var(--dark-card);
+    border-color: var(--dark-border);
+}
+
+/* Page backgrounds and decorative sections */
+[data-theme="dark"] .hero,
+[data-theme="dark"] .auth-section,
+[data-theme="dark"] .dashboard-welcome,
+[data-theme="dark"] .hub-section,
+[data-theme="dark"] .faq-section,
+[data-theme="dark"] .error-page {
+    background:
+        radial-gradient(circle at 16% 18%, rgba(131, 199, 182, 0.10), transparent 30%),
+        linear-gradient(145deg, #101C27 0%, #132331 54%, #101C27 100%);
+}
+
+[data-theme="dark"] .how-section,
+[data-theme="dark"] .features-section,
+[data-theme="dark"] .my-jamiyahs-page,
+[data-theme="dark"] .jamiyah-create-page,
+[data-theme="dark"] .jamiyah-detail-page,
+[data-theme="dark"] .explore-page,
+[data-theme="dark"] .private-invite-page,
+[data-theme="dark"] .payments-page,
+[data-theme="dark"] .delivery-page,
+[data-theme="dark"] .profile-page,
+[data-theme="dark"] .reports-page {
+    background: transparent;
+}
+
+[data-theme="dark"] .dark-band,
+[data-theme="dark"] .final-section,
+[data-theme="dark"] .jd-hero,
+[data-theme="dark"] .payments-hero,
+[data-theme="dark"] .profile-hero,
+[data-theme="dark"] .report-detail-hero,
+[data-theme="dark"] .jd-main-action {
+    color: #ffffff;
+    background: linear-gradient(115deg, #0b2332, #14575c);
+}
+
+[data-theme="dark"] .dark-band *,
+[data-theme="dark"] .final-section *,
+[data-theme="dark"] .jd-hero *,
+[data-theme="dark"] .payments-hero *,
+[data-theme="dark"] .profile-hero *,
+[data-theme="dark"] .report-detail-hero *,
+[data-theme="dark"] .jd-main-action * {
+    color: inherit;
+}
+
+[data-theme="dark"] .band-content > p,
+[data-theme="dark"] .payments-hero p,
+[data-theme="dark"] .jd-hero p,
+[data-theme="dark"] .profile-username,
+[data-theme="dark"] .profile-joined,
+[data-theme="dark"] .report-detail-hero p,
+[data-theme="dark"] .final-content p,
+[data-theme="dark"] .final-content small {
+    color: #cfe1e4;
+}
+
+/* Surfaces */
+[data-theme="dark"] :is(
+    .auth-container,
+    .dashboard-card,
+    .dashboard-message,
+    .dashboard-notifications-menu,
+    .dashboard-footer,
+    .site-footer,
+    .journey-step,
+    .hub-center,
+    .hub-node,
+    .feature-card,
+    .faq-list details,
+    .jamiyah-create-card,
+    .jamiyah-create-note,
+    .jamiyah-cancel-card,
+    .jamiyah-cancel-summary,
+    .my-jamiyahs-stat-card,
+    .my-jamiyah-card,
+    .my-jamiyahs-empty,
+    .jd-panel,
+    .jd-stat,
+    .jd-manager-card,
+    .jd-member,
+    .jd-request,
+    .jd-notice,
+    .jd-note,
+    .jd-order-row,
+    .jd-turn-card,
+    .jd-invite-card,
+    .private-invite-card,
+    .private-invite-details > div,
+    .explore-search-input,
+    .explore-filters a,
+    .explore-card,
+    .explore-empty-state,
+    .payments-back-btn,
+    .payments-stat,
+    .payments-round-card,
+    .payments-empty,
+    .delivery-info,
+    .delivery-card,
+    .profile-stat-card,
+    .profile-panel,
+    .profile-jamiyah-item,
+    .profile-empty-state,
+    .reports-stat,
+    .reports-section,
+    .reports-jamiyah-card,
+    .reports-empty,
+    .report-summary-card,
+    .report-table-panel,
+    .report-note,
+    .error-mark
+) {
+    color: var(--dark-text);
+    background: var(--dark-card);
+    border-color: var(--dark-border);
+    box-shadow: none;
+}
+
+[data-theme="dark"] :is(
+    .dashboard-card:hover,
+    .my-jamiyah-card:hover,
+    .explore-card:hover,
+    .profile-stat-card:hover,
+    .profile-jamiyah-item:hover,
+    .reports-stat:hover,
+    .reports-jamiyah-card:hover,
+    .jd-turn-card:hover,
+    .jd-turn-card[open],
+    .delivery-card:hover
+) {
+    background: var(--dark-surface);
+    border-color: rgba(131, 199, 182, 0.45);
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] :is(
+    .dashboard-card-icon,
+    .dashboard-notification-icon,
+    .dashboard-notifications-empty,
+    .journey-circle,
+    .hub-node-icon,
+    .feature-icon,
+    .jamiyah-create-heading-icon,
+    .jamiyah-create-note-icon,
+    .my-jamiyahs-stat-icon,
+    .my-jamiyah-card-icon,
+    .my-jamiyahs-empty-icon,
+    .jd-hero-icon,
+    .jd-member-avatar,
+    .jd-invite-icon,
+    .private-invite-icon,
+    .explore-card-icon,
+    .explore-empty-icon,
+    .payments-avatar,
+    .delivery-card-top,
+    .profile-stat-icon,
+    .profile-empty-icon,
+    .profile-jamiyah-icon,
+    .reports-stat-icon,
+    .reports-list-heading-icon,
+    .reports-jamiyah-icon,
+    .report-detail-hero-icon,
+    .report-summary-icon
+) {
+    background: var(--dark-surface);
+    border-color: var(--dark-border);
+}
+
+/* Text */
+[data-theme="dark"] :is(
+    h1,
+    h2,
+    h3,
+    h4,
+    label,
+    .auth-heading h1,
+    .auth-heading p,
+    .section-heading h2,
+    .dashboard-section-heading h2,
+    .dashboard-card h3,
+    .my-jamiyah-card-head h3,
+    .explore-card-body h3,
+    .payments-member-info strong,
+    .reports-jamiyah-details h3,
+    .profile-jamiyah-info h3,
+    .error-content h2,
+    .error-code
+) {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] :is(
+    p,
+    small,
+    .section-heading p,
+    .dashboard-section-heading p,
+    .dashboard-card p,
+    .my-jamiyah-card-description,
+    .my-jamiyah-created-at,
+    .my-jamiyah-detail-label,
+    .explore-card-description,
+    .payments-member-info span,
+    .payments-section-heading p,
+    .reports-section-heading p,
+    .report-summary-label,
+    .profile-page-heading p,
+    .profile-panel-header p,
+    .profile-jamiyah-info > p,
+    .error-content p,
+    .field-help,
+    .jamiyah-field-hint
+) {
+    color: var(--dark-muted);
+}
+
+/* Forms and tables */
+[data-theme="dark"] :is(input, select, textarea) {
+    color: var(--dark-text) !important;
+    background: var(--dark-surface) !important;
+    border-color: var(--dark-border) !important;
+}
+
+[data-theme="dark"] :is(input, textarea)::placeholder {
+    color: #8fa5ae !important;
+}
+
+[data-theme="dark"] :is(input, select, textarea):focus,
+[data-theme="dark"] :is(input, select, textarea):focus-visible {
+    border-color: var(--dark-accent) !important;
+    box-shadow: 0 0 0 3px rgba(131, 199, 182, 0.18) !important;
+}
+
+[data-theme="dark"] :is(table, .jd-schedule-table, .report-table) {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] :is(th, .jd-schedule-table th, .report-table th) {
+    color: var(--dark-muted);
+    background: var(--dark-surface);
+}
+
+[data-theme="dark"] :is(td, .jd-schedule-table td, .report-table td) {
+    color: var(--dark-text);
+    border-color: var(--dark-border);
+}
+
+/* Primary and secondary actions */
+[data-theme="dark"] :is(
+    .nav-cta,
+    .btn-primary,
+    .dashboard-logout,
+    .auth-submit,
+    .jamiyah-submit-btn,
+    .my-jamiyahs-create-btn,
+    .my-jamiyah-details-btn,
+    .my-jamiyahs-empty-btn,
+    .jd-primary-btn,
+    .jd-approve-btn,
+    .jd-payments-link,
+    .jd-schedule-submit,
+    .jd-copy-invite,
+    .private-invite-form button,
+    .explore-search-btn,
+    .explore-filters a.is-active,
+    .explore-details-btn,
+    .explore-reset-btn,
+    .payments-action-btn,
+    .payments-verify-btn,
+    .delivery-confirm-btn,
+    .profile-save-btn,
+    .profile-primary-btn,
+    .profile-empty-action,
+    .reports-view-btn,
+    .report-action-btn.primary,
+    .report-action-btn:not(.secondary)
+) {
+    color: #07131d;
+    background: var(--dark-accent);
+    border-color: var(--dark-accent);
+    box-shadow: none;
+}
+
+[data-theme="dark"] :is(
+    .nav-cta,
+    .btn-primary,
+    .dashboard-logout,
+    .auth-submit,
+    .jamiyah-submit-btn,
+    .my-jamiyahs-create-btn,
+    .my-jamiyah-details-btn,
+    .my-jamiyahs-empty-btn,
+    .jd-primary-btn,
+    .jd-approve-btn,
+    .jd-payments-link,
+    .jd-schedule-submit,
+    .jd-copy-invite,
+    .private-invite-form button,
+    .explore-search-btn,
+    .explore-filters a.is-active,
+    .explore-details-btn,
+    .explore-reset-btn,
+    .payments-action-btn,
+    .payments-verify-btn,
+    .delivery-confirm-btn,
+    .profile-save-btn,
+    .profile-primary-btn,
+    .profile-empty-action,
+    .reports-view-btn,
+    .report-action-btn.primary,
+    .report-action-btn:not(.secondary)
+):hover {
+    color: #07131d;
+    background: #a7ded2;
+    border-color: #a7ded2;
+}
+
+[data-theme="dark"] :is(
+    .btn-outline,
+    .btn-light,
+    .nav-register,
+    .jamiyah-cancel-btn,
+    .jd-secondary-action,
+    .payments-back-btn,
+    .report-action-btn.secondary,
+    .profile-empty-action.secondary,
+    .my-jamiyahs-empty-btn.secondary,
+    .explore-filters a
+) {
+    color: var(--dark-text);
+    background: var(--dark-surface);
+    border-color: var(--dark-border);
+}
+
+[data-theme="dark"] :is(
+    .btn-outline,
+    .btn-light,
+    .nav-register,
+    .jamiyah-cancel-btn,
+    .jd-secondary-action,
+    .payments-back-btn,
+    .report-action-btn.secondary,
+    .profile-empty-action.secondary,
+    .my-jamiyahs-empty-btn.secondary,
+    .explore-filters a
+):hover {
+    color: var(--dark-accent);
+    background: #263f50;
+    border-color: rgba(131, 199, 182, 0.55);
+}
+
+/* Semantic status colors */
+[data-theme="dark"] :is(
+    .message-success,
+    .dashboard-message.message-success,
+    .site-message.message-success,
+    .payment-status.is-verified,
+    .jd-payment-badge.is-verified,
+    .jd-delivery-status.is-delivered,
+    .jd-delivery-status.is-ready,
+    .delivery-status.is-delivered,
+    .explore-status-badge.is-open,
+    .my-jamiyah-tag.is-completed,
+    .profile-jamiyah-stamp.is-completed,
+    .reports-jamiyah-stamp.is-completed,
+    .report-status.is-verified
+) {
+    color: #BFF2D0;
+    background: rgba(35, 137, 81, 0.24);
+    border-color: rgba(94, 209, 139, 0.35);
+}
+
+[data-theme="dark"] :is(
+    .message-warning,
+    .dashboard-message.message-warning,
+    .site-message.message-warning,
+    .payment-status.is-pending,
+    .jd-payment-badge.is-pending,
+    .jd-delivery-status.is-pending,
+    .delivery-status.is-ready,
+    .explore-membership-note.is-pending,
+    .report-status.is-pending
+) {
+    color: #F7D48B;
+    background: rgba(151, 101, 18, 0.22);
+    border-color: rgba(232, 181, 82, 0.34);
+}
+
+[data-theme="dark"] :is(
+    .message-error,
+    .dashboard-message.message-error,
+    .site-message.message-error,
+    .payment-status.is-rejected,
+    .payments-reject-btn,
+    .jd-reject-btn,
+    .jd-danger-action,
+    .jamiyah-danger-btn,
+    .jd-payment-badge.is-rejected,
+    .profile-jamiyah-stamp.is-cancelled,
+    .reports-jamiyah-stamp.is-cancelled,
+    .report-status.is-rejected
+) {
+    color: #FFB8B8;
+    background: rgba(174, 47, 56, 0.24);
+    border-color: rgba(255, 138, 138, 0.34);
+}
+
+[data-theme="dark"] :is(
+    .payment-status.is-unreported,
+    .jd-delivery-status.is-upcoming,
+    .jd-payment-badge,
+    .explore-status-badge,
+    .my-jamiyah-tag,
+    .profile-jamiyah-role,
+    .reports-jamiyah-status,
+    .reports-jamiyah-role,
+    .report-status
+) {
+    color: var(--dark-muted);
+    background: var(--dark-surface);
+    border-color: var(--dark-border);
+}
+
+/* Progress, separators, notification menus */
+[data-theme="dark"] :is(
+    .jd-journey-progress,
+    .jd-mini-progress,
+    .jd-native-progress,
+    .jd-native-progress::-webkit-progress-bar
+) {
+    background: #2b4252;
+}
+
+[data-theme="dark"] :is(
+    .dashboard-notification-item,
+    .payments-member-row,
+    .jd-cycle-payment,
+    .jd-turn-content,
+    .dashboard-notifications-heading,
+    .dashboard-notifications-footer,
+    .profile-panel-header,
+    .reports-section-heading,
+    .reports-jamiyah-card,
+    .report-table td
+) {
+    border-color: var(--dark-border);
+}
+
+[data-theme="dark"] .dashboard-notification-item:hover,
+[data-theme="dark"] .dashboard-notification-item.is-action {
+    background: var(--dark-surface);
+}
+
+[data-theme="dark"] .dashboard-notifications-count {
+    color: #ffffff;
+    background: #c45757;
+    border-color: var(--dark-card);
+}
+
+/* Existing stamps keep their position while becoming readable. */
+[data-theme="dark"] :is(
+    .my-jamiyah-card.is-completed,
+    .profile-jamiyah-item.status-completed,
+    .reports-jamiyah-card.is-completed
+) {
+    background: rgba(35, 137, 81, 0.12);
+    border-color: rgba(94, 209, 139, 0.36);
+}
+
+[data-theme="dark"] :is(
+    .my-jamiyah-card.is-cancelled,
+    .profile-jamiyah-item.status-cancelled,
+    .reports-jamiyah-card.is-cancelled
+) {
+    background: rgba(174, 47, 56, 0.12);
+    border-color: rgba(255, 138, 138, 0.38);
+}
+
+/* Error page */
+[data-theme="dark"] .error-kicker {
+    color: var(--dark-accent);
+    background: rgba(131, 199, 182, 0.12);
+    border-color: rgba(131, 199, 182, 0.28);
+}
+
+[data-theme="dark"] .error-orbit {
+    border-color: rgba(131, 199, 182, 0.22);
+}
+
+/* Icon readability without affecting the official logo. */
+[data-theme="dark"] :is(
+    .menu-toggle img,
+    .dashboard-menu-toggle img,
+    .dashboard-avatar img,
+    .dashboard-notifications-trigger img,
+    .dashboard-notification-icon img,
+    .dashboard-card-icon img,
+    .feature-icon img,
+    .hub-node-icon img,
+    .jamiyah-create-heading-icon img,
+    .jamiyah-create-note-icon img,
+    .my-jamiyahs-stat-icon img,
+    .my-jamiyah-card-icon img,
+    .my-jamiyahs-empty-icon img,
+    .explore-search-input img,
+    .explore-card-icon img,
+    .explore-empty-icon img,
+    .jd-member-avatar img,
+    .jd-invite-icon img,
+    .payments-avatar img,
+    .delivery-info img,
+    .delivery-card-top img,
+    .profile-stat-icon img,
+    .profile-empty-icon img,
+    .profile-jamiyah-icon img,
+    .reports-stat-icon img,
+    .reports-list-heading-icon img,
+    .reports-jamiyah-icon img,
+    .report-summary-icon img
+) {
+    filter: brightness(0) invert(1);
+    opacity: 0.92;
+}
+
+@media (max-width: 780px) {
+    .theme-toggle {
+        width: 42px;
+        height: 42px;
+    }
+
+    .mobile-auth .theme-toggle {
+        align-self: flex-start;
+        margin-bottom: 4px;
+    }
+
+    .mobile-auth .theme-toggle-form {
+        align-self: flex-start;
+        margin-bottom: 4px;
+    }
+
+    [data-theme="dark"] .dashboard-mobile-panel .dashboard-actions {
+        border-color: var(--dark-border);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .theme-toggle,
+    .theme-toggle-icon {
+        transition: none !important;
+    }
+}

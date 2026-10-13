@@ -1,0 +1,23 @@
+<form method="post" action="{% url 'switch_theme' %}" class="theme-toggle-form">
+    {% csrf_token %}
+    <input type="hidden" name="theme" value="{{ next_theme|default:'dark' }}">
+    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+    <button
+        type="submit"
+        class="theme-toggle"
+        aria-label="{% if active_theme == 'dark' %}تفعيل الوضع الفاتح{% else %}تفعيل الوضع الداكن{% endif %}"
+        aria-pressed="{% if active_theme == 'dark' %}true{% else %}false{% endif %}"
+    >
+        <span class="theme-toggle-icon theme-toggle-sun" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2.2M12 19.8V22M4.93 4.93l1.56 1.56M17.51 17.51l1.56 1.56M2 12h2.2M19.8 12H22M4.93 19.07l1.56-1.56M17.51 6.49l1.56-1.56"></path>
+            </svg>
+        </span>
+        <span class="theme-toggle-icon theme-toggle-moon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M20.4 14.4A7.6 7.6 0 0 1 9.6 3.6a8.2 8.2 0 1 0 10.8 10.8Z"></path>
+            </svg>
+        </span>
+    </button>
+</form>
